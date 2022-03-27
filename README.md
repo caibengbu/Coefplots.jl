@@ -5,7 +5,7 @@ This repository aims to make available in Julia the functionalities of the Stata
 ## Example
 ```
 using Coefplots
-using DataFrame
+using DataFrames
 using GLM
 
 df = DataFrame(Y=rand(10), X1=rand(10), X2=rand(10), X3=rand(10), X4=rand(10))
