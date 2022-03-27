@@ -4,11 +4,14 @@ module Coefplots
     import FixedEffectModels: FixedEffectModel
     import GLFixedEffectModels: GLFixedEffectModel
 
+    include("color.jl")
     include("preamble.jl")
-    include("pgfplot.jl")
-    include("parse.jl")
+    include("options.jl")
+    include("singlecoefplot.jl")
     include("coefplot.jl")
-    
+    include("parse.jl")
+    include("pgfplot.jl")
+    include("plot.jl")
 
-    export coefplot
+    export plot
 end
