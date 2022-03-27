@@ -20,7 +20,7 @@ mutable struct Coefplot
     end
 
     # create Coefplot from combining regmodel output and reglabel, regnote, xtitle, ytitle
-    function Coefplot(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{Any},
+    function Coefplot(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{T} where T<:Any,
                       name_2_newname=missing, newindex_2_loc=x->x, 
                       xtitle::Union{Missing,String}=missing, ytitle::Union{Missing,String}=missing,
                       reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
@@ -52,25 +52,19 @@ function rename!(coefplot::Coefplot,name_2_newname::Dict)
     return coefplot
 end
 
-function sort!(coefplot::Coefplot,key::Union{Dict,Function,Vector}=Base.string)
-    if key isa Function
-        Base.sort!(coefplot.vec_singlecoefplot,by=x->key(x.thiscoef_label))
-    elseif key isa Dict
-        Base.sort!(coefplot.vec_singlecoefplot,by=x->get(key,x.thiscoef_label,0))
-    elseif key isa Vector{T} where T <: Union{Missing,String}
-        vec_singlecoefplot = Vector{SinglecoefPlot}(undef,length(coefplot.vec_singlecoefplot))
-        name_2_singelcoefplot = Dict([singlecoefplot.thiscoef_label => singlecoefplot for singlecoefplot in coefplot.vec_singlecoefplot])
-        name_2_newindex = Dict([name => newindex for (newindex, name) in enumerate(key)])
-        @assert issetequal(keys(name_2_newindex),keys(name_2_singelcoefplot)) "keys doesn't match"
-        for name in key
-            newindex = name_2_newindex[name]
-            vec_singlecoefplot[newindex] = name_2_singelcoefplot[name]
-        end
-        coefplot = Coefplot(vec_singlecoefplot, coefplot.xtitle, coefplot.ytitle, coefplot.reglabel, coefplot.regnote)
-    else
-        throw(ArgumentError("key is unrecognized"))
+
+sort!(coefplot::Coefplot,key::Function = Base.string) = Base.sort!(coefplot.vec_singlecoefplot,by=x->key(x.thiscoef_label))
+sort!(coefplot::Coefplot,key::Dict) = Base.sort!(coefplot.vec_singlecoefplot,by=x->get(key,x.thiscoef_label,0))
+function sort!(coefplot::Coefplot,key::Vector{T} where T <: Union{Missing,String})
+    vec_singlecoefplot = Vector{SinglecoefPlot}(undef,length(coefplot.vec_singlecoefplot))
+    name_2_singelcoefplot = Dict([singlecoefplot.thiscoef_label => singlecoefplot for singlecoefplot in coefplot.vec_singlecoefplot])
+    name_2_newindex = Dict([name => newindex for (newindex, name) in enumerate(key)])
+    @assert issetequal(keys(name_2_newindex),keys(name_2_singelcoefplot)) "keys doesn't match"
+    for name in key
+        newindex = name_2_newindex[name]
+        vec_singlecoefplot[newindex] = name_2_singelcoefplot[name]
     end
-    return coefplot
+    coefplot = Coefplot(vec_singlecoefplot, coefplot.xtitle, coefplot.ytitle, coefplot.reglabel, coefplot.regnote)
 end
 
 
