@@ -23,9 +23,10 @@ function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot, option::Sin
     PGFPlotsX.print_tex(io, line, lineoptions)
 
     # draw dot next
-    dot = Dot(singlecoefplot, option)
-    dotoptions = get_dot_options(option)
-    PGFPlotsX.print_tex(io, dot, dotoptions)
+    dot = Dot(singlecoefplot)
+    # dotoptions = get_dot_options(option) # need to rework on this: getting dot options from SinglecoefplotOption.
+    # PGFPlotsX.print_tex(io, dot, dotoptions)
+    PGFPlotsX.print_tex(io, dot)
 end
 
 function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot)
@@ -36,7 +37,8 @@ function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot)
     PGFPlotsX.print_tex(io, line, lineoptions)
 
     # draw dot next
-    dot = Dot(singlecoefplot, option)
-    dotoptions = get_dot_options(option)
-    PGFPlotsX.print_tex(io, dot, dotoptions)
+    dot = Dot(singlecoefplot)
+    # dotoptions = get_dot_options(option) need to rework on this
+    # PGFPlotsX.print_tex(io, dot, dotoptions)
+    PGFPlotsX.print_tex(io, dot)
 end

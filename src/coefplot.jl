@@ -49,3 +49,8 @@ function gen_other_option_from_coefplot(coefplot::Coefplot)
         :ymin => yaxis_lb, :ymax => yaxis_ub, 
         :xtick => xtick, :xticklabels => xticklabels)
 end
+
+function PGFPlotsX.print_tex(coefplot::Coefplot)
+    # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
+    # 
+end

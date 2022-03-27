@@ -2,6 +2,7 @@ include("../src/Coefplots.jl")
 using .Coefplots
 using GLM
 using FixedEffectModels
+using MLJLinearModels
 using DataFrames
 using Test
 
@@ -11,9 +12,11 @@ df = DataFrame(Y=rand(100),X1=rand(100),X2=rand(100),
                X6=rand(100),X7=rand(100), X8=rand(100),
                X9=rand(100),cat1=repeat([1,2],inner=50))
 ols = lm(@formula(Y~X1+X2+X3+X4+X5+X6+X7+X8+X9), df)
+
+theta = fit(LassoRegression(0.7), df[!,[:X1,:X2,:X3,:X4,:X5,:X6,:X7,:X8,:X9]]|>Matrix, df.Y)
 my_coefplot = Coefplots.parse(ols)
 plot(ols,"save.png")
-
+plot(my_coefplot,"save.pdf")
 #=
 plot(my_coefplot,"save.pdf")
 

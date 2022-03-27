@@ -17,20 +17,28 @@ end
 
 struct Dot
     loc::Tuple
-    size::Real
 
-    function Dot(singlecoefplot::SinglecoefPlot, options::SinglecoefplotOption)
-        new((singlecoefplot.thiscoef_loc,singlecoefplot.point_est),options.dotsize)
+    function Dot(singlecoefplot::SinglecoefPlot)
+        new((singlecoefplot.thiscoef_loc,singlecoefplot.point_est))
     end
 end
+
+default_dot_options() = merge(PGFPlotsX.Options(:circle => nothing, :"inner sep" => "0pt",:"minimum size" => "3pt"),color_as_fill_option(:navy))
 
 function PGFPlotsX.print_tex(io::IO, dot::Dot, options::PGFPlotsX.Options)
     PGFPlotsX.print_indent(io, "%%%%%%%%% plot dot of the coefplot %%%%%%%%%%")
     print(io, "\\filldraw")
+    print(io,"(axis cs:$(join(dot.loc,",")))")
     PGFPlotsX.print_options(io, options; newline = false)
-    println(io, "(axis cs:$(join(dot.loc,","))) circle ($(dot.size)pt);")
+    println(io, "{}")
 end
 
-function TikzDocument(elements)
-    td = PGFPlotsX.TikzDocument(elements;use_default_preamble = false, preamble = gen_default_preamble());
+function PGFPlotsX.print_tex(io::IO, dot::Dot)
+    options = default_dot_options()
+    PGFPlotsX.print_indent(io, "%%%%%%%%% plot dot of the coefplot %%%%%%%%%%")
+    print(io, "\\filldraw")
+    print(io,"(axis cs:$(join(dot.loc,","))) node")
+    PGFPlotsX.print_options(io, options; newline = false)
+    println(io, "{}; ")
 end
+
