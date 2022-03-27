@@ -3,7 +3,7 @@
 # scp3 = SinglecoefPlot(3,-0.2,-1,0.5,"coef3")
 # scps = [scp1,scp2,scp3]
 
-struct SinglecoefPlot
+mutable struct SinglecoefPlot
     thiscoef_loc::Real
     point_est::Real
     confint_lb::Real

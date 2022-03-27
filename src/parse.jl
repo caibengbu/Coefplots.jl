@@ -10,22 +10,74 @@ SupportedEstimation = Union{StatsModels.TableRegressionModel,FixedEffectModel,GL
 mutable struct Coefplot
     reglabel::Union{Missing,String}
     regnote::Union{Missing,String}
-    xtitle::String
-    ytitle::String
+    xtitle::Union{Missing,String}
+    ytitle::Union{Missing,String}
     vec_singlecoefplot::Vector{SinglecoefPlot}
 
-    function Coefplot(vec_singlecoefplot::Vector{SinglecoefPlot},xtitle::String=missing,ytitle::String=missing,reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
+    # create Coefplot from combining vec_singlecoefplot and reglabel, regnote, xtitle, ytitle
+    function Coefplot(vec_singlecoefplot::Vector{SinglecoefPlot},xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
         new(reglabel, regnote, xtitle, ytitle, vec_singlecoefplot)
     end
-    function Coefplot(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{Any},xtitle::String=missing,ytitle::String=missing,reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
+
+    # create Coefplot from combining regmodel output and reglabel, regnote, xtitle, ytitle
+    function Coefplot(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{Any},
+                      name_2_newname=missing, newindex_2_loc=x->x, 
+                      xtitle::Union{Missing,String}=missing, ytitle::Union{Missing,String}=missing,
+                      reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
         @assert size(coefvec,1) == size(confint,1) == size(coefnames,1) "Dimension doesn't match"
-        # TO-DO: how to sort coefficients?
-        vec_singlecoefplot = [SinglecoefPlot(i, coefvec[i], confint[i,:]..., coefnames[i]) for i in 1:size(coefvec,1)]
+
+        if name_2_newname === missing
+            vec_singlecoefplot = [SinglecoefPlot(newindex_2_loc(i), coefvec[i], confint[i,:]..., coefnames[i]) for i in 1:size(coefvec,1)]
+        else
+            vec_singlecoefplot = Vector{SinglecoefPlot}(undef,size(coefvec,1))
+            name_2_newindex = Dict([name => newindex for (newindex, name) in enumerate(keys(name_2_newname))])
+            for i in 1:size(coefvec,1)
+                name = coefnames[i]
+                newindex = name_2_newindex[name]
+                vec_singlecoefplot[newindex] = SinglecoefPlot(newindex_2_loc(newindex), coefvec[i], confint[i,:]..., name)
+            end
+        end
         new(reglabel, regnote, xtitle, ytitle, vec_singlecoefplot)
     end
 end
 
 
-function parse(est::SupportedEstimation, reglabel::Union{Missing,String}=missing, regnote::Union{Missing,String}=missing)
-    return Coefplot(coef(est),confint(est),coefnames(est), reglabel, regnote)
+function rename!(coefplot::Coefplot,name_2_newname::Dict)
+    for singlecoefplot in coefplot.vec_singlecoefplot
+        if singlecoefplot.thiscoef_label ∈ keys(name_2_newname)
+            # if the name is in the name_2_newname dictionary, change it
+            singlecoefplot.thiscoef_label = name_2_newname[singlecoefplot.thiscoef_label]
+        end
+    end
+    return coefplot
+end
+
+function sort!(coefplot::Coefplot,key::Union{Dict,Function,Vector}=Base.string)
+    if key isa Function
+        Base.sort!(coefplot.vec_singlecoefplot,by=x->key(x.thiscoef_label))
+    elseif key isa Dict
+        Base.sort!(coefplot.vec_singlecoefplot,by=x->get(key,x.thiscoef_label,0))
+    elseif key isa Vector{T} where T <: Union{Missing,String}
+        vec_singlecoefplot = Vector{SinglecoefPlot}(undef,length(coefplot.vec_singlecoefplot))
+        name_2_singelcoefplot = Dict([singlecoefplot.thiscoef_label => singlecoefplot for singlecoefplot in coefplot.vec_singlecoefplot])
+        name_2_newindex = Dict([name => newindex for (newindex, name) in enumerate(key)])
+        @assert issetequal(keys(name_2_newindex),keys(name_2_singelcoefplot)) "keys doesn't match"
+        for name in key
+            newindex = name_2_newindex[name]
+            vec_singlecoefplot[newindex] = name_2_singelcoefplot[name]
+        end
+        coefplot = Coefplot(vec_singlecoefplot, coefplot.xtitle, coefplot.ytitle, coefplot.reglabel, coefplot.regnote)
+    else
+        throw(ArgumentError("key is unrecognized"))
+    end
+    return coefplot
+end
+
+
+function parse(est::SupportedEstimation, level::Real=0.95)
+    if est isa FixedEffectModel
+        Coefplot(StatsModels.coef(est),StatsModels.confint(est;level=level),StatsModels.coefnames(est))
+    else
+        Coefplot(StatsModels.coef(est),StatsModels.confint(est,level),StatsModels.coefnames(est))
+    end
 end
