@@ -1,30 +1,30 @@
 mutable struct Coefplot <: PGFPlotsX.TikzElement
-    name::Union{Missing,AbstractCaption}
+    name::Union{Missing,String}
     note::Union{Missing,AbstractCaption}
-    xtitle::Union{Missing,AbstractCaption}
-    ytitle::Union{Missing,AbstractCaption}
+    xtitle::Union{Missing,String}
+    ytitle::Union{Missing,String}
     dict::Dict{Symbol,SinglecoefPlot}
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
     function Coefplot(dict::Dict{Symbol,SinglecoefPlot},
-                      xtitle::Union{Missing,AbstractCaption}=missing,ytitle::Union{Missing,AbstractCaption}=missing,
+                      xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
                       name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing)
         new(name, note, xtitle, ytitle, dict)
     end
 end
 
 function setxtitle!(c::Coefplot, x::String)
-    c.xtitle = AbstractCaption(x)
+    c.xtitle = x
     return c
 end
 
 function setytitle!(c::Coefplot, y::String)
-    c.ytitle = AbstractCaption(y)
+    c.ytitle = y
     return c
 end
 
 function setname!(c::Coefplot, name::String)
-    c.name = AbstractCaption(name)
+    c.name = name
     return c
 end
 
@@ -44,8 +44,19 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
     xaxis_ub = xmax + (xmax - xmin)/(length(singlecoefplots)-1)
     yaxis_lb = ymin - (ymax - ymin)*0.1
     yaxis_ub = ymax + (ymax - ymin)*0.1
+    labels_and_titles = PGFPlotsX.Options()
+    if coefplot.xtitle !== missing
+        labels_and_titles[:xlabel] = coefplot.xtitle
+    end 
+    if coefplot.ytitle !== missing
+        labels_and_titles[:ylabel] = coefplot.ytitle
+    end
+    if coefplot.name !== missing
+        labels_and_titles[:title] = coefplot.name
+    end
+    
     if vertical
-        PGFPlotsX.Options(
+        other_options = PGFPlotsX.Options(
             :name => "tmp_fig",
             :xmin => xaxis_lb, :xmax => xaxis_ub, 
             :ymin => yaxis_lb, :ymax => yaxis_ub, 
@@ -53,7 +64,7 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
             Symbol("xticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}",
             Symbol("yticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}")
     else
-        PGFPlotsX.Options(
+        other_options = PGFPlotsX.Options(
             :name => "tmp_fig",
             :ymin => xaxis_lb, :ymax => xaxis_ub, 
             :xmin => yaxis_lb, :xmax => yaxis_ub, 
@@ -61,6 +72,7 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
             Symbol("xticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}",
             Symbol("yticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}")
     end
+    return merge!(labels_and_titles,other_options)
 end
 
 Base.getindex(coefplot::Coefplot, args...; kwargs...) = getindex(coefplot.dict, args...; kwargs...)
@@ -102,7 +114,7 @@ function Base.show(io::IO, coefplot::Coefplot)
     bottom_and_top_rule = format_vec("─", "─", "─", "─", "─"; fill="─", sep="───")
     width = length(bottom_and_top_rule)
     if coefplot.name !== missing
-        println(io, cpad("─── * Coefplot Name: "*coefplot.name.caption*" * ───",width))
+        println(io, cpad("─── * Coefplot Name: "*coefplot.name*" * ───",width))
     else
         println(io, cpad("─── * Unnamed Coefplot * ───",width))
     end  
@@ -131,21 +143,9 @@ function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
     # allow print title and note
     PGFPlotsX.print_tex(io, Axis(gen_other_option_from_coefplot(coefplot), collect(values(coefplot.dict))))
-    if coefplot.xtitle !== missing
-        xtitle_default_option = default_xtitle_options()
-        PGFPlotsX.print_tex(io, coefplot.xtitle, xtitle_default_option)
-    end
-    if coefplot.ytitle !== missing
-        ytitle_default_option = default_ytitle_options()
-        PGFPlotsX.print_tex(io, coefplot.ytitle, ytitle_default_option)
-    end
     if coefplot.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, coefplot.note, note_default_option)
-    end
-    if coefplot.name !== missing
-        title_default_option = default_title_options()
-        PGFPlotsX.print_tex(io, coefplot.name, title_default_option)
     end
 end
 

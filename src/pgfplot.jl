@@ -37,11 +37,9 @@ struct AbstractCaption
     caption::String
 end
 
-default_xtitle_options() = PGFPlotsX.Options(:name => "xlabel", :anchor => "north", :font => "\\footnotesize", :yshift => "-1em",:at => "(tmp_fig.south)")
-default_ytitle_options() = PGFPlotsX.Options(:name => "ylabel", :anchor => "south", :font => "\\footnotesize", :xshift => "-1em", :rotate => 90, :at => "(tmp_fig.west)")
-default_note_options() = PGFPlotsX.Options(:name => "note", :anchor => "north west", :font => "{\\fontsize{4.5}{4.5}\\selectfont}", 
-                                           :yshift => "-2em", :xshift => "-0.5em", :"text width" => "20em", :at => "(tmp_fig.south west)")
-default_title_options() = PGFPlotsX.Options(:name => "title", :anchor => "south", :font => "\\small", :at => "(tmp_fig.north)")
+
+default_note_options() = PGFPlotsX.Options(:name => "note", :anchor => "north west", :font => "{\\fontsize{4.5}{4.5}\\selectfont}",
+                                           :"text width" => "0.7\\textwidth", :at => "(current axis.outer south west)")
 
 function PGFPlotsX.print_tex(io::IO, caption::AbstractCaption,options::PGFPlotsX.Options)
     PGFPlotsX.print_indent(io, "%%%%%%%%% plot caption %%%%%%%%%%")
