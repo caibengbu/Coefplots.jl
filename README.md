@@ -8,9 +8,18 @@ using Coefplots
 using DataFrames
 using GLM
 
-df = DataFrame(Y=rand(10), X1=rand(10), X2=rand(10), X3=rand(10), X4=rand(10))
-ols = lm(@formula(Y ~ X1 + X2 + X3 + X4), df)
-plot(ols,"save.pdf")
+
+df1 = DataFrame(Y=rand(100),X1=rand(100),X2=rand(100),
+               X3=rand(100),X4=rand(100),X5=rand(100), 
+               X6=rand(100),X7=rand(100), X8=rand(100),
+               X9=rand(100),cat1=repeat([1,2],inner=50))
+ols = lm(@formula(Y ~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9), df1)
+coefplot = Coefplots.parse(ols)
+setxtitle!(coefplot,"My X-label")
+setytitle!(coefplot,"My Y-label")
+setname!(coefplot,"The title of my plot")
+includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
+plot(coefplot,"asset/example1.png")
 ```
 ![Example plot](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example.png)
 
