@@ -16,8 +16,18 @@ df = DataFrame(Y=rand(100),X1=rand(100),X2=rand(100),
                X9=rand(100))
 ols = lm(@formula(Y ~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9), df)
 ```
-### Parsing Regression Models into Coefplot
+### Plot directly
+Use `setxtitle!()`, `setytitle!()`, `setname!()`, and `includenote!()` to add x label, y label, plot title, and footnote.
+```
+setxtitle!(coefplot,"My X-label")
+setytitle!(coefplot,"My Y-label")
+setname!(coefplot,"The title of my plot")
+includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
+plot(coefplot,"asset/example.png")
+```
+![Example plot](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example.png)
 
+### Manipulation with the Coefplot
 
 ```
 julia> coefplot = Coefplots.parse(ols)
@@ -104,15 +114,6 @@ Key   Location   Point Estimate   Confidence Interval   Label
  X3      3           0.2118       (-0.004738, 0.4283)    X3  
 ─────────────────────────────────────────────────────────────
 ```
-Use `setxtitle!()`, `setytitle!()`, `setname!()`, and `includenote!()` to add x label, y label, plot title, and footnote.
-```
-setxtitle!(coefplot,"My X-label")
-setytitle!(coefplot,"My Y-label")
-setname!(coefplot,"The title of my plot")
-includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
-plot(coefplot,"asset/example.png")
-```
-![Example plot](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example.png)
 
 ## Installation
 ```
