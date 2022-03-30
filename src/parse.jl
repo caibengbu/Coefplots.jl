@@ -10,6 +10,7 @@ function parse(est::SupportedEstimation, level::Real=0.95; drop_cons::Bool=true)
         drop_cons!(coefplot::Coefplot)
         equidist!(coefplot)
     end
+    return coefplot
 end
 
 function parse(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{T} where T<:Any)
