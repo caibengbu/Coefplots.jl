@@ -47,12 +47,15 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
     labels_and_titles = PGFPlotsX.Options()
     if coefplot.xtitle !== missing
         labels_and_titles[:xlabel] = coefplot.xtitle
+        labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end 
     if coefplot.ytitle !== missing
         labels_and_titles[:ylabel] = coefplot.ytitle
+        labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end
     if coefplot.name !== missing
         labels_and_titles[:title] = coefplot.name
+        labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
     
     if vertical

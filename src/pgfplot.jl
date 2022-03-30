@@ -14,7 +14,7 @@ struct Dot
     loc::Tuple
 end
 
-default_dot_options() = merge(PGFPlotsX.Options(:circle => nothing, :"inner sep" => "0pt",:"minimum size" => "3pt"),color_as_fill_option(:navy))
+default_dot_options() = merge(PGFPlotsX.Options(:circle => nothing, :"inner sep" => "0pt",:"minimum size" => "4pt"),color_as_fill_option(:navy))
 
 function PGFPlotsX.print_tex(io::IO, dot::Dot, options::PGFPlotsX.Options)
     PGFPlotsX.print_indent(io, "%%%%%%%%% plot dot of the coefplot %%%%%%%%%%")

@@ -15,7 +15,7 @@ setxtitle!(coefplot,"My X-label")
 setytitle!(coefplot,"My Y-label")
 setname!(coefplot,"The title of my plot")
 includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
-plot(coefplot,"../asset/example.png")
+plot(coefplot,"../asset/example.pdf")
 
 # td = Coefplots.TikzDocument(Coefplots.TikzPicture(coefplot));
 
