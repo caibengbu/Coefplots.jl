@@ -1,13 +1,13 @@
 TikzDocument(elements) = PGFPlotsX.TikzDocument(elements;use_default_preamble = false, preamble = gen_default_preamble());
 
 function plot(my_coefplot::Coefplot, filename::String; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(Axis(gen_other_option_from_coefplot(my_coefplot), my_coefplot.vec_singlecoefplot)))
+    td = TikzDocument(TikzPicture(my_coefplot))
     verbose ? print_tex(td) : nothing
     pgfsave(filename,td)
 end
 
 function plot(my_coefplot::Coefplot; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(Axis(gen_other_option_from_coefplot(my_coefplot), my_coefplot.vec_singlecoefplot)))
+    td = TikzDocument(TikzPicture(my_coefplot))
     if verbose
         @show td
         print_tex(td)

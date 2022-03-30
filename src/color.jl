@@ -44,14 +44,14 @@ colorname_as_xcolor(color_name::Symbol) = color_as_xcolor(get_default_color(colo
 
 color_as_option(color::Color) = PGFPlotsX.Options(:color => color_as_xcolor(color), 
                                                   :opacity => color.opacity)
-color_as_fill_option(color::Color) = PGFPlotsX.Options(:"fill" => color_as_xcolor(color), 
+color_as_fill_option(color::Color) = PGFPlotsX.Options(:fill => color_as_xcolor(color), 
                                                        :"fill opacity" => color.opacity)
 color_as_draw_option(color::Color) = PGFPlotsX.Options(:color => color_as_xcolor(color), 
                                                        :"draw opacity" => color.opacity)
 
 color_as_option(color_name::Symbol) = PGFPlotsX.Options(:color => colorname_as_xcolor(color_name), 
                                                         :opacity => get_default_color(color_name).opacity)
-color_as_fill_option(color_name::Symbol) = PGFPlotsX.Options(:"fill" => colorname_as_xcolor(color_name), 
+color_as_fill_option(color_name::Symbol) = PGFPlotsX.Options(:fill => colorname_as_xcolor(color_name), 
                                                              :"fill opacity" => get_default_color(color_name).opacity)
 color_as_draw_option(color_name::Symbol) = PGFPlotsX.Options(:color => ccolorname_as_xcolor(color_name), 
                                                              :"draw opacity" => get_default_color(color_name).opacity)
