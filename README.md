@@ -25,7 +25,7 @@ setname!(coefplot,"The title of my plot")
 includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
 plot(coefplot,"asset/example.png")
 ```
-![Example plot](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example.png)
+<img src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example.svg" width="600" height="600">
 
 ### Manipulation with the Coefplot
 
