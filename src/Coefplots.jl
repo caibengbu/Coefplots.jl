@@ -12,6 +12,7 @@ module Coefplots
     include("pgfplot.jl")
     include("singlecoefplot.jl")
     include("coefplot.jl")
+    include("multicoefplot.jl")
     include("parse.jl")
     include("plot.jl")
 

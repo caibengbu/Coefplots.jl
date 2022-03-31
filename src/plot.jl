@@ -1,4 +1,4 @@
-TikzDocument(elements) = PGFPlotsX.TikzDocument(elements;use_default_preamble = false, preamble = gen_default_preamble());
+TikzDocument(elements) = PGFPlotsX.TikzDocument("\\sffamily\\sansmath",elements;use_default_preamble = false, preamble = gen_default_preamble());
 
 function plot(my_coefplot::Coefplot, filename::String; verbose::Bool=false)
     td = TikzDocument(TikzPicture(my_coefplot))
