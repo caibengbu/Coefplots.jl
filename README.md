@@ -15,6 +15,7 @@ df = DataFrame(Y=rand(100),X1=rand(100),X2=rand(100),
                X6=rand(100),X7=rand(100), X8=rand(100),
                X9=rand(100))
 ols = lm(@formula(Y ~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9), df)
+coefplot = Coefplots.parse(ols; drop_cons=true)
 ```
 ### Plot directly
 Use `setxtitle!()`, `setytitle!()`, `setname!()`, and `includenote!()` to add x label, y label, plot title, and footnote.
