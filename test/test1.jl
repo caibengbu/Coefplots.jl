@@ -1,43 +1,44 @@
 include("../src/Coefplots.jl")
 using .Coefplots
+using RDatasets
 using GLM
 using DataFrames
 using Test
 
-# test GLM
-df1 = DataFrame(Y=rand(100),X1=rand(100),X2=rand(100),
-               X3=rand(100),X4=rand(100),X5=rand(100), 
-               X6=rand(100),X7=rand(100), X8=rand(100),
-               X9=rand(100),cat1=repeat([1,2],inner=50))
-ols1 = lm(@formula(Y~X1+X2+X3+X4), df1)
+# Example 1
+df = dataset("datasets", "iris")
+ols1 = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth), df)
+plot(ols1,"../asset/example1.svg")
+
+# Example 2
 coefplot = Coefplots.parse(ols1)
 setxtitle!(coefplot,"coefficient")
 setytitle!(coefplot,"regressor")
-setname!(coefplot,"Coefplot of My Example Regression (Multivariate)")
+setname!(coefplot,"Coefplot of My Example Regression")
 includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
-plot(coefplot,"../asset/example.png")
+plot(coefplot,"../asset/example2_multivariate.svg")
 
 # td = Coefplots.TikzDocument(Coefplots.TikzPicture(coefplot));
 
-bi1 = lm(@formula(Y~X1), df1)
-bi2 = lm(@formula(Y~X2), df1)
-bi3 = lm(@formula(Y~X3), df1)
-bi4 = lm(@formula(Y~X4), df1)
+uni1 = lm(@formula(SepalLength~SepalWidth), df)
+uni2 = lm(@formula(SepalLength~PetalLength), df)
+uni3 = lm(@formula(SepalLength~PetalWidth), df)
 
 
-coefplot_bivar = Coefplots.concat(Coefplots.parse.([bi1,bi2,bi3,bi4]))
+coefplot_bivar = Coefplots.concat(Coefplots.parse.([uni1,uni2,uni3]))
 setxtitle!(coefplot_bivar,"coefficient")
 setytitle!(coefplot_bivar,"regressor")
-setname!(coefplot_bivar,"Coefplot of My Example Regression (Bivariate)")
+setname!(coefplot_bivar,"Coefplot of My Example Regression")
 includenote!(coefplot_bivar,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
-plot(coefplot_bivar,"../asset/example2.png")
+plot(coefplot_bivar,"../asset/example2_univariate.svg")
 
 # no constant
-ols3 = lm(@formula(Y~X1+X2+X3+X4+0), df1)
+ols3 = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth + 0), df)
 coefplot_nocons = Coefplots.parse(ols3)
 
-mcoefplot = Coefplots.MultiCoefplot(OrderedDict(:model1 => coefplot, :model2 => coefplot_bivar, :model3 => coefplot_nocons))
-plot(mcoefplot)
+mcoefplot = Coefplots.MultiCoefplot(:model1 => coefplot, :model2 => coefplot_bivar, :model3 => coefplot_nocons)
+plot(mcoefplot,"../asset/example2_multicoefplot.svg")
+
 
 #=
 plot(my_coefplot,"save.pdf")

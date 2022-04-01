@@ -5,7 +5,7 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
     ytitle::Union{Missing,String}
     dict::OrderedDict{Symbol,Coefplot}
 
-    # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
+
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
                       name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing)
@@ -16,6 +16,10 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
         end
         new(name, note, xtitle, ytitle, new_dict)
     end
+end
+
+function MultiCoefplot(pair::Pair{Symbol,Coefplot}...)
+    MultiCoefplot(OrderedDict(pair))
 end
 
 function PGFPlotsX.print_tex(io::IO, m::MultiCoefplot)
@@ -30,7 +34,8 @@ end
 
 function gen_other_option_from_mcoefplot(m::MultiCoefplot)
     options_list = gen_other_option_from_coefplot.(values(m.dict);seperate_line=true)
-    merged_option = reduce(merge,reverse(options_list))
+    specified_options_list = get_coefplot_options.(values(m.dict))
+    merged_option = reduce(merge,reverse(vcat(options_list, specified_options_list)))
     merged_option[:xmin] = minimum([option[:xmin] for option in options_list])
     merged_option[:ymin] = minimum([option[:ymin] for option in options_list])
     merged_option[:xmax] = maximum([option[:xmax] for option in options_list])

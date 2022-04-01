@@ -17,6 +17,9 @@ mutable struct SinglecoefPlot
     end
 end
 
+get_line_options(s::SinglecoefPlot) = get_line_options(s.options)
+get_dot_options(s::SinglecoefPlot) = get_dot_options(s.options)
+
 function get_dot(singlecoefplot::SinglecoefPlot, vertical::Bool=false)
     loc = (singlecoefplot.thiscoef_loc,singlecoefplot.point_est)
     if vertical
@@ -39,11 +42,11 @@ end
 function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot)
     # Draw line first
     line = get_line(singlecoefplot)
-    lineoptions = get_line_options(singlecoefplot.options)
+    lineoptions = get_line_options(singlecoefplot)
     PGFPlotsX.print_tex(io, line, lineoptions)
 
     # draw dot next
     dot = get_dot(singlecoefplot)
-    dotoptions = get_dot_options(singlecoefplot.options)
+    dotoptions = get_dot_options(singlecoefplot)
     PGFPlotsX.print_tex(io, dot, dotoptions)
 end

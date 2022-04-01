@@ -26,6 +26,11 @@ function plot(mcoefplot::MultiCoefplot; verbose::Bool=false)
     end
 end
 
+function plot(mcoefplot::MultiCoefplot, filename::String; verbose::Bool=false)
+    td = TikzDocument(TikzPicture(mcoefplot))
+    verbose ? print_tex(td) : nothing
+    pgfsave(filename,td)
+end
 
 function plot(regmodel::SupportedEstimation, filename::String)
     parsed_model = parse(regmodel)

@@ -105,7 +105,7 @@ Base.getindex(coefplot::Coefplot, args...; kwargs...) = getindex(coefplot.dict, 
 Base.setindex!(coefplot::Coefplot, args...; kwargs...) = (setindex!(coefplot.dict, args...; kwargs...); coefplot)
 Base.delete!(coefplot::Coefplot, args...; kwargs...) = (delete!(coefplot.dict, args...; kwargs...); coefplot)
 Base.haskey(coefplot::Coefplot, args...; kwargs...) = haskey(coefplot.dict, args...; kwargs...)
-
+get_coefplot_options(c::Coefplot) = get_coefplot_options(c.options)
 cpad(str::String,n::Int64,fill::String=" ") = rpad(lpad(str,(n+length(str))÷2, fill),n, fill)
 
 function Base.show(io::IO, coefplot::Coefplot)
@@ -185,7 +185,7 @@ function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
     # allow print title and note
     default_coefplot_options = gen_other_option_from_coefplot(coefplot)
-    specified_options = get_coefplot_options(coefplot.options)
+    specified_options = get_coefplot_options(coefplot)
     options = merge(default_coefplot_options,specified_options) # give options in coefplot attributes a higher priority
     PGFPlotsX.print_tex(io, Axis(options, collect(values(coefplot.dict))))
     if coefplot.note !== missing
