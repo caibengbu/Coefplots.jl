@@ -3,13 +3,14 @@ mutable struct Coefplot <: PGFPlotsX.TikzElement
     note::Union{Missing,AbstractCaption}
     xtitle::Union{Missing,String}
     ytitle::Union{Missing,String}
-    dict::Dict{Symbol,SinglecoefPlot}
+    dict::OrderedDict{Symbol,SinglecoefPlot}
+    options::CoefplotOption
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
-    function Coefplot(dict::Dict{Symbol,SinglecoefPlot},
+    function Coefplot(dict::OrderedDict{Symbol,SinglecoefPlot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing)
-        new(name, note, xtitle, ytitle, dict)
+                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,options=default_coefplot_options())
+        new(name, note, xtitle, ytitle, dict, options)
     end
 end
 
@@ -33,15 +34,23 @@ function includenote!(c::Coefplot, note::String)
     return c
 end
 
-function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
+function setcolor!(c::Coefplot, color::Color)
+    for sc in values(c.dict)
+        sc.options.dotcolor = color
+        sc.options.linecolor = color
+    end
+    return c
+end
+
+function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false,seperate_line::Bool=false)
     singlecoefplots = values(coefplot.dict)
     xtick = [singlecoefplot.thiscoef_loc for singlecoefplot in singlecoefplots]
     xticklabels = [singlecoefplot.thiscoef_label for singlecoefplot in singlecoefplots]
     xmin, xmax = extrema(xtick)
     ymin = minimum([singlecoefplot.confint_lb for singlecoefplot in singlecoefplots])
     ymax = maximum([singlecoefplot.confint_ub for singlecoefplot in singlecoefplots])
-    xaxis_lb = xmin - (xmax - xmin)/(length(singlecoefplots)-1)
-    xaxis_ub = xmax + (xmax - xmin)/(length(singlecoefplots)-1)
+    xaxis_lb = xmin - (xmax - xmin)/(length(singlecoefplots)-1) * 0.5
+    xaxis_ub = xmax + (xmax - xmin)/(length(singlecoefplots)-1) * 0.5
     yaxis_lb = ymin - (ymax - ymin)*0.1
     yaxis_ub = ymax + (ymax - ymin)*0.1
     labels_and_titles = PGFPlotsX.Options()
@@ -57,23 +66,37 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false)
         labels_and_titles[:title] = coefplot.name
         labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
-    
-    if vertical
-        other_options = PGFPlotsX.Options(
-            :name => "tmp_fig",
-            :xmin => xaxis_lb, :xmax => xaxis_ub, 
-            :ymin => yaxis_lb, :ymax => yaxis_ub, 
-            :xtick => xtick, :xticklabels => xticklabels,
-            Symbol("xticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}",
-            Symbol("yticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}")
+    if seperate_line
+        sorted_xtick = sort(xtick)
+        if vertical
+            other_options = PGFPlotsX.Options(
+                :xmin => xaxis_lb, :xmax => xaxis_ub, 
+                :ymin => yaxis_lb, :ymax => yaxis_ub, 
+                :xtick => xtick, :xticklabels => xticklabels,
+                Symbol("extra x ticks") => [(sorted_xtick[i]+sorted_xtick[i+1])/2 for i in 1:(length(sorted_xtick)-1)], 
+                Symbol("extra x tick style") => "{grid=major,grid style={dashed,gray!25}}",
+                Symbol("extra x tick labels") => "{}")
+        else
+            other_options = PGFPlotsX.Options(
+                :ymin => xaxis_lb, :ymax => xaxis_ub, 
+                :xmin => yaxis_lb, :xmax => yaxis_ub, 
+                :ytick => xtick, :yticklabels => xticklabels,
+                Symbol("extra y ticks") => [(sorted_xtick[i]+sorted_xtick[i+1])/2 for i in 1:(length(sorted_xtick)-1)],
+                Symbol("extra y tick style") => "{grid=major,grid style={dashed,gray!25}}",
+                Symbol("extra y tick labels") => "{}")
+        end
     else
-        other_options = PGFPlotsX.Options(
-            :name => "tmp_fig",
-            :ymin => xaxis_lb, :ymax => xaxis_ub, 
-            :xmin => yaxis_lb, :xmax => yaxis_ub, 
-            :ytick => xtick, :yticklabels => xticklabels,
-            Symbol("xticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}",
-            Symbol("yticklabel style") => "{font=\\fontsize{5}{5}\\selectfont}")
+        if vertical
+            other_options = PGFPlotsX.Options(
+                :xmin => xaxis_lb, :xmax => xaxis_ub, 
+                :ymin => yaxis_lb, :ymax => yaxis_ub, 
+                :xtick => xtick, :xticklabels => xticklabels)
+        else
+            other_options = PGFPlotsX.Options(
+                :ymin => xaxis_lb, :ymax => xaxis_ub, 
+                :xmin => yaxis_lb, :xmax => yaxis_ub, 
+                :ytick => xtick, :yticklabels => xticklabels)
+        end
     end
     return merge!(labels_and_titles,other_options)
 end
@@ -82,7 +105,6 @@ Base.getindex(coefplot::Coefplot, args...; kwargs...) = getindex(coefplot.dict, 
 Base.setindex!(coefplot::Coefplot, args...; kwargs...) = (setindex!(coefplot.dict, args...; kwargs...); coefplot)
 Base.delete!(coefplot::Coefplot, args...; kwargs...) = (delete!(coefplot.dict, args...; kwargs...); coefplot)
 Base.haskey(coefplot::Coefplot, args...; kwargs...) = haskey(coefplot.dict, args...; kwargs...)
-Base.copy(coefplot::Coefplot) = deepcopy(coefplot)
 
 cpad(str::String,n::Int64,fill::String=" ") = rpad(lpad(str,(n+length(str))÷2, fill),n, fill)
 
@@ -134,6 +156,23 @@ function Base.show(io::IO, coefplot::Coefplot)
 end
     
 
+function Base.pushfirst!(d::OrderedDict{Symbol,SinglecoefPlot}, p::Pair{Symbol,SinglecoefPlot} ...; overwrite::Bool=true, suppress::Bool=false)
+    for pp in p
+        if haskey(d,pp.first)
+            if overwrite
+                if ~suppress
+                    @warn "label $(pp.first) already exists in the coefplot, overwriting ..."
+                end
+                push!(d,pp)
+            end
+            throw(KeyError("label $(pp.first) already exists in the coefplot, please relabel your coefficients, or specify overwrite=true."))
+        else
+            push!(d,pp)
+        end
+    end
+    return d
+end
+
 function Base.push!(coefplot::Coefplot, other::Pair{Symbol, SinglecoefPlot} ...)
     all_keys = vcat(keys(coefplot.dict),[other[1] for this_other in other])
     @assert length(unique(all_keys)) == length(all_keys) "there are repeated keys!"
@@ -145,13 +184,15 @@ end
 function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
     # allow print title and note
-    PGFPlotsX.print_tex(io, Axis(gen_other_option_from_coefplot(coefplot), collect(values(coefplot.dict))))
+    default_coefplot_options = gen_other_option_from_coefplot(coefplot)
+    specified_options = get_coefplot_options(coefplot.options)
+    options = merge(default_coefplot_options,specified_options) # give options in coefplot attributes a higher priority
+    PGFPlotsX.print_tex(io, Axis(options, collect(values(coefplot.dict))))
     if coefplot.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, coefplot.note, note_default_option)
     end
 end
-
 
 function copy_options!(coefplot::Coefplot, to_be_copyed::Coefplot, exceptions::Vector{Symbol})
     for fieldname in fieldnames(typeof(coefplot))
@@ -161,6 +202,7 @@ function copy_options!(coefplot::Coefplot, to_be_copyed::Coefplot, exceptions::V
     end
     return coefplot
 end
+
 function copy_options!(coefplot::Coefplot, to_be_copyed::Coefplot, exception::Symbol=:dict)
     for fieldname in fieldnames(typeof(coefplot))
         if fieldname != exception
@@ -170,22 +212,24 @@ function copy_options!(coefplot::Coefplot, to_be_copyed::Coefplot, exception::Sy
     return coefplot
 end
 
-function concat(coefplots::Coefplot ...)
-    dict = Dict{Symbol, SinglecoefPlot}()
-    last_max_loc = 0
+function concat(coefplots::Vector{Coefplot})
+    dict = OrderedDict{Symbol, SinglecoefPlot}()
     for coefplot in coefplots
-        append!(dict, shift.(coefplot.dict,last_max_loc))
-        last_max_loc = maximum([singlecoefplot.thiscoef_loc for singlecoefplot in values(coefplot.dict)])
+        pushfirst!(dict,collect(coefplot.dict)...)
     end
     concated = Coefplot(dict)
     copy_options!(concated, coefplots[1])
+    equidist!(concated;preserve_order=false)
 end
 
-function shift(pair::Pair{Symbol,SinglecoefPlot}, shift::Real)
-    return pair.first => pair.second.thiscoef_loc + shift
+function shift(pair::Pair{Symbol,SinglecoefPlot}, dist::Real)
+    new_pair = deepcopy(pair)
+    new_pair.second.thiscoef_loc = new_pair.second.thiscoef_loc + dist
+    return new_pair
 end
 
-function shift!(coefplot::Coefplot, shift::Real)
-    coefplot.dict = Dict([shift(kv,shift) for kv in coefplot.dict])
-    return coefplot
+function shift(coefplot::Coefplot, dist::Real)
+    new_coefplot = deepcopy(coefplot)
+    new_coefplot.dict = OrderedDict([shift(kv,dist) for kv in coefplot.dict])
+    return new_coefplot
 end

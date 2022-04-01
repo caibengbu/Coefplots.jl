@@ -16,25 +16,11 @@ end
 function parse(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{T} where T<:Any)
     # create Coefplot from combining regmodel output and reglabel, regnote, xtitle, ytitle
     @assert size(coefvec,1) == size(confint,1) == size(coefnames,1) "Dimension doesn't match"
-    dict = Dict([Symbol(coefnames[i])=>SinglecoefPlot(coefvec[i], confint[i,:]..., coefnames[i], i) for i in 1:size(coefvec,1)])
+    dict = OrderedDict([Symbol(coefnames[i])=>SinglecoefPlot(coefvec[i], confint[i,:]..., coefnames[i], i) for i in 1:size(coefvec,1)])
     Coefplot(dict)
 end
 
 function rename!(coefplot::Coefplot,key_2_newkey::Pair{Symbol,Symbol}...; keep_name::Bool=false)
-    key_2_newkey_dict = Dict(key_2_newkey)
-    new_dict = Pair{Symbol,Coefplot}()
-    for (k,v) in coefplot.dict
-        new_key = get(key_2_newkey_dict,k,k)
-        if keep_name
-            #dothing
-        else
-            v.thiscoef_label = string(new_key)
-        end
-        push!(new_dict, new_key => v)
-    end
-    new_coefplot = Coefplot(new_dict)
-    copy_options!(new_coefplot,coefplot)
-    return new_coefplot
 end
 
 

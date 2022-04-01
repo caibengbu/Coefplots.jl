@@ -21,7 +21,7 @@ function PGFPlotsX.print_tex(io::IO, dot::Dot, options::PGFPlotsX.Options)
     print(io, "\\filldraw")
     print(io,"(axis cs:$(join(dot.loc,","))) node")
     PGFPlotsX.print_options(io, options; newline = false)
-    println(io, "{}")
+    println(io, "{}; ")
 end
 
 function PGFPlotsX.print_tex(io::IO, dot::Dot)

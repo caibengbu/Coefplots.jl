@@ -2,6 +2,7 @@ module Coefplots
     using StatsModels
     using PGFPlotsX
     using Printf
+    using DataStructures
     import FixedEffectModels: FixedEffectModel
     import GLFixedEffectModels: GLFixedEffectModel
     

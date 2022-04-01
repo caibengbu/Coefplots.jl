@@ -30,12 +30,27 @@ const default_color = (white   = Color(RGB(255, 255, 255)),
                        gray    = Color(RGB(128, 128, 128)), 
                        silver  = Color(RGB(191, 191, 191)),
                        pink    = Color(RGB(255, 128, 128)),
-                       maroon  = Color(RGB(128, 0  , 0  )),
+                       maroon  = Color(RGB(144, 53,  59 )),
                        olive   = Color(RGB(128, 128, 0  )),
                        green   = Color(RGB(0  , 128, 0  )),
                        purple  = Color(RGB(128, 0  , 128)),
-                       teal    = Color(RGB(0  , 128, 128)),
-                       navy    = Color(RGB(26 , 71 , 111)))
+                       teal    = Color(RGB(110, 142, 132)),
+                       navy    = Color(RGB(26 , 71 , 111)),
+                       forest  = Color(RGB(85 , 117, 47 )),
+                       dkorg   = Color(RGB(227, 126, 0  )),
+                       cranbrry= Color(RGB(193, 5  , 52 )),
+                       lavender= Color(RGB(147, 141, 210)),
+                       khaki   = Color(RGB(202, 194, 126)),
+                       sienna  = Color(RGB(160, 82 , 45 )),
+                       emidblue= Color(RGB(123, 146, 168)),
+                       emerald = Color(RGB(45 , 109, 102)),
+                       brown   = Color(RGB(156, 136, 71 )),
+                       erose   = Color(RGB(191, 161, 156)),
+                       gold    = Color(RGB(255, 210,   0)),
+                       bluegray= Color(RGB(217, 230, 235)))
+            
+const color_palatte = [:navy, :maroon, :forest, :dkorg, :teal, :cranbrry, :lavender, :khaki,
+                       :sienna, :emidblue, :emerald, :brown, :erose, :gold, :bluegray]
 
 rbg_as_xcolor(rgb::RGB) = "rgb,255: red, $(rgb.r); green, $(rgb.g); blue, $(rgb.b)"
 color_as_xcolor(color::Color) = rbg_as_xcolor(color.rgb)
