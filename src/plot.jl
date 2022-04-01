@@ -12,7 +12,7 @@ function plot(coefplot::Coefplot; verbose::Bool=false)
         @show td
         print_tex(td)
     else
-        display(td)
+        display_on_different_IDE(td)
     end
 end
 
@@ -22,7 +22,7 @@ function plot(mcoefplot::MultiCoefplot; verbose::Bool=false)
         @show td
         print_tex(td)
     else
-        display(td)
+        display_on_different_IDE(td)
     end
 end
 
@@ -32,12 +32,22 @@ function plot(mcoefplot::MultiCoefplot, filename::String; verbose::Bool=false)
     pgfsave(filename,td)
 end
 
-function plot(regmodel::SupportedEstimation, filename::String)
+function plot(regmodel::SupportedEstimation, filename::String; verbose::Bool=false)
     parsed_model = parse(regmodel)
-    plot(parsed_model,filename)
+    plot(parsed_model,filename; verbose)
 end
 
-function plot(regmodel::SupportedEstimation)
+function plot(regmodel::SupportedEstimation; verbose::Bool=false)
     parsed_model = parse(regmodel)
-    plot(parsed_model)
+    plot(parsed_model; verbose)
 end
+
+function display_on_different_IDE(td::PGFPlotsX.TikzDocument)
+    if PGFPlotsX._is_ijulia()
+        display("image/svg+xml",td)
+    else
+        display(td)
+    end
+end
+
+
