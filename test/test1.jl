@@ -37,7 +37,7 @@ ols3 = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth + 0), df)
 coefplot_nocons = Coefplots.parse(ols3)
 
 mcoefplot = Coefplots.MultiCoefplot(:model1 => coefplot, :model2 => coefplot_bivar, :model3 => coefplot_nocons)
-setlegends!(mcoefplot, :model1 => "Multivariate", :model2 => "Bivariate", :model3 => "No Constant")
+setlegends!(mcoefplot, :model1 => "Multivariate", :model2 => "Univariate", :model3 => "No Constant")
 plot(mcoefplot,"../asset/example2_multicoefplot.svg")
 
 

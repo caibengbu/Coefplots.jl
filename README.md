@@ -64,13 +64,13 @@ uni1 = lm(@formula(SepalLength~SepalWidth), df)
 uni2 = lm(@formula(SepalLength~PetalLength), df)
 uni3 = lm(@formula(SepalLength~PetalWidth), df)
 
-coefplot_bivar = Coefplots.concat(Coefplots.parse.([uni1,uni2,uni3]))
-setxtitle!(coefplot_bivar,"coefficient")
-setytitle!(coefplot_bivar,"regressor")
-setname!(coefplot_bivar,"Coefplot of My Example Regression (Univariate)")
-includenote!(coefplot_bivar,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
+coefplot_univar = Coefplots.concat(Coefplots.parse.([uni1,uni2,uni3]))
+setxtitle!(coefplot_univar,"coefficient")
+setytitle!(coefplot_univar,"regressor")
+setname!(coefplot_univar,"Coefplot of My Example Regression (Univariate)")
+includenote!(coefplot_univar,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
 plot(coefplot)
-# plot(coefplot_bivar,"../asset/example2_univariate.svg")
+# plot(coefplot_univar,"../asset/example2_univariate.svg")
 ```
 
 
@@ -87,7 +87,8 @@ To plot multiple coefplots together as a MultiCoefplot, construct the MultiCoefp
 # no constant
 ols3 = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth + 0), df)
 coefplot_nocons = Coefplots.parse(ols3)
-mcoefplot = Coefplots.MultiCoefplot(:model1 => coefplot, :model2 => coefplot_bivar, :model3 => coefplot_nocons)
+mcoefplot = Coefplots.MultiCoefplot(:model1 => coefplot, :model2 => coefplot_univar, :model3 => coefplot_nocons)
+setlegends!(mcoefplot, :model1 => "Multivariate", :model2 => "Univariate", :model3 => "No Constant")
 plot(mcoefplot)
 # plot(mcoefplot,"../asset/example2_multicoefplot.svg")
 ```
