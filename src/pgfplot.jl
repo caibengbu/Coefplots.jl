@@ -49,7 +49,7 @@ function PGFPlotsX.print_tex(io::IO, caption::AbstractCaption,options::PGFPlotsX
 end
 
 mutable struct Legend
-    l::Union{String}
+    l::String
     line_options::PGFPlotsX.Options
     dot_options::PGFPlotsX.Options
 end
@@ -62,3 +62,8 @@ function PGFPlotsX.print_tex(io::IO, lgd::Legend)
     PGFPlotsX.print_opt(io, lgd.dot_options)
     print(io, "}};")
 end
+
+Legend(l::String,representitive_scoptions::SinglecoefplotOption) = Legend(l,
+                                            get_line_options(representitive_scoptions),
+                                            merge(get_dot_options(representitive_scoptions), 
+                                                                  color_as_draw_option(changeopacity(representitive_scoptions.dotcolor,0)))) # need to set draw opacity = 0

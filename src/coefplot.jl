@@ -233,3 +233,5 @@ function shift(coefplot::Coefplot, dist::Real)
     new_coefplot.dict = OrderedDict([shift(kv,dist) for kv in coefplot.dict])
     return new_coefplot
 end
+
+check_if_all_singlecoefplot_options_conform(c::Coefplot) = @assert all_equal([sc.options for sc in values(c.dict)]) throw(AssertionError("nonconforming subplot options within the coefplot labelled" * string(c_symbol)))

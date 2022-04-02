@@ -13,15 +13,10 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
         for (c_symbol, c, color) in zip(keys(new_dict),values(new_dict),Iterators.cycle(color_palatte))
-            if ~all_equal([sc.options for sc in values(c.dict)]) 
-                # might allow this in later releases
-                throw(AssertionError("nonconforming subplot options within the coefplot labelled" * string(c_symbol)))
-            end
+            check_if_all_singlecoefplot_options_conform(c)
             setcolor!(c,get_default_color(color))
             representitive_scoptions = first(values(c.dict)).options
-            this_legend = Legend(string(c_symbol),
-                                 get_line_options(representitive_scoptions),
-                                 merge(get_dot_options(representitive_scoptions), color_as_draw_option(changeopacity(get_default_color(color),0)))) # need to set draw opacity = 0
+            this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
         new(name, note, xtitle, ytitle, new_dict, autolegends)
@@ -48,7 +43,17 @@ function includenote!(m::MultiCoefplot, note::String)
     return m
 end
 
-function setlegends!(m::MultiCoefplot,p::Pair{Symbol,Union{String,Missing}} ...)
+function setlegends!(m::MultiCoefplot, ps::Pair{Symbol,T} ...) where T <: Union{String, Missing}
+    for p in ps
+        if ismissing(p.second)
+            m.legends[p.first] = missing
+        else
+            c = m.dict[p.first]
+            check_if_all_singlecoefplot_options_conform(c)
+            representitive_scoptions = first(values(c.dict)).options
+            m.legends[p.first] = Legend(p.second, representitive_scoptions)
+        end
+    end
 end
 
 function MultiCoefplot(pair::Pair{Symbol,Coefplot}...)
