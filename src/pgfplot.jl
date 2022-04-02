@@ -47,3 +47,18 @@ function PGFPlotsX.print_tex(io::IO, caption::AbstractCaption,options::PGFPlotsX
     PGFPlotsX.print_options(io, options; newline = false)
     println(io, "{"*caption.caption*"};")
 end
+
+mutable struct Legend
+    l::Union{String}
+    line_options::PGFPlotsX.Options
+    dot_options::PGFPlotsX.Options
+end
+
+function PGFPlotsX.print_tex(io::IO, lgd::Legend)
+    PGFPlotsX.print_indent(io, "%%%%%%%%% plot legends %%%%%%%%%%")
+    print(io, "\\addlegendimage{")
+    PGFPlotsX.print_opt(io, lgd.line_options)
+    PGFPlotsX.print_opt(io, ", mark = *, mark options = {")
+    PGFPlotsX.print_opt(io, lgd.dot_options)
+    print(io, "}};")
+end

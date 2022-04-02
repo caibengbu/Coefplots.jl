@@ -32,3 +32,25 @@ get_dot_options(option::SinglecoefplotOption) = merge(option.other_dot_options,
 get_coefplot_options(option::CoefplotOption) = merge(option.other_coefplot_options,
                                                      PGFPlotsX.Options(Symbol("xticklabel style")=> "font=\\fontsize{$(option.xticklabel_size)}{$(option.xticklabel_size)}\\selectfont, rotate=$(option.xticklabel_angle)"),
                                                      PGFPlotsX.Options(Symbol("yticklabel style")=> "font=\\fontsize{$(option.yticklabel_size)}{$(option.yticklabel_size)}\\selectfont, rotate=$(option.yticklabel_angle)"))
+
+Base.:(==)(o1::PGFPlotsX.Options,o2::PGFPlotsX.Options) = (o1.dict == o2.dict) && (o1.print_empty == o2.print_empty)
+function Base.:(==)(so1::SinglecoefplotOption,so2::SinglecoefplotOption)
+    for fieldname in fieldnames(typeof(so1))
+        if getfield(so1,fieldname) == getfield(so2,fieldname)
+            continue
+        else
+            return false
+        end
+    end
+    return true
+end
+function all_equal(v::Vector{SinglecoefplotOption})
+    for i in 1:(length(v)-1)
+        if v[i] == v[i+1]
+            continue
+        else
+            return false
+        end
+    end
+    return true
+end
