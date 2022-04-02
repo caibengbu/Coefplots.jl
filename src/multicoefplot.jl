@@ -5,10 +5,11 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
     ytitle::Union{Missing,String}
     dict::OrderedDict{Symbol,Coefplot}
     legends::OrderedDict{Symbol,Union{Legend,Missing}}
+    other_components::Vector{Any}
 
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing)
+                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,other_components::Vector{Any}=Vector{Any}())
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
@@ -19,7 +20,7 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
-        new(name, note, xtitle, ytitle, new_dict, autolegends)
+        new(name, note, xtitle, ytitle, new_dict, autolegends, other_components)
     end
 end
 
@@ -56,6 +57,17 @@ function setlegends!(m::MultiCoefplot, ps::Pair{Symbol,T} ...) where T <: Union{
     end
 end
 
+function addcomponent!(m::MultiCoefplot, v::T) where T <: Union{VLine,VBand,HLine,HBand}
+    push!(m.other_components,v)
+    return m
+end
+
+function clearcomponents!(m::MultiCoefplot)
+    m.other_components = Vector{Any}()
+    return m
+end
+
+
 function MultiCoefplot(pair::Pair{Symbol,Coefplot}...)
     MultiCoefplot(OrderedDict(pair))
 end
@@ -65,7 +77,7 @@ function PGFPlotsX.print_tex(io::IO, m::MultiCoefplot)
     merge!(options,gen_legend_options(m))
     scoefplots = gen_scoefplots_from_mcoefplot(m)
     legend_nonmissing = collect(values(filter(x -> ~ismissing(x.second), m.legends)))
-    PGFPlotsX.print_tex(io, Axis(options,scoefplots,values(legend_nonmissing)))
+    PGFPlotsX.print_tex(io, Axis(options,m.other_components,scoefplots,values(legend_nonmissing)))
     if m.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, m.note, note_default_option)

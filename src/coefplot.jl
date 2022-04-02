@@ -5,12 +5,14 @@ mutable struct Coefplot <: PGFPlotsX.TikzElement
     ytitle::Union{Missing,String}
     dict::OrderedDict{Symbol,SinglecoefPlot}
     options::CoefplotOption
+    other_components::Vector{Any}
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
     function Coefplot(dict::OrderedDict{Symbol,SinglecoefPlot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,options=default_coefplot_options())
-        new(name, note, xtitle, ytitle, dict, options)
+                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,
+                      options::CoefplotOption=default_coefplot_options(),other_components::Vector{Any}=Vector{Any}())
+        new(name, note, xtitle, ytitle, dict, options, other_components)
     end
 end
 
@@ -39,6 +41,16 @@ function setcolor!(c::Coefplot, color::Color)
         sc.options.dotcolor = color
         sc.options.linecolor = color
     end
+    return c
+end
+
+function addcomponent!(c::Coefplot, v::T) where T <: Union{VLine,VBand,HLine,HBand}
+    push!(c.other_components,v)
+    return c
+end
+
+function clearcomponents!(c::Coefplot)
+    c.other_components = Vector{Any}()
     return c
 end
 
@@ -187,7 +199,7 @@ function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     default_coefplot_options = gen_other_option_from_coefplot(coefplot)
     specified_options = get_coefplot_options(coefplot)
     options = merge(default_coefplot_options,specified_options) # give options in coefplot attributes a higher priority
-    PGFPlotsX.print_tex(io, Axis(options, collect(values(coefplot.dict))))
+    PGFPlotsX.print_tex(io, Axis(options, coefplot.other_components, collect(values(coefplot.dict))))
     if coefplot.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, coefplot.note, note_default_option)

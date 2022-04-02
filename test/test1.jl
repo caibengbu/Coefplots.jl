@@ -18,8 +18,7 @@ setname!(coefplot,"Coefplot of My Example Regression")
 includenote!(coefplot,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
 plot(coefplot,"../asset/example2_multivariate.svg")
 
-# td = Coefplots.TikzDocument(Coefplots.TikzPicture(coefplot));
-
+# Example 3
 uni1 = lm(@formula(SepalLength~SepalWidth), df)
 uni2 = lm(@formula(SepalLength~PetalLength), df)
 uni3 = lm(@formula(SepalLength~PetalWidth), df)
@@ -32,6 +31,7 @@ setname!(coefplot_bivar,"Coefplot of My Example Regression")
 includenote!(coefplot_bivar,"Note: This is my note. These are very important captions and should not be missed for readers. This part contains a lot of important details about the figure presented in the above.")
 plot(coefplot_bivar,"../asset/example2_univariate.svg")
 
+# Example 4
 # no constant
 ols3 = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth + 0), df)
 coefplot_nocons = Coefplots.parse(ols3)
@@ -39,6 +39,16 @@ coefplot_nocons = Coefplots.parse(ols3)
 mcoefplot = Coefplots.MultiCoefplot(:model1 => coefplot, :model2 => coefplot_bivar, :model3 => coefplot_nocons)
 setlegends!(mcoefplot, :model1 => "Multivariate", :model2 => "Univariate", :model3 => "No Constant")
 plot(mcoefplot,"../asset/example2_multicoefplot.svg")
+
+# Example 5
+# Add PGFPlotsX TikzElement using their @pgf macro
+using PGFPlotsX
+addcomponent!(coefplot, @pgf VLine({red, dashed},0)) # add a vertical line red dashed line
+plot(coefplot, "../asset/example5_1.svg")
+
+push!(Coefplots.PGFPlotsX.CUSTOM_PREAMBLE, "\\usetikzlibrary{patterns}")
+addcomponent!(mcoefplot, @pgf HBand({pattern = "north west lines", opacity = 0.5, draw = "none"}, 1, 2)) # add a horizontal band from y=1 to y=2
+plot(mcoefplot, "../asset/example5_2.svg")
 
 
 #=

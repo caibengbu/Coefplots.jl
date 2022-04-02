@@ -6,6 +6,7 @@ function gen_default_preamble()
     push!(preamble, "\\usepackage{lmodern}")
     push!(preamble, "\\usepackage[T1]{fontenc}")
     push!(preamble,"\\usepackage{sansmath}")
+    push!(preamble, "\\usetikzlibrary{patterns}")
 end
 
 push!(PGFPlotsX.CUSTOM_PREAMBLE, gen_default_preamble()...)
