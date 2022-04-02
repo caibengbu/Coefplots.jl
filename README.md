@@ -97,8 +97,7 @@ plot(mcoefplot)
 <img src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example2_multicoefplot.svg" width="500" height="500">
     
 ### Example 5
-To plot multiple coefplots together as a MultiCoefplot, construct the MultiCoefplot object from `MultiCoefplot()`
-
+You can also add TikzElements from PGFPlotsX using their macro `@pgf`. The supported TikzElements now are limited to `HLine`, `HBand`, `VLine`, `VBand`.
 
 ```julia
 # Example 5
