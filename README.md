@@ -1,4 +1,5 @@
-![logo](assets/logo.svg)
+<img width="400" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg">
+
 # Coefplots.jl
 
 [Coefplots](https://github.com/caibengbu/Coefplots.jl) aims to make available in Julia (part of) the functionalities of [the Stata command `coefplot`](http://repec.sowi.unibe.ch/stata/coefplot/getting-started.html). [Coefplots](https://github.com/caibengbu/Coefplots.jl) is built on [PGFPlotsX](https://github.com/KristofferC/PGFPlotsX.jl/tree/ada03510396af592e05b2e382a0c12ce37ee3cc8). Work in progress.
