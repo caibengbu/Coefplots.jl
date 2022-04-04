@@ -18,10 +18,10 @@ pkg> add https://github.com/caibengbu/Coefplots.jl.git
 - [ ] allow multiple regression plot together (figure side by side, align on value axis)
 - [x] allow multiple regression plot together (same figure, singlecoefplot side by side)
 - [ ] allow offset
-- [ ] allow yline
-- [ ] allow xline
-- [ ] allow yband
-- [ ] allow xband
+- [x] allow yline
+- [x] allow xline
+- [x] allow yband
+- [x] allow xband
 - [ ] automate fontsize
 - [x] allow color change
 - [ ] allow node shape change
