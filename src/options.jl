@@ -15,7 +15,7 @@ mutable struct SinglecoefplotOption
     other_line_options::PGFPlotsX.Options
 end
 
-default_singlecoefplot_options() = SinglecoefplotOption(4, get_default_color(:navy), 0.5, get_default_color(:navy), PGFPlotsX.Options(), PGFPlotsX.Options())
+default_singlecoefplot_options() = SinglecoefplotOption(4, first(COLOR_PALATTE), 0.5, first(COLOR_PALATTE), PGFPlotsX.Options(), PGFPlotsX.Options())
 
 default_coefplot_options() = CoefplotOption(0, 5, 0, 5, PGFPlotsX.Options())
 

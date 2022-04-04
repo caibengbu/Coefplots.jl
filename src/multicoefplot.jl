@@ -15,9 +15,9 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
-        for (c_symbol, c, color) in zip(keys(new_dict),values(new_dict),Iterators.cycle(color_palatte))
+        for (c_symbol, c, color) in zip(keys(new_dict),values(new_dict),COLOR_PALATTE)
             check_if_all_singlecoefplot_options_conform(c)
-            setcolor!(c,get_default_color(color))
+            setcolor!(c, color)
             representitive_scoptions = first(values(c.dict)).options
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)

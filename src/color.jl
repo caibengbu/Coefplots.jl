@@ -47,10 +47,18 @@ const default_color = (white   = Color(RGB(255, 255, 255)),
                        brown   = Color(RGB(156, 136, 71 )),
                        erose   = Color(RGB(191, 161, 156)),
                        gold    = Color(RGB(255, 210,   0)),
-                       bluegray= Color(RGB(217, 230, 235)))
+                       bluegray= Color(RGB(217, 230, 235)),
+                       jl_blue = Color(RGB(64 , 99 , 216)),
+                       jl_purp = Color(RGB(149, 88 , 178)),
+                       jl_green= Color(RGB(56 , 152, 38 )),
+                       jl_red  = Color(RGB(203, 60 , 51 )))
             
-const color_palatte = [:navy, :maroon, :forest, :dkorg, :teal, :cranbrry, :lavender, :khaki,
-                       :sienna, :emidblue, :emerald, :brown, :erose, :gold, :bluegray]
+const stata_color = [:navy, :maroon, :forest, :dkorg, :teal, :cranbrry, :lavender, :khaki,
+                     :sienna, :emidblue, :emerald, :brown, :erose, :gold, :bluegray]
+
+const julia_color = [:jl_blue, :jl_green, :jl_red, :jl_purp]
+
+COLOR_PALATTE = Iterators.cycle(broadcast(x->get(default_color,x,:black),julia_color))
 
 changeopacity(color::Color,o::Real) = Color(color.rgb, o)
 
