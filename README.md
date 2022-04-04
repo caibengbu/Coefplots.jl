@@ -1,6 +1,6 @@
 # Coefplots.jl
 
-This repository aims to make available in Julia the functionalities of the Stata command `coefplot`. Work in progress.
+[Coefplots](https://github.com/caibengbu/Coefplots.jl) aims to make available in Julia (part of) the functionalities of [the Stata command `coefplot`](http://repec.sowi.unibe.ch/stata/coefplot/getting-started.html). [Coefplots](https://github.com/caibengbu/Coefplots.jl) is built on [PGFPlotsX](https://github.com/KristofferC/PGFPlotsX.jl/tree/ada03510396af592e05b2e382a0c12ce37ee3cc8). Work in progress.
 
 ## Quick Start
 
@@ -96,7 +96,28 @@ plot(mcoefplot)
 
 <img src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example2_multicoefplot.svg" width="500" height="500">
     
+### Example 5
+You can also add TikzElements from PGFPlotsX using their macro `@pgf`. The supported TikzElements now are limited to `HLine`, `HBand`, `VLine`, `VBand`.
 
+```julia
+# Example 5
+# Add PGFPlotsX TikzElement using their @pgf macro
+using PGFPlotsX
+addcomponent!(coefplot, @pgf VLine({red, dashed},0)) # add a vertical line red dashed line
+# plot(coefplot, "../asset/example5_1.svg")
+plot(coefplot)
+```
+
+<img src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/asset/example5_1.svg" width="500" height="500">
+
+```julia
+push!(Coefplots.PGFPlotsX.CUSTOM_PREAMBLE, "\\usetikzlibrary{patterns}")
+addcomponent!(mcoefplot, @pgf HBand({pattern = "north west lines", opacity = 0.5, draw = "none"}, 1, 2)) # add a horizontal band from y=1 to y=2
+# plot(mcoefplot, "../asset/example5_2.svg")
+plot(mcoefplot)
+```
+
+<img src="https://github.com/caibengbu/Coefplots.jl/blob/main/asset/example5_2.svg" width="500" height="500">
 
 
 ## Installation
