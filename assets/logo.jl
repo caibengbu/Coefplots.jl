@@ -8,10 +8,10 @@ using Luxor
             Luxor.julia_red,
             Luxor.julia_purple,
             Luxor.julia_blue][mod1(n, 4)])
-        sector(Point(-100, 0), 50, 100, θ, θ + 2π/steps - deg2rad(gap), :fill)
+        sector(Point(-150, 0), 50, 100, θ, θ + 2π/steps - deg2rad(gap), :fill)
     end
      fontsize(90)
      fontface("MyanmarMN-Bold")
      sethue("black")
-     text("oefplot", Point(-128, -10) ,halign=:left,valign = :middle)
-end 420 200 "logo.svg"
+     text("oefplots.jl", Point(-178, -10) ,halign=:left,valign = :middle)
+end 700 200 "logo.svg"
