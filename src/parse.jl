@@ -20,9 +20,6 @@ function parse(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Rea
     Coefplot(dict)
 end
 
-function rename!(coefplot::Coefplot,key_2_newkey::Pair{Symbol,Symbol}...; keep_name::Bool=false)
-end
-
 
 """
     drop_cons!(coefplot[, cons])
@@ -51,8 +48,8 @@ julia> equidist!(coefplot);
 julia> plot(coefplot)
 ```
 """
-function equidist!(coefplot::Coefplot;interval::Real=1,preserve_order::Bool=true)
-    if preserve_order
+function equidist!(coefplot::Coefplot;interval::Real=1,preserve_locorder::Bool=false)
+    if preserve_locorder
         loc = [singlecoefplot.thiscoef_loc for singlecoefplot in values(coefplot.dict)]
         @assert ~all(ismissing.(loc)) "there are missing singlecoefplot location"
         newloc = invperm(sortperm(loc))

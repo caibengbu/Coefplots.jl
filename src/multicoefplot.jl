@@ -114,7 +114,7 @@ function gen_other_option_from_mcoefplot(m::MultiCoefplot)
     return merge!(merged_option,labels_and_titles) # give labels_and_titles better priority
 end
 
-function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,Real}=missing)
+function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,Real}=missing) # need to rework. identify which singlecoefplot should be together. This implementation is very fragile
     v = Vector{SinglecoefPlot}()
     l = length(m.dict)
     if interval === missing

@@ -231,7 +231,7 @@ function concat(coefplots::Vector{Coefplot})
     end
     concated = Coefplot(dict)
     copy_options!(concated, coefplots[1])
-    equidist!(concated;preserve_order=false)
+    equidist!(concated;preserve_locorder=false)
 end
 
 function shift(pair::Pair{Symbol,SinglecoefPlot}, dist::Real)
@@ -247,3 +247,57 @@ function shift(coefplot::Coefplot, dist::Real)
 end
 
 check_if_all_singlecoefplot_options_conform(c::Coefplot) = @assert all_equal([sc.options for sc in values(c.dict)]) throw(AssertionError("nonconforming subplot options within the coefplot labelled" * string(c_symbol)))
+
+function coefrename!(c::Coefplot,ps::Pair{Symbol,String}...;relabel=false,rename=true,sort=false,drop=true)
+    # if rename or relabel are all false, return coefplot as it is
+    if ~rename && ~relabel 
+        return c
+    end
+
+    new_dict = OrderedDict{Symbol,SinglecoefPlot}()
+    mapping_dict = Dict(ps)
+    p_contained_in_c = all(broadcast(x -> haskey(c.dict,x),keys(mapping_dict))) # p(pair) ⊆ c(coefplot)
+    c_contained_in_p = all(broadcast(x -> haskey(mapping_dict,x),keys(c.dict))) # c ⊆ p
+    @assert p_contained_in_c "exceptional key found in the pair input"
+    is_partial_rename = ~ c_contained_in_p # given that p ⊆ c, if c ⊆ p means that this is a full rename.
+
+    if is_partial_rename && sort && drop
+        @info "the renaming is partial, sorting will drop coefficients that is not renamed..."
+    elseif is_partial_rename && sort && ~drop
+        throw(ArgumentError("the renaming is partial, can't sort without dropping"))
+    end
+
+    if sort # if sort, the new coefplot.dict will have the order of the ps
+        for pp in p
+            this_singlecoefplot = deepcopy(c[pp.first])
+            if rename
+                this_singlecoefplot.thiscoef_label = pp.second
+            end
+            if relabel
+                new_dict[Symbol(pp.second)] = this_singlecoefplot
+            else
+                new_dict[pp.first] = this_singlecoefplot
+            end
+        end
+    else # if sort, the new coefplot.dict will have the old order
+        for (k,v) in c.dict
+            this_singlecoefplot = deepcopy(v)
+            new_label = get(mapping_dict,k,v.thiscoef_label) # check if k has a new label, if not return the original label as a default
+            if rename
+                this_singlecoefplot.thiscoef_label = new_label
+            end
+            if relabel
+                new_dict[Symbol(new_label)] = this_singlecoefplot
+            else
+                new_dict[k] = this_singlecoefplot
+            end
+        end
+    end
+    c.dict = new_dict
+    return c
+end
+
+function coefrename(c::Coefplot,ps::Pair{Symbol,String}...;relabel=false,rename=true,sort=false,drop=true)
+    new_c = deepcopy(c)
+    coefrename!(new_c,ps...;relabel,rename,sort,drop)
+end
