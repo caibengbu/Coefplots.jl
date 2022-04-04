@@ -54,3 +54,19 @@ function all_equal(v::Vector{SinglecoefplotOption})
     end
     return true
 end
+
+mutable struct LegendsOption
+    fontsize::Real
+    at::Tuple{Real, Real}
+    anchor::Symbol
+
+    function LegendsOption(fontsize::Real=5,at::Tuple{Real, Real}=(0.98,0.98),anchor::Symbol=Symbol("north east"))
+        new(fontsize,at,anchor)
+    end
+end
+
+function gen_legend_options(lo::LegendsOption)
+    PGFPlotsX.Options(Symbol("legend style") => "font=\\fontsize{$(lo.fontsize)}{$(lo.fontsize)}\\selectfont",
+                      :at => "($(first(lo.at)),$(last(lo.at)))",
+                      :anchor => string(lo.anchor))
+end

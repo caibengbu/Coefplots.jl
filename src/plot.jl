@@ -45,7 +45,7 @@ end
 
 function display_on_different_IDE(td::PGFPlotsX.TikzDocument)
     if PGFPlotsX._is_ijulia()
-        display("image/svg+xml",td)
+        display("image/png",td)
     else
         display(td)
     end

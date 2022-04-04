@@ -5,11 +5,13 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
     ytitle::Union{Missing,String}
     dict::OrderedDict{Symbol,Coefplot}
     legends::OrderedDict{Symbol,Union{Legend,Missing}}
+    legends_options::LegendsOption
     other_components::Vector{Any}
 
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,other_components::Vector{Any}=Vector{Any}())
+                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,
+                      legends_options::LegendsOption=LegendsOption(),other_components::Vector{Any}=Vector{Any}())
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
@@ -20,7 +22,7 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
-        new(name, note, xtitle, ytitle, new_dict, autolegends, other_components)
+        new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components)
     end
 end
 
@@ -74,9 +76,11 @@ end
 
 function PGFPlotsX.print_tex(io::IO, m::MultiCoefplot)
     options = gen_other_option_from_mcoefplot(m)
-    merge!(options,gen_legend_options(m))
-    scoefplots = gen_scoefplots_from_mcoefplot(m)
     legend_nonmissing = collect(values(filter(x -> ~ismissing(x.second), m.legends)))
+    legend_labels = PGFPlotsX.Options(Symbol("legend entries") => join([lgd.l for lgd in values(legend_nonmissing)],","))
+    merge!(options,gen_legend_options(m.legends_options),legend_labels)
+
+    scoefplots = gen_scoefplots_from_mcoefplot(m)
     PGFPlotsX.print_tex(io, Axis(options,m.other_components,scoefplots,values(legend_nonmissing)))
     if m.note !== missing
         note_default_option = default_note_options()
@@ -107,13 +111,7 @@ function gen_other_option_from_mcoefplot(m::MultiCoefplot)
         labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
 
-    return merge!(labels_and_titles,merged_option)
-end
-
-function gen_legend_options(m::MultiCoefplot)
-    legend_nonmissing = filter(x -> ~ismissing(x.second), m.legends)
-    PGFPlotsX.Options(Symbol("legend style") => "font=\\fontsize{5.0}{5.0}\\selectfont",
-                      Symbol("legend entries") => join([lgd.l for lgd in values(legend_nonmissing)],","))
+    return merge!(merged_option,labels_and_titles) # give labels_and_titles better priority
 end
 
 function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,Real}=missing)
