@@ -6,13 +6,14 @@ mutable struct Coefplot <: PGFPlotsX.TikzElement
     dict::OrderedDict{Symbol,SinglecoefPlot}
     options::CoefplotOption
     other_components::Vector{Any}
+    vertical::Bool
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
     function Coefplot(dict::OrderedDict{Symbol,SinglecoefPlot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
                       name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,
                       options::CoefplotOption=default_coefplot_options(),other_components::Vector{Any}=Vector{Any}())
-        new(name, note, xtitle, ytitle, dict, options, other_components)
+        new(name, note, xtitle, ytitle, dict, options, other_components, false)
     end
 end
 
@@ -54,7 +55,15 @@ function clearcomponents!(c::Coefplot)
     return c
 end
 
-function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false,seperate_line::Bool=false)
+function transpose!(c::Coefplot)
+    c.vertical = ~c.vertical
+    xtitle = deepcopy(c.xtitle)
+    c.xtitle = deepcopy(c.ytitle)
+    c.ytitle = xtitle
+    return c
+end
+
+function gen_other_option_from_coefplot(coefplot::Coefplot;seperate_line::Bool=false)
     singlecoefplots = values(coefplot.dict)
     xtick = [singlecoefplot.thiscoef_loc for singlecoefplot in singlecoefplots]
     xticklabels = [singlecoefplot.thiscoef_label for singlecoefplot in singlecoefplots]
@@ -80,7 +89,7 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false,
     end
     if seperate_line
         sorted_xtick = sort(xtick)
-        if vertical
+        if coefplot.vertical
             other_options = PGFPlotsX.Options(
                 :xmin => xaxis_lb, :xmax => xaxis_ub, 
                 :ymin => yaxis_lb, :ymax => yaxis_ub, 
@@ -98,7 +107,7 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;vertical::Bool=false,
                 Symbol("extra y tick labels") => "{}")
         end
     else
-        if vertical
+        if coefplot.vertical
             other_options = PGFPlotsX.Options(
                 :xmin => xaxis_lb, :xmax => xaxis_ub, 
                 :ymin => yaxis_lb, :ymax => yaxis_ub, 
@@ -166,7 +175,6 @@ function Base.show(io::IO, coefplot::Coefplot)
     end
     println(io, bottom_and_top_rule)
 end
-    
 
 function Base.pushfirst!(d::OrderedDict{Symbol,SinglecoefPlot}, p::Pair{Symbol,SinglecoefPlot} ...; overwrite::Bool=true, suppress::Bool=false)
     for pp in p
@@ -192,6 +200,25 @@ function Base.push!(coefplot::Coefplot, other::Pair{Symbol, SinglecoefPlot} ...)
     coefplot
 end
 
+function print_coefplot(io::IO, options::PGFPlotsX.Options, s::Vector{SinglecoefPlot}, vertical::Bool, other_components::Any ...)
+    print(io, "\\begin{axis}")
+    PGFPlotsX.print_options(io, options)
+    PGFPlotsX.print_indent(io) do io
+        for elt in other_components
+            PGFPlotsX.print_tex(io, elt)
+        end
+        if vertical
+            for ss in s
+                print_singelcoefplot_vertical(io, ss)
+            end
+        else
+            for ss in s
+                print_singelcoefplot(io, ss)
+            end
+        end
+    end
+    println(io, "\\end{axis}")
+end
 
 function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
@@ -199,7 +226,7 @@ function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
     default_coefplot_options = gen_other_option_from_coefplot(coefplot)
     specified_options = get_coefplot_options(coefplot)
     options = merge(default_coefplot_options,specified_options) # give options in coefplot attributes a higher priority
-    PGFPlotsX.print_tex(io, Axis(options, coefplot.other_components, collect(values(coefplot.dict))))
+    print_coefplot(io, options,  collect(values(coefplot.dict)), coefplot.vertical, coefplot.other_components)
     if coefplot.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, coefplot.note, note_default_option)

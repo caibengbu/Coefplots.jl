@@ -39,7 +39,7 @@ function get_line(singlecoefplot::SinglecoefPlot, vertical::Bool=false)
     end
 end
 
-function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot)
+function print_singelcoefplot(io::IO, singlecoefplot::SinglecoefPlot)
     # Draw line first
     line = get_line(singlecoefplot)
     lineoptions = get_line_options(singlecoefplot)
@@ -47,6 +47,18 @@ function PGFPlotsX.print_tex(io::IO, singlecoefplot::SinglecoefPlot)
 
     # draw dot next
     dot = get_dot(singlecoefplot)
+    dotoptions = get_dot_options(singlecoefplot)
+    PGFPlotsX.print_tex(io, dot, dotoptions)
+end
+
+function print_singelcoefplot_vertical(io::IO, singlecoefplot::SinglecoefPlot)
+    # Draw line first
+    line = get_line(singlecoefplot, true)
+    lineoptions = get_line_options(singlecoefplot)
+    PGFPlotsX.print_tex(io, line, lineoptions)
+
+    # draw dot next
+    dot = get_dot(singlecoefplot, true)
     dotoptions = get_dot_options(singlecoefplot)
     PGFPlotsX.print_tex(io, dot, dotoptions)
 end

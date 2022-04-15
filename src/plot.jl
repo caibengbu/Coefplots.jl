@@ -13,7 +13,7 @@ function plot(coefplot::Coefplot; verbose::Bool=false)
         @show td
         print_tex(td)
     else
-        display_on_different_IDE(td)
+        display_on_different_IDEs(td)
     end
 end
 
@@ -23,7 +23,7 @@ function plot(mcoefplot::MultiCoefplot; verbose::Bool=false)
         @show td
         print_tex(td)
     else
-        display_on_different_IDE(td)
+        display_on_different_IDEs(td)
     end
 end
 
@@ -43,7 +43,7 @@ function plot(regmodel::SupportedEstimation; verbose::Bool=false)
     plot(parsed_model; verbose)
 end
 
-function display_on_different_IDE(td::PGFPlotsX.TikzDocument)
+function display_on_different_IDEs(td::PGFPlotsX.TikzDocument)
     if PGFPlotsX._is_ijulia()
         display("image/png",td)
     else

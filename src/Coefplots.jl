@@ -17,5 +17,5 @@ module Coefplots
     include("parse.jl")
     include("plot.jl")
 
-    export plot, setxtitle!, setytitle!, setname!, includenote!, equidist!, setlegends!, addcomponent!, clearcomponents!, coefrename, coefrename!
+    export plot, setxtitle!, setytitle!, setname!, includenote!, equidist!, setlegends!, addcomponent!, clearcomponents!, coefrename, coefrename!, transpose!
 end

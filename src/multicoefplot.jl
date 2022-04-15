@@ -7,6 +7,7 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
     legends::OrderedDict{Symbol,Union{Legend,Missing}}
     legends_options::LegendsOption
     other_components::Vector{Any}
+    vertical::Bool
 
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
                       xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
@@ -16,13 +17,14 @@ mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
         for (c_symbol, c, color) in zip(keys(new_dict),values(new_dict),COLOR_PALATTE)
-            check_if_all_singlecoefplot_options_conform(c)
+            check_if_all_singlecoefplot_options_conform(c) 
             setcolor!(c, color)
+            c.vertical = false # reset all coefplots to non vertical
             representitive_scoptions = first(values(c.dict)).options
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
-        new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components)
+        new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components, false)
     end
 end
 
@@ -69,6 +71,16 @@ function clearcomponents!(m::MultiCoefplot)
     return m
 end
 
+function transpose!(m::MultiCoefplot)
+    m.vertical = ~m.vertical
+    for c in values(m.dict)
+        c.vertical = m.vertical
+    end
+    xtitle = deepcopy(m.xtitle)
+    m.xtitle = deepcopy(m.ytitle)
+    m.ytitle = xtitle
+    return m
+end
 
 function MultiCoefplot(pair::Pair{Symbol,Coefplot}...)
     MultiCoefplot(OrderedDict(pair))
@@ -81,7 +93,7 @@ function PGFPlotsX.print_tex(io::IO, m::MultiCoefplot)
     merge!(options,gen_legend_options(m.legends_options),legend_labels)
 
     scoefplots = gen_scoefplots_from_mcoefplot(m)
-    PGFPlotsX.print_tex(io, Axis(options,m.other_components,scoefplots,values(legend_nonmissing)))
+    print_coefplot(io, options, scoefplots, m.vertical, values(legend_nonmissing), m.other_components)
     if m.note !== missing
         note_default_option = default_note_options()
         PGFPlotsX.print_tex(io, m.note, note_default_option)
