@@ -1,8 +1,8 @@
-mutable struct Coefplot <: PGFPlotsX.TikzElement
-    name::Union{Missing,String}
-    note::Union{Missing,AbstractCaption}
-    xtitle::Union{Missing,String}
-    ytitle::Union{Missing,String}
+mutable struct Coefplot
+    name::Union{Null,String}
+    note::Union{Null,AbstractCaption}
+    xtitle::Union{Null,String}
+    ytitle::Union{Null,String}
     dict::OrderedDict{Symbol,SinglecoefPlot}
     options::CoefplotOption
     other_components::Vector{Any}
@@ -10,8 +10,8 @@ mutable struct Coefplot <: PGFPlotsX.TikzElement
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
     function Coefplot(dict::OrderedDict{Symbol,SinglecoefPlot},
-                      xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,
+                      xtitle::Union{Null,String}=Null(),ytitle::Union{Null,String}=Null(),
+                      name::Union{Null,String}=Null(), note::Union{Null,AbstractCaption}=Null(),
                       options::CoefplotOption=default_coefplot_options(),other_components::Vector{Any}=Vector{Any}())
         new(name, note, xtitle, ytitle, dict, options, other_components, false)
     end
@@ -33,7 +33,7 @@ function setname!(c::Coefplot, name::String)
 end
 
 function includenote!(c::Coefplot, note::String)
-    c.note = AbstractCaption(note)
+    c.note = AbstractCaption(note, default_note_options())
     return c
 end
 
@@ -75,15 +75,15 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;seperate_line::Bool=f
     yaxis_lb = ymin - (ymax - ymin)*0.1
     yaxis_ub = ymax + (ymax - ymin)*0.1
     labels_and_titles = PGFPlotsX.Options()
-    if coefplot.xtitle !== missing
+    if ~issingletontype(coefplot.xtitle)
         labels_and_titles[:xlabel] = coefplot.xtitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end 
-    if coefplot.ytitle !== missing
+    if ~issingletontype(coefplot.ytitle)
         labels_and_titles[:ylabel] = coefplot.ytitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end
-    if coefplot.name !== missing
+    if ~issingletontype(coefplot.name)
         labels_and_titles[:title] = coefplot.name
         labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
@@ -200,39 +200,6 @@ function Base.push!(coefplot::Coefplot, other::Pair{Symbol, SinglecoefPlot} ...)
     coefplot
 end
 
-function print_coefplot(io::IO, options::PGFPlotsX.Options, s::Vector{SinglecoefPlot}, vertical::Bool, other_components::Any ...)
-    print(io, "\\begin{axis}")
-    PGFPlotsX.print_options(io, options)
-    PGFPlotsX.print_indent(io) do io
-        for elt in other_components
-            PGFPlotsX.print_tex(io, elt)
-        end
-        if vertical
-            for ss in s
-                print_singelcoefplot_vertical(io, ss)
-            end
-        else
-            for ss in s
-                print_singelcoefplot(io, ss)
-            end
-        end
-    end
-    println(io, "\\end{axis}")
-end
-
-function PGFPlotsX.print_tex(io::IO, coefplot::Coefplot)
-    # allow change color of a singlecoefplot (use inherit_options_from_coefplot as default)
-    # allow print title and note
-    default_coefplot_options = gen_other_option_from_coefplot(coefplot)
-    specified_options = get_coefplot_options(coefplot)
-    options = merge(default_coefplot_options,specified_options) # give options in coefplot attributes a higher priority
-    print_coefplot(io, options,  collect(values(coefplot.dict)), coefplot.vertical, coefplot.other_components)
-    if coefplot.note !== missing
-        note_default_option = default_note_options()
-        PGFPlotsX.print_tex(io, coefplot.note, note_default_option)
-    end
-end
-
 function copy_options!(coefplot::Coefplot, to_be_copyed::Coefplot, exceptions::Vector{Symbol})
     for fieldname in fieldnames(typeof(coefplot))
         if fieldname ∉ exceptions
@@ -327,4 +294,20 @@ end
 function coefrename(c::Coefplot,ps::Pair{Symbol,String}...;relabel=false,rename=true,sort=false,drop=true)
     new_c = deepcopy(c)
     coefrename!(new_c,ps...;relabel,rename,sort,drop)
+end
+
+function to_plotable(c::Coefplot)
+    default_coefplot_options = gen_other_option_from_coefplot(c)
+    specified_options = get_coefplot_options(c)
+    options = merge(default_coefplot_options,specified_options)  # give options in coefplot attributes a higher priority
+    Plotable(options, c.note, collect(c), c.other_components)
+end
+
+function Base.collect(c::Coefplot)
+    scs = PGFPlotsX.TikzElement[]
+    for sc in values(c.dict)
+        push!(scs, get_line(sc, c.vertical))
+        push!(scs, get_dot(sc, c.vertical))
+    end
+    return scs
 end

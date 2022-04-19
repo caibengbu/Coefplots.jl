@@ -2,13 +2,13 @@ TikzDocument(elements) = PGFPlotsX.TikzDocument("\\sffamily\\sansmath",elements;
 
 
 function plot(coefplot::Coefplot, filename::String; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(coefplot))
+    td = TikzDocument(TikzPicture(to_plotable(coefplot)))
     verbose ? print_tex(td) : nothing
     pgfsave(filename,td)
 end
 
 function plot(coefplot::Coefplot; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(coefplot))
+    td = TikzDocument(TikzPicture(to_plotable(coefplot)))
     if verbose
         @show td
         print_tex(td)
@@ -17,8 +17,8 @@ function plot(coefplot::Coefplot; verbose::Bool=false)
     end
 end
 
-function plot(mcoefplot::MultiCoefplot; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(mcoefplot))
+function plot(mcoefplot::MultiCoefplot; offset::Union{Real,Missing}=missing, verbose::Bool=false)
+    td = TikzDocument(TikzPicture(to_plotable(mcoefplot, offset)))
     if verbose
         @show td
         print_tex(td)
@@ -27,8 +27,8 @@ function plot(mcoefplot::MultiCoefplot; verbose::Bool=false)
     end
 end
 
-function plot(mcoefplot::MultiCoefplot, filename::String; verbose::Bool=false)
-    td = TikzDocument(TikzPicture(mcoefplot))
+function plot(mcoefplot::MultiCoefplot, filename::String; offset::Union{Real,Missing}=missing, verbose::Bool=false)
+    td = TikzDocument(TikzPicture(to_plotable(mcoefplot, offset)))
     verbose ? print_tex(td) : nothing
     pgfsave(filename,td)
 end

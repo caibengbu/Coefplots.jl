@@ -5,6 +5,7 @@ module Coefplots
     using DataStructures
     import FixedEffectModels: FixedEffectModel
     import GLFixedEffectModels: GLFixedEffectModel
+    import Base: issingletontype
     
 
     include("color.jl")

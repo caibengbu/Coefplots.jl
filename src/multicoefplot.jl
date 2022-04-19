@@ -1,18 +1,18 @@
-mutable struct MultiCoefplot <: PGFPlotsX.TikzElement
-    name::Union{Missing,String}
-    note::Union{Missing,AbstractCaption}
-    xtitle::Union{Missing,String}
-    ytitle::Union{Missing,String}
+mutable struct MultiCoefplot
+    name::Union{Null,String}
+    note::Union{Null,AbstractCaption}
+    xtitle::Union{Null,String}
+    ytitle::Union{Null,String}
     dict::OrderedDict{Symbol,Coefplot}
-    legends::OrderedDict{Symbol,Union{Legend,Missing}}
+    legends::OrderedDict{Symbol,Union{Legend,Null}}
     legends_options::LegendsOption
     other_components::Vector{Any}
     vertical::Bool
 
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
-                      xtitle::Union{Missing,String}=missing,ytitle::Union{Missing,String}=missing,
-                      name::Union{Missing,String}=missing, note::Union{Missing,AbstractCaption}=missing,
-                      legends_options::LegendsOption=LegendsOption(),other_components::Vector{Any}=Vector{Any}())
+                      xtitle::Union{Null,String}=Null(),ytitle::Union{Null,String}=Null(),
+                      name::Union{Null,String}=Null(), note::Union{Null,AbstractCaption}=Null(),
+                      legends_options::LegendsOption=LegendsOption(),other_components::Vector{Any}=Any[])
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
@@ -44,14 +44,14 @@ function setname!(m::MultiCoefplot, name::String)
 end
 
 function includenote!(m::MultiCoefplot, note::String)
-    m.note = AbstractCaption(note)
+    m.note = AbstractCaption(note,  default_note_options())
     return m
 end
 
 function setlegends!(m::MultiCoefplot, ps::Pair{Symbol,T} ...) where T <: Union{String, Missing}
     for p in ps
         if ismissing(p.second)
-            m.legends[p.first] = missing
+            m.legends[p.first] = Null()
         else
             c = m.dict[p.first]
             check_if_all_singlecoefplot_options_conform(c)
@@ -86,18 +86,13 @@ function MultiCoefplot(pair::Pair{Symbol,Coefplot}...)
     MultiCoefplot(OrderedDict(pair))
 end
 
-function PGFPlotsX.print_tex(io::IO, m::MultiCoefplot)
+function to_plotable(m::MultiCoefplot, interval::Union{Missing,Real}=missing)
     options = gen_other_option_from_mcoefplot(m)
-    legend_nonmissing = collect(values(filter(x -> ~ismissing(x.second), m.legends)))
+    legend_nonmissing = collect(values(filter(x -> ~issingletontype(x.second), m.legends)))
     legend_labels = PGFPlotsX.Options(Symbol("legend entries") => join([lgd.l for lgd in values(legend_nonmissing)],","))
     merge!(options,gen_legend_options(m.legends_options),legend_labels)
-
-    scoefplots = gen_scoefplots_from_mcoefplot(m)
-    print_coefplot(io, options, scoefplots, m.vertical, values(legend_nonmissing), m.other_components)
-    if m.note !== missing
-        note_default_option = default_note_options()
-        PGFPlotsX.print_tex(io, m.note, note_default_option)
-    end
+    scs = gen_scoefplots_from_mcoefplot(m, interval)
+    Plotable(options, m.note, scs, m.other_components, values(legend_nonmissing))
 end
 
 function gen_other_option_from_mcoefplot(m::MultiCoefplot)
@@ -110,15 +105,15 @@ function gen_other_option_from_mcoefplot(m::MultiCoefplot)
     merged_option[:ymax] = maximum([option[:ymax] for option in options_list])
 
     labels_and_titles = PGFPlotsX.Options()
-    if m.xtitle !== missing
+    if ~issingletontype(m.xtitle)
         labels_and_titles[:xlabel] = m.xtitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end 
-    if m.ytitle !== missing
+    if ~issingletontype(m.ytitle)
         labels_and_titles[:ylabel] = m.ytitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end
-    if m.name !== missing
+    if ~issingletontype(m.name)
         labels_and_titles[:title] = m.name
         labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
@@ -127,16 +122,16 @@ function gen_other_option_from_mcoefplot(m::MultiCoefplot)
 end
 
 function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,Real}=missing) # need to rework. identify which singlecoefplot should be together. This implementation is very fragile
-    v = Vector{SinglecoefPlot}()
+    v = PGFPlotsX.TikzElement[]
     l = length(m.dict)
-    if interval === missing
+    if ismissing(interval)
         interval = 1/(l+1)
     end
     d = - interval * (l-1)/2
     for coefplot in values(m.dict)
         shifted_c = shift(coefplot,d)
         d = d + interval
-        append!(v,values(shifted_c.dict))
+        append!(v,collect(shifted_c))
     end
     return v
 end

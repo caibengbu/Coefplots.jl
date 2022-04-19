@@ -12,7 +12,7 @@ mutable struct SinglecoefPlot
                             options::SinglecoefplotOption=default_singlecoefplot_options())
         @assert confint_lb <= point_est <= confint_ub "Point estimate not in the interval"
         @assert isfinite(point_est) & isfinite(confint_lb) & isfinite(confint_ub) "Estimation not finite"
-        @assert ismissing(thiscoef_loc) || isfinite(thiscoef_loc) "Coef location is note finite"
+        @assert (~ismissing(thiscoef_loc)) || isfinite(thiscoef_loc) "Coef location is not finite"
         new(thiscoef_loc, point_est, confint_lb, confint_ub, thiscoef_label, options)
     end
 end
@@ -22,43 +22,21 @@ get_dot_options(s::SinglecoefPlot) = get_dot_options(s.options)
 
 function get_dot(singlecoefplot::SinglecoefPlot, vertical::Bool=false)
     loc = (singlecoefplot.thiscoef_loc,singlecoefplot.point_est)
+    options = get_dot_options(singlecoefplot)
     if vertical
-        Dot(loc)
+        Dot(loc, options)
     else
-        Dot(reverse(loc))
+        Dot(reverse(loc), options)
     end
 end
 
 function get_line(singlecoefplot::SinglecoefPlot, vertical::Bool=false)
     end1 = (singlecoefplot.thiscoef_loc, singlecoefplot.confint_lb)
     end2 = (singlecoefplot.thiscoef_loc, singlecoefplot.confint_ub)
+    options = get_line_options(singlecoefplot)
     if vertical
-        LineWithEnds(end1, end2)
+        LineWithEnds(end1, end2, options)
     else
-        LineWithEnds(reverse(end1),reverse(end2))
+        LineWithEnds(reverse(end1), reverse(end2), options)
     end
-end
-
-function print_singelcoefplot(io::IO, singlecoefplot::SinglecoefPlot)
-    # Draw line first
-    line = get_line(singlecoefplot)
-    lineoptions = get_line_options(singlecoefplot)
-    PGFPlotsX.print_tex(io, line, lineoptions)
-
-    # draw dot next
-    dot = get_dot(singlecoefplot)
-    dotoptions = get_dot_options(singlecoefplot)
-    PGFPlotsX.print_tex(io, dot, dotoptions)
-end
-
-function print_singelcoefplot_vertical(io::IO, singlecoefplot::SinglecoefPlot)
-    # Draw line first
-    line = get_line(singlecoefplot, true)
-    lineoptions = get_line_options(singlecoefplot)
-    PGFPlotsX.print_tex(io, line, lineoptions)
-
-    # draw dot next
-    dot = get_dot(singlecoefplot, true)
-    dotoptions = get_dot_options(singlecoefplot)
-    PGFPlotsX.print_tex(io, dot, dotoptions)
 end
