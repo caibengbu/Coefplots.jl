@@ -79,7 +79,7 @@ function PGFPlotsX.print_tex(io::IO, p::Plotable)
     print(io, "\\begin{axis}")
     PGFPlotsX.print_options(io, p.options)
     PGFPlotsX.print_indent(io) do io
-        for elt in p.contents
+        for elt in reverse(p.contents)
             PGFPlotsX.print_tex(io, elt)
         end
     end
