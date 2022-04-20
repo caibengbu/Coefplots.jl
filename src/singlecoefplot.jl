@@ -17,6 +17,8 @@ mutable struct SinglecoefPlot
     end
 end
 
+empty_sc(;label::String) = SinglecoefPlot(0, 0, 0, label, 0)
+
 get_line_options(s::SinglecoefPlot) = get_line_options(s.options)
 get_dot_options(s::SinglecoefPlot) = get_dot_options(s.options)
 

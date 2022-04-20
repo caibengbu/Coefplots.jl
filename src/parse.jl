@@ -1,6 +1,6 @@
 SupportedEstimation = Union{StatsModels.TableRegressionModel,FixedEffectModel,GLFixedEffectModel}
 
-function parse(est::SupportedEstimation, level::Real=0.95; drop_cons::Bool=true)
+function parse(est::SupportedEstimation; level::Real=0.95, drop_cons::Bool=true)
     if est isa FixedEffectModel
         coefplot = parse(StatsModels.coef(est), StatsModels.confint(est;level=level), StatsModels.coefnames(est))
     else
