@@ -5,11 +5,11 @@
 </h1>
 
 
-[Coefplots](https://github.com/caibengbu/Coefplots.jl) aims to make available in Julia (part of) the functionalities of [the Stata command `coefplot`](http://repec.sowi.unibe.ch/stata/coefplot/getting-started.html). [Coefplots](https://github.com/caibengbu/Coefplots.jl) is built on [PGFPlotsX](https://github.com/KristofferC/PGFPlotsX.jl/tree/ada03510396af592e05b2e382a0c12ce37ee3cc8). Work in progress.
+[Coefplots](https://github.com/caibengbu/Coefplots.jl) aims to make available in Julia (part of) the functionalities of [the Stata command `coefplot`](http://repec.sowi.unibe.ch/stata/coefplot/getting-started.html) and [the Stata command `esplot`](https://github.com/dballaelliott/esplot). [Coefplots](https://github.com/caibengbu/Coefplots.jl) is built on [PGFPlotsX](https://github.com/KristofferC/PGFPlotsX.jl/tree/ada03510396af592e05b2e382a0c12ce37ee3cc8). Work in progress.
 
 ## Quick Start
 
-Please refer to [this Jupyter Notebook](examples/quick_start.ipynb) for a quick tutorial.
+Please refer to [our quick general tutorial](examples/quick_start.ipynb) and [our tutorial for event study plots](examples/esplot.ipynb).
 
 ## Installation
 ```
