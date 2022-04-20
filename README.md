@@ -9,7 +9,7 @@
 
 ## Quick Start
 
-Please refer to [this Jupyter Notebook](examples/quick_start.ipynb) for a quick tutorial.
+Please refer to [our quick general tutorial](examples/quick_start.ipynb) and [our tutorial for event study plots](examples/esplot.ipynb).
 
 ## Installation
 ```
