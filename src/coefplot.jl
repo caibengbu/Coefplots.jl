@@ -159,7 +159,7 @@ function Base.show(io::IO, coefplot::Coefplot)
 
     bottom_and_top_rule = format_vec("─", "─", "─", "─", "─"; fill="─", sep="───")
     width = length(bottom_and_top_rule)
-    if coefplot.name !== missing
+    if ~issingletontype(coefplot.name)
         println(io, cpad("─── * Coefplot Name: "*coefplot.name*" * ───",width))
     else
         println(io, cpad("─── * Unnamed Coefplot * ───",width))
