@@ -16,16 +16,41 @@ mutable struct MultiCoefplot
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
+
+        base_locs = Dict(label => i for (i,label) in enumerate(get_unique_syms(new_dict)))
+
         for (c_symbol, c, color) in zip(keys(new_dict),values(new_dict),COLOR_PALATTE)
             check_if_all_singlecoefplot_options_conform(c) 
             setcolor!(c, color)
             c.vertical = false # reset all coefplots to non vertical
+            for (k,v) in c.dict
+                @assert haskey(base_locs,k)
+                v.thiscoef_loc = base_locs[k]
+            end
             representitive_scoptions = first(values(c.dict)).options
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
         new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components, false)
     end
+end
+
+function get_unique_syms(m::MultiCoefplot)
+    syms = Symbol[]
+    for c in values(m.dict)
+        append!(syms, keys(c.dict))
+    end
+    unique!(syms)
+    return syms
+end
+
+function get_unique_syms(d::OrderedDict{Symbol,Coefplot})
+    syms = Symbol[]
+    for c in values(d)
+        append!(syms, keys(c.dict))
+    end
+    unique!(syms)
+    return syms
 end
 
 function setxtitle!(m::MultiCoefplot, x::String)
@@ -88,7 +113,7 @@ end
 
 function to_plotable(m::MultiCoefplot, interval::Union{Missing,Real}=missing)
     options = gen_other_option_from_mcoefplot(m)
-    legend_nonmissing = collect(values(filter(x -> ~issingletontype(x.second), m.legends)))
+    legend_nonmissing = collect(values(filter(x -> ~isnull(x.second), m.legends)))
     legend_labels = PGFPlotsX.Options(Symbol("legend entries") => join([lgd.l for lgd in values(legend_nonmissing)],","))
     merge!(options,gen_legend_options(m.legends_options),legend_labels)
     scs = gen_scoefplots_from_mcoefplot(m, interval)
@@ -96,24 +121,41 @@ function to_plotable(m::MultiCoefplot, interval::Union{Missing,Real}=missing)
 end
 
 function gen_other_option_from_mcoefplot(m::MultiCoefplot)
-    options_list = gen_other_option_from_coefplot.(values(m.dict);seperate_line=true)
     specified_options_list = get_coefplot_options.(values(m.dict))
-    merged_option = reduce(merge,reverse(vcat(options_list, specified_options_list)))
+    merged_option_1 = merge(specified_options_list...)
+    
+    options_list = gen_other_option_from_coefplot.(values(m.dict);seperate_line=true)
+    merged_option_2 = merge_merge([[:xtick, :xticklabels], [:ytick, :yticklabels]], options_list...)
+    merged_option = merge(merged_option_1,merged_option_2)
+    
+    has_x_ticks = haskey(merged_option.dict,Symbol("extra x ticks"))
+    has_y_ticks = haskey(merged_option.dict,Symbol("extra y ticks"))
+    if has_x_ticks
+        xtick = deepcopy(merged_option[:xtick])
+        sorted_xtick = sort(xtick)
+        merged_option[Symbol("extra x ticks")] = [(sorted_xtick[i]+sorted_xtick[i+1])/2 for i in 1:(length(sorted_xtick)-1)]
+    end
+    if has_y_ticks
+        ytick = deepcopy(merged_option[:ytick])
+        sorted_ytick = sort(ytick)
+        merged_option[Symbol("extra x ticks")] = [(sorted_ytick[i]+sorted_ytick[i+1])/2 for i in 1:(length(sorted_ytick)-1)]
+    end
+
     merged_option[:xmin] = minimum([option[:xmin] for option in options_list])
     merged_option[:ymin] = minimum([option[:ymin] for option in options_list])
     merged_option[:xmax] = maximum([option[:xmax] for option in options_list])
     merged_option[:ymax] = maximum([option[:ymax] for option in options_list])
 
     labels_and_titles = PGFPlotsX.Options()
-    if ~issingletontype(m.xtitle)
+    if ~isnull(m.xtitle)
         labels_and_titles[:xlabel] = m.xtitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end 
-    if ~issingletontype(m.ytitle)
+    if ~isnull(m.ytitle)
         labels_and_titles[:ylabel] = m.ytitle
         labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end
-    if ~issingletontype(m.name)
+    if ~isnull(m.name)
         labels_and_titles[:title] = m.name
         labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
@@ -135,3 +177,4 @@ function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,
     end
     return v
 end
+        

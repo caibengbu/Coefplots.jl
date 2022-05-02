@@ -1,6 +1,39 @@
 struct Null
 end
 
+isnull(x) = issingletontype(typeof(x))
+
+
+function merge_merge(fields::Vector{Vector{Symbol}}, options::PGFPlotsX.Options...;uniq::Bool=true)
+    # fields is a vector of subvector of symbols
+    # fields in a subvector, they should be deduped together
+    # for field in fields, append them, overwrite otherwise
+    mentioned_keys = vcat(fields...)
+    @assert allunique(mentioned_keys) "elem appears multiple times in multiple subvectors"
+    all_keys = unique(mapreduce(o->collect(keys(o.dict)), vcat ,options))
+    left_keys = setdiff(all_keys,mentioned_keys)
+    merged = reduce(options; init=PGFPlotsX.Options()) do x,y
+        dict = OrderedDict()
+        for fs in fields
+            x_f = zip([vcat(get(x.dict, f, [])) for f in fs]...)
+            y_f = zip([vcat(get(y.dict, f, [])) for f in fs]...)
+            new_f = vcat(x_f...,y_f...)
+            if length(new_f) == 0
+                continue
+            end
+            if uniq
+                unique!(new_f)
+            end
+            merge!(dict,OrderedDict(fk=>collect(fv) for (fk,fv) in zip(fs, zip(new_f...))))
+        end
+        merge!(dict,OrderedDict(fk=>get(merge(y.dict,x.dict), fk, nothing) for fk in left_keys))
+        return PGFPlotsX.Options(dict, x.print_empty|y.print_empty)
+    end
+    return merged
+end
+
+
+
 function PGFPlotsX.print_tex(io::IO, n::Null)
 end
 

@@ -70,22 +70,27 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;seperate_line::Bool=f
     xmin, xmax = extrema(xtick)
     ymin = minimum([singlecoefplot.confint_lb for singlecoefplot in singlecoefplots])
     ymax = maximum([singlecoefplot.confint_ub for singlecoefplot in singlecoefplots])
-    xaxis_lb = xmin - (xmax - xmin)/(length(singlecoefplots)-1) * 0.5
-    xaxis_ub = xmax + (xmax - xmin)/(length(singlecoefplots)-1) * 0.5
+    l_c = length(singlecoefplots)
+    if l_c == 1
+        xaxis_lb = xmin - 0.5
+        xaxis_ub = xmax + 0.5
+    else
+        xaxis_lb = xmin - (xmax - xmin)/(l_c-1) * 0.5
+        xaxis_ub = xmax + (xmax - xmin)/(l_c-1) * 0.5
+    end
     yaxis_lb = ymin - (ymax - ymin)*0.1
     yaxis_ub = ymax + (ymax - ymin)*0.1
     labels_and_titles = PGFPlotsX.Options()
-    if ~issingletontype(coefplot.xtitle)
+    labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
+    labels_and_titles[Symbol("title style")] = "{font=\\large}"
+    if ~isnull(coefplot.xtitle)
         labels_and_titles[:xlabel] = coefplot.xtitle
-        labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end 
-    if ~issingletontype(coefplot.ytitle)
+    if ~isnull(coefplot.ytitle)
         labels_and_titles[:ylabel] = coefplot.ytitle
-        labels_and_titles[Symbol("label style")] = "{font=\\footnotesize}"
     end
-    if ~issingletontype(coefplot.name)
+    if ~isnull(coefplot.name)
         labels_and_titles[:title] = coefplot.name
-        labels_and_titles[Symbol("title style")] = "{font=\\large}"
     end
     if seperate_line
         sorted_xtick = sort(xtick)
@@ -159,7 +164,7 @@ function Base.show(io::IO, coefplot::Coefplot)
 
     bottom_and_top_rule = format_vec("─", "─", "─", "─", "─"; fill="─", sep="───")
     width = length(bottom_and_top_rule)
-    if ~issingletontype(coefplot.name)
+    if ~isnull(coefplot.name)
         println(io, cpad("─── * Coefplot Name: "*coefplot.name*" * ───",width))
     else
         println(io, cpad("─── * Unnamed Coefplot * ───",width))

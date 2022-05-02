@@ -66,7 +66,8 @@ mutable struct LegendsOption
 end
 
 function gen_legend_options(lo::LegendsOption)
-    PGFPlotsX.Options(Symbol("legend style") => "font=\\fontsize{$(lo.fontsize)}{$(lo.fontsize)}\\selectfont",
-                      :at => "($(first(lo.at)),$(last(lo.at)))",
-                      :anchor => string(lo.anchor))
+    legend_stype = PGFPlotsX.Options(:font => "\\fontsize{$(lo.fontsize)}{$(lo.fontsize)}\\selectfont",
+                                     :at => "($(first(lo.at)),$(last(lo.at)))",
+                                     :anchor => string(lo.anchor))
+    PGFPlotsX.Options(Symbol("legend style") => legend_stype)
 end
