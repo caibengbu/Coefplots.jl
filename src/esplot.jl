@@ -6,7 +6,7 @@ function esplot(regmodel::T where T<:SupportedEstimation; normalized_period::Any
     plot(coefplot; verbose)
 end
 
-function get_time_from_coefname(coefnames; pre_print::Function=x->parse(Int64,x))
+function get_time_from_coefname(coefnames; pre_print::Function=x->Int64(parse(Float64,x)))
     time_marks = Pair[]
     for coefname in coefnames
         timevar_name_treatment_name_and_time_mark = strip.(split(coefname)) # return a vector of "timevar_name:", treatment_name and time_mark, but might be of random order
@@ -16,7 +16,7 @@ function get_time_from_coefname(coefnames; pre_print::Function=x->parse(Int64,x)
         end
         timevar_ind = findfirst(istimevar)
         if checkbounds(Bool, timevar_name_treatment_name_and_time_mark, timevar_ind + 1)
-            time_mark = string(timevar_name_treatment_name_and_time_mark[timevar_ind + 1])
+            time_mark = timevar_name_treatment_name_and_time_mark[timevar_ind + 1]
         else
             throw(AssertionError("Fail to extract time mark!"))
         end
@@ -25,7 +25,7 @@ function get_time_from_coefname(coefnames; pre_print::Function=x->parse(Int64,x)
     return time_marks
 end
 
-function esparse(regmodel::T where T<:SupportedEstimation; normalized_period::Any, by=x->parse(Int64,x), pre_print::Function=x->parse(Int64,x), verbose::Bool=false)
+function esparse(regmodel::T where T<:SupportedEstimation; normalized_period::Any, by=x->parse(Int64,x), pre_print::Function=x->Int64(parse(Float64,x)), verbose::Bool=false)
     # Event Study Specification can be formulated by @formula(outcome_it ~ treatment_i & eventtime_t + ...) with the keyward arg contrast
     # "contrasts = Dict(:eventtime_t => DummyCoding(base = event_time))"
     # this function is a shortcut to plot event studies that are formulated like this.
