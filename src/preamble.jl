@@ -8,6 +8,6 @@ function gen_default_preamble()
     push!(preamble,"\\usepackage{sansmath}")
 end
 
-Coefplots.CUSTOM_PREAMBLE = String[]
+CUSTOM_PREAMBLE = String[]
 
-push!(Coefplots.CUSTOM_PREAMBLE, gen_default_preamble()...)
+push!(CUSTOM_PREAMBLE, gen_default_preamble()...)
