@@ -21,8 +21,8 @@ pkg> add https://github.com/caibengbu/Coefplots.jl.git
 - [ ] allow multiple regression plot together (figure side by side, align on label axis)
 - [ ] allow multiple regression plot together (figure side by side, align on value axis)
 - [x] allow multiple regression plot together (same figure, singlecoefplot side by side)
-- [ ] *allow offset*
-- [ ] *allow change lengend location*
+- [x] *allow offset*
+- [x] *allow change lengend location*
 - [x] allow yline
 - [x] allow xline
 - [x] allow yband
