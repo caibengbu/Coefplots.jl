@@ -6,7 +6,7 @@ function esplot(regmodel::T where T<:SupportedEstimation; normalized_period::Any
     plot(coefplot; verbose)
 end
 
-function get_time_from_coefname(coefnames)
+function get_time_from_coefname(coefnames; pre_print_mark::Function=x->parse(Int64,x))
     time_marks = Pair[]
     for coefname in coefnames
         timevar_name_treatment_name_and_time_mark = strip.(split(coefname)) # return a vector of "timevar_name:", treatment_name and time_mark, but might be of random order
@@ -20,7 +20,7 @@ function get_time_from_coefname(coefnames)
         else
             throw(AssertionError("Fail to extract time mark!"))
         end
-        push!(time_marks, Symbol(coefname) => string(time_mark))
+        push!(time_marks, Symbol(coefname) => string(pre_print_mark(time_mark)))
     end
     return time_marks
 end
