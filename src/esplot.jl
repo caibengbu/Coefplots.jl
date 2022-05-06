@@ -60,3 +60,6 @@ function include_tails!(parsed_model::Coefplot)
     parsed_model.dict[last_sc_sym] = last_sc
     return parsed_model
 end
+
+Base.last(itr::OrderedDict, n::Integer) = reverse!(collect(Iterators.take(Iterators.reverse(collect(itr)), n)))
+Base.last(itr::OrderedDict) = Base.last(itr::OrderedDict, 1)
