@@ -8,4 +8,6 @@ function gen_default_preamble()
     push!(preamble,"\\usepackage{sansmath}")
 end
 
-push!(PGFPlotsX.CUSTOM_PREAMBLE, gen_default_preamble()...)
+Coefplots.CUSTOM_PREAMBLE = String[]
+
+push!(Coefplots.CUSTOM_PREAMBLE, gen_default_preamble()...)
