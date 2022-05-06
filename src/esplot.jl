@@ -52,14 +52,14 @@ end
 
 function include_tails!(parsed_model::Coefplot)
     first_sc_sym, first_sc = first(parsed_model.dict)
-    first_sc.thiscoef_label = join("\$\\leq\$",first_sc.thiscoef_label)
+    first_sc.thiscoef_label = join(["\$\\leq\$",first_sc.thiscoef_label])
     parsed_model.dict[first_sc_sym] = first_sc
 
     last_sc_sym, last_sc = last(parsed_model.dict)
-    last_sc.thiscoef_label = join("\$\\geq\$",last_sc.thiscoef_label)
+    last_sc.thiscoef_label = join(["\$\\geq\$",last_sc.thiscoef_label])
     parsed_model.dict[last_sc_sym] = last_sc
     return parsed_model
 end
 
 Base.last(itr::OrderedDict, n::Integer) = reverse!(collect(Iterators.take(Iterators.reverse(collect(itr)), n)))
-Base.last(itr::OrderedDict) = Base.last(itr::OrderedDict, 1)
+Base.last(itr::OrderedDict) = first(Base.last(itr::OrderedDict, 1))
