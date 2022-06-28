@@ -255,7 +255,7 @@ function coefrename!(c::Coefplot,ps::Pair{Symbol,String}...;relabel=false,rename
 
     new_dict = OrderedDict{Symbol,SinglecoefPlot}()
     mapping_dict = Dict(ps)
-    p_contained_in_c = all(broadcast(x -> haskey(c.dict,x),keys(mapping_dict))) # p(pair) ⊆ c(coefplot)
+    p_contained_in_c = all(broadcast(x -> haskey(c.dict,x),keys(mapping_dict))) # p (pairs) ⊆ c (coefplot)
     c_contained_in_p = all(broadcast(x -> haskey(mapping_dict,x),keys(c.dict))) # c ⊆ p
     @assert p_contained_in_c "exceptional key found in the pair input"
     is_partial_rename = ~ c_contained_in_p # given that p ⊆ c, if c ⊆ p means that this is a full rename.
@@ -267,7 +267,7 @@ function coefrename!(c::Coefplot,ps::Pair{Symbol,String}...;relabel=false,rename
     end
 
     if sort # if sort, the new coefplot.dict will have the order of the ps
-        for pp in p
+        for pp in ps
             this_singlecoefplot = deepcopy(c[pp.first])
             if rename
                 this_singlecoefplot.thiscoef_label = pp.second

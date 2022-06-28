@@ -10,11 +10,17 @@ function get_time_from_coefname(coefnames; pre_print::Function=x->Int64(parse(Fl
     time_marks = Pair[]
     for coefname in coefnames
         timevar_name_treatment_name_and_time_mark = strip.(split(coefname)) # return a vector of "timevar_name:", treatment_name and time_mark, but might be of random order
+
         # find timevar_name by looking at which element ends with a colon
         istimevar = map(timevar_name_treatment_name_and_time_mark) do x
             endswith(x,":")
         end
         timevar_ind = findfirst(istimevar)
+        
+        if timevar_ind === nothing # meaning that this coefficient is not a treatment-x-time variable
+            continue
+        end
+
         if checkbounds(Bool, timevar_name_treatment_name_and_time_mark, timevar_ind + 1)
             time_mark = timevar_name_treatment_name_and_time_mark[timevar_ind + 1]
         else
@@ -33,7 +39,7 @@ function esparse(regmodel::T where T<:SupportedEstimation; normalized_period::An
     coef_names = coefnames(regmodel)
     keys_of_changes = get_time_from_coefname(coef_names; pre_print)
     parsed_model = parse(regmodel)
-    coefrename!(parsed_model, keys_of_changes...)
+    coefrename!(parsed_model, keys_of_changes...; sort = true)
 
     # re-insert normalized the event_time 
     if ~ismissing(normalized_period)

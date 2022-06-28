@@ -10,6 +10,11 @@ mutable struct SinglecoefPlot
                             confint_lb::Real, confint_ub::Real, 
                             thiscoef_label::String,thiscoef_loc::Real, 
                             options::SinglecoefplotOption=default_singlecoefplot_options())
+        if isnan(confint_lb) && isnan(confint_ub) && point_est == 0
+            # this regressor is not effective due to multicolinearity, change the lb and ub
+            confint_lb = 0.0
+            confint_ub = 0.0
+        end
         @assert confint_lb <= point_est <= confint_ub "Point estimate not in the interval"
         @assert isfinite(point_est) & isfinite(confint_lb) & isfinite(confint_ub) "Estimation not finite"
         @assert (~ismissing(thiscoef_loc)) || isfinite(thiscoef_loc) "Coef location is not finite"

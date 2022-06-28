@@ -20,5 +20,5 @@ module Coefplots
     include("esplot.jl")
 
     export setxtitle!, setytitle!, setname!, includenote!, equidist!, setlegends!, addcomponent!, clearcomponents!, coefrename, coefrename!, transpose!
-    export plot, parse, esplot, esparse 
+    export plot, parse, esplot, esparse, concat
 end
