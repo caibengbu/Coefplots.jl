@@ -7,12 +7,19 @@ mutable struct MultiCoefplot
     legends::OrderedDict{Symbol,Union{Legend,Null}}
     legends_options::LegendsOption
     other_components::Vector{Any}
+    width::Real
+    height::Real
     vertical::Bool
 
     function MultiCoefplot(dict::OrderedDict{Symbol,Coefplot},
-                      xtitle::Union{Null,String}=Null(),ytitle::Union{Null,String}=Null(),
-                      name::Union{Null,String}=Null(), note::Union{Null,AbstractCaption}=Null(),
-                      legends_options::LegendsOption=LegendsOption(),other_components::Vector{Any}=Any[])
+                      xtitle::Union{Null,String}=Null(), 
+                      ytitle::Union{Null,String}=Null(),
+                      name::Union{Null,String}=Null(), 
+                      note::Union{Null,AbstractCaption}=Null(),
+                      legends_options::LegendsOption=LegendsOption(), 
+                      other_components::Vector{Any}=Any[],
+                      width::Real=240, 
+                      height::Real=207)
         @assert length(dict) > 1 "Can't make a MultiCoefplot out of a singleton"
         new_dict = deepcopy(dict)
         autolegends = OrderedDict()
@@ -31,7 +38,7 @@ mutable struct MultiCoefplot
             this_legend = Legend(string(c_symbol),representitive_scoptions)
             push!(autolegends, c_symbol => this_legend)
         end
-        new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components, false)
+        new(name, note, xtitle, ytitle, new_dict, autolegends, legends_options, other_components, width, height, false)
     end
 end
 
@@ -69,7 +76,7 @@ function setname!(m::MultiCoefplot, name::String)
 end
 
 function includenote!(m::MultiCoefplot, note::String)
-    m.note = AbstractCaption(note,  default_note_options())
+    m.note = AbstractCaption(note,  default_note_options(m))
     return m
 end
 
@@ -145,6 +152,8 @@ function gen_other_option_from_mcoefplot(m::MultiCoefplot)
     merged_option[:ymin] = minimum([option[:ymin] for option in options_list])
     merged_option[:xmax] = maximum([option[:xmax] for option in options_list])
     merged_option[:ymax] = maximum([option[:ymax] for option in options_list])
+    merged_option[:width] = "$(m.width)pt"
+    merged_option[:height] = "$(m.height)pt"
 
     labels_and_titles = PGFPlotsX.Options()
     if ~isnull(m.xtitle)
@@ -177,4 +186,9 @@ function gen_scoefplots_from_mcoefplot(m::MultiCoefplot,interval::Union{Missing,
     end
     return v
 end
-        
+
+default_note_options(p::MultiCoefplot) = PGFPlotsX.Options( :name => "note", 
+                                                            :anchor => "north west", 
+                                                            :font => "{\\fontsize{4.5}{4.5}\\selectfont}",
+                                                            Symbol("text width") => "$(p.width)pt", 
+                                                            :at => "(current axis.outer south west)")

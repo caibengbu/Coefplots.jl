@@ -70,9 +70,6 @@ struct AbstractCaption <: PGFPlotsX.TikzElement
     options::PGFPlotsX.Options
 end
 
-default_note_options() = PGFPlotsX.Options(:name => "note", :anchor => "north west", :font => "{\\fontsize{4.5}{4.5}\\selectfont}",
-                                           :"text width" => "0.7\\textwidth", :at => "(current axis.outer south west)")
-
 function PGFPlotsX.print_tex(io::IO, caption::AbstractCaption)
     PGFPlotsX.print_indent(io, "%%%%%%%%% plot caption %%%%%%%%%%")
     print(io, "\\draw node")

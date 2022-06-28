@@ -6,14 +6,21 @@ mutable struct Coefplot
     dict::OrderedDict{Symbol,SinglecoefPlot}
     options::CoefplotOption
     other_components::Vector{Any}
+    width::Real
+    height::Real
     vertical::Bool
 
     # create Coefplot from combining vec_singlecoefplot and name, note, xtitle, ytitle
     function Coefplot(dict::OrderedDict{Symbol,SinglecoefPlot},
-                      xtitle::Union{Null,String}=Null(),ytitle::Union{Null,String}=Null(),
-                      name::Union{Null,String}=Null(), note::Union{Null,AbstractCaption}=Null(),
-                      options::CoefplotOption=default_coefplot_options(),other_components::Vector{Any}=Vector{Any}())
-        new(name, note, xtitle, ytitle, dict, options, other_components, false)
+                      xtitle::Union{Null,String}=Null(),
+                      ytitle::Union{Null,String}=Null(),
+                      name::Union{Null,String}=Null(),
+                      note::Union{Null,AbstractCaption}=Null(),
+                      options::CoefplotOption=default_coefplot_options(),
+                      other_components::Vector{Any}=Vector{Any}(),
+                      width::Real=240, # default value of width for tikz
+                      height::Real=207) # default value of height for tikz
+        new(name, note, xtitle, ytitle, dict, options, other_components, width, height, false)
     end
 end
 
@@ -33,7 +40,7 @@ function setname!(c::Coefplot, name::String)
 end
 
 function includenote!(c::Coefplot, note::String)
-    c.note = AbstractCaption(note, default_note_options())
+    c.note = AbstractCaption(note, default_note_options(c))
     return c
 end
 
@@ -126,6 +133,12 @@ function gen_other_option_from_coefplot(coefplot::Coefplot;seperate_line::Bool=f
     end
     return merge!(labels_and_titles,other_options)
 end
+
+default_note_options(p::Coefplot) = PGFPlotsX.Options(:name => "note", 
+                                                      :anchor => "north west", 
+                                                      :font => "{\\fontsize{4.5}{4.5}\\selectfont}",
+                                                      Symbol("text width") => "$(p.width)pt", 
+                                                      :at => "(current axis.outer south west)")
 
 Base.getindex(coefplot::Coefplot, args...; kwargs...) = getindex(coefplot.dict, args...; kwargs...)
 Base.setindex!(coefplot::Coefplot, args...; kwargs...) = (setindex!(coefplot.dict, args...; kwargs...); coefplot)
