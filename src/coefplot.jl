@@ -17,11 +17,29 @@ mutable struct Coefplot
                       name::Union{Null,String}=Null(),
                       note::Union{Null,AbstractCaption}=Null(),
                       options::CoefplotOption=default_coefplot_options(),
-                      other_components::Vector{Any}=Vector{Any}(),
+                      other_components::Vector{Any}=Any[],
                       width::Real=240, # default value of width for tikz
                       height::Real=207) # default value of height for tikz
         new(name, note, xtitle, ytitle, dict, options, other_components, width, height, false)
     end
+end
+
+function dot_connect!(c::Coefplot)
+    len = length(c.dict)
+    x = zeros(len)
+    y = zeros(len)
+    counter = 0
+    for sc in values(c.dict)
+        counter += 1
+        x[counter] = sc.thiscoef_loc
+        y[counter] = sc.point_est
+    end
+    check_if_all_singlecoefplot_options_conform(c)
+    o = get_line_options(first(values(c.dict)))
+    push!(o, :no_marks => nothing)
+    connect = PGFPlotsX.Plot(o,PGFPlotsX.Coordinates(x, y))
+    push!(c.other_components, connect)
+    return c
 end
 
 function setxtitle!(c::Coefplot, x::String)
