@@ -42,6 +42,13 @@ mutable struct MultiCoefplot
     end
 end
 
+function set_dot_shape!(m::MultiCoefplot, shape_name::Symbol)
+    for c in values(m.dict)
+        set_dot_shape!(c, shape_name)
+    end
+    return m
+end
+
 function get_unique_syms(m::MultiCoefplot)
     syms = Symbol[]
     for c in values(m.dict)

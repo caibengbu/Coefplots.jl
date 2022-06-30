@@ -9,13 +9,14 @@ end
 mutable struct SinglecoefplotOption
     dotsize::Float64
     dotcolor::Color
+    dotshape::Symbol
     linewidth::Float64
     linecolor::Color
     other_dot_options::PGFPlotsX.Options
     other_line_options::PGFPlotsX.Options
 end
 
-default_singlecoefplot_options() = SinglecoefplotOption(4, first(COLOR_PALATTE), 0.5, first(COLOR_PALATTE), PGFPlotsX.Options(), PGFPlotsX.Options())
+default_singlecoefplot_options() = SinglecoefplotOption(4, first(COLOR_PALATTE), Symbol("circle"), 0.5, first(COLOR_PALATTE), PGFPlotsX.Options(), PGFPlotsX.Options())
 
 default_coefplot_options() = CoefplotOption(0, 5, 0, 5, PGFPlotsX.Options())
 
@@ -25,7 +26,7 @@ get_line_options(option::SinglecoefplotOption) = merge(option.other_line_options
 
 get_dot_options(option::SinglecoefplotOption) = merge(option.other_dot_options,
                                                       color_as_fill_option(option.dotcolor),
-                                                      PGFPlotsX.Options(:circle => nothing, # TODO consider make this flexible 
+                                                      PGFPlotsX.Options(option.dotshape => nothing, # TODO consider make this flexible 
                                                                         Symbol("inner sep") => 0,
                                                                         Symbol("minimum size") => option.dotsize))
 

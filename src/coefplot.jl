@@ -24,6 +24,13 @@ mutable struct Coefplot
     end
 end
 
+function set_dot_shape!(c::Coefplot, shape_name::Symbol)
+    for sc in values(c.dict)
+        set_dot_shape!(sc, shape_name)
+    end
+    return c
+end
+
 function dot_connect!(c::Coefplot)
     len = length(c.dict)
     x = zeros(len)
