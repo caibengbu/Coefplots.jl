@@ -10,7 +10,7 @@
 ## Gallery
 <h1>
   <p align="center">
-    <img width="550" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg">
+    <img width="700" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg">
   </p>
 </h1>
 
