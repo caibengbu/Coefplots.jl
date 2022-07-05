@@ -58,7 +58,9 @@ const stata_color = [:navy, :maroon, :forest, :dkorg, :teal, :cranbrry, :lavende
 
 const julia_color = [:jl_blue, :jl_green, :jl_red, :jl_purp]
 
-COLOR_PALATTE = Iterators.cycle(broadcast(x->get(default_color,x,:black),julia_color))
+COLOR_PALATTE = julia_color
+
+COLOR_LOOP = Iterators.cycle(broadcast(x->get(default_color,x,:black),COLOR_PALATTE))
 
 changeopacity(color::Color,o::Real) = Color(color.rgb, o)
 
