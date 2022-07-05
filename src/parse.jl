@@ -1,65 +1,65 @@
-SupportedEstimation = Union{StatsModels.TableRegressionModel,FixedEffectModel,GLFixedEffectModel}
+const SupportedEstimation = Union{FixedEffectModel,TableRegressionModel,RegressionModel}
 
-function parse(est::SupportedEstimation; level::Real=0.95, drop_cons::Bool=true)
-    if est isa FixedEffectModel
-        coefplot = parse(StatsModels.coef(est), StatsModels.confint(est;level=level), StatsModels.coefnames(est))
-    else
-        coefplot = parse(StatsModels.coef(est), StatsModels.confint(est,level), StatsModels.coefnames(est))
-    end
-    if drop_cons
-        drop_cons!(coefplot::Coefplot)
-        equidist!(coefplot)
-    end
-    return coefplot
-end
+coefnames(r::RegressionModel) = StatsBase.coefnames(r)
+coefnames(r::TableRegressionModel) = StatsModels.coefnames(r.mf)
+coefnames(r::FixedEffectModel) = FixedEffectModels.coefnames(r)
 
-function parse(coefvec::Vector{T} where T<:Real, confint::Matrix{T} where T<:Real ,coefnames::Vector{T} where T<:Any)
-    # create Coefplot from combining regmodel output and reglabel, regnote, xtitle, ytitle
-    @assert size(coefvec,1) == size(confint,1) == size(coefnames,1) "Dimension doesn't match"
-    dict = OrderedDict([Symbol(coefnames[i])=>SinglecoefPlot(coefvec[i], confint[i,:]..., coefnames[i], i) for i in 1:size(coefvec,1)])
-    Coefplot(dict)
-end
+coef(r::RegressionModel) = StatsBase.coef(r)
+coef(r::TableRegressionModel) = StatsModels.coef(r)
+coef(r::FixedEffectModel) = FixedEffectModels.coef(r)
 
+yname(r::RegressionModel) = responsename(r) # returns a Symbol
+yname(r::TableRegressionModel) = lhs(r.mf.f.lhs) # returns a Symbol
+yname(r::FixedEffectModel) = r.yname
 
-"""
-    drop_cons!(coefplot[, cons])
+stderror(r::RegressionModel) = StatsBase.stderror(r)
+stderror(r::RegressionModel) = StatsModels.coefnames(r)
+stderror(r::FixedEffectModel) = FixedEffectModels.stderror(r)
 
-Drop constant term from the coefplot.
+df_residual(r::RegressionModel) = StatsBase.dof_residual(r)
+df_residual(r::TableRegressionModel) = StatsModels.dof_residual(r)
+df_residual(r::FixedEffectModel) = FixedEffectModels.dof_residual(r)
 
-# Examples
-```julia-repl
-julia> coefplot = parse(ols; drop_cons=false);
-julia> drop_cons!(coefplot);
-julia> plot(coefplot)
-```
-"""
-drop_cons!(coefplot::Coefplot,cons::Symbol=Symbol("(Intercept)")) = delete!(coefplot,cons)
+latex_escape(s) = escape_string(s,"&\$%")
 
-"""
-    equidist!(coefplot)
+function parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
+    """
+    This function takes the regression result and convert it into a Coefplot.
+    `ps` is how you want to rename the coefficients. 
+    If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
+    """
+    data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
+    data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
+    data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
 
-Rearrange the location of each coefficients according to their index in the subplot vector.
-
-
-# Examples
-```julia-repl
-julia> coefplot = parse(coefplot; drop_cons=false);
-julia> equidist!(coefplot);
-julia> plot(coefplot)
-```
-"""
-function equidist!(coefplot::Coefplot;interval::Real=1,preserve_locorder::Bool=false)
-    if preserve_locorder
-        loc = [singlecoefplot.thiscoef_loc for singlecoefplot in values(coefplot.dict)]
-        @assert ~all(ismissing.(loc)) "there are missing singlecoefplot location"
-        newloc = invperm(sortperm(loc))
-        for (thiscoef_newloc, singlecoefplot) in zip(newloc,values(coefplot.dict))
-            singlecoefplot.thiscoef_loc = thiscoef_newloc * interval
+    if isempty(ps) # if input no pairs, sorter is the varname itself
+        sorter = data.varname
+    else # if input some pairs, use the pair order as the sorter, also rename the varname according to the pair
+        ps = map(ps) do x # convert pair.second to string
+            return x.first => string(x.second)
         end
-    else
-        for (index, singlecoefplot) in enumerate(values(coefplot.dict))
-            singlecoefplot.thiscoef_loc = index * interval
+        if drop_unmentioned
+            data.varname = get.(Ref(Dict(ps)), data.varname, missing) 
+            data = data[completecases(data),:] # filter out varnames that are not mentioned in pairs
+            sorter = intersect(string.(last.(ps)), data.varname) # sorter order is kept the same with the ps, remove redundant naming
+        else
+            v = get.(Ref(Dict(ps)), data.varname, missing)
+            v[ismissing.(v)] = data.varname[ismissing.(v)]
+            data.varname = v
+            sorter = data.varname
         end
     end
-    return coefplot
+    sorter = latex_escape.(sorter)
+    data.varname = latex_escape.(data.varname)
+    Coefplot(data; sorter = sorter, kwargs...)
 end
+
+## TO-DO: something is wrong with the current escaping. for example "$\geq$", this won't event be able to inputted as a string.
+## Users will have to input it as "\$\\geq\$". which is already escapped.
+## in that case, latex_escape will need to skip "\\g"-like items, and "\$". If not, this will happen:
+
+## julia> print_tex(latex_escape("\$"))
+## \$                                      -- (instead of $)
+
+## julia> print_tex(latex_escape("\\g"))
+## \\g                                     -- (instead of \g)
