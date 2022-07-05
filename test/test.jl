@@ -25,7 +25,7 @@ outcome = treatment .* (time .> 0) + idfe[id] + timefe[Int.(time .+ event_time)]
 df = DataFrame(id = id, time = time, outcome = outcome, treatment = treatment)
 first(df,10)
 
-rename_rule = ["time: -7.0 & treatment" => "\$\\leq\$-7", 
+rename_rule = ["time: -7.0 & treatment" => -7, 
     "time: -6.0 & treatment" => -6,
     "time: -5.0 & treatment" => -5,
     "time: -4.0 & treatment" => -4,
@@ -44,7 +44,7 @@ rename_rule = ["time: -7.0 & treatment" => "\$\\leq\$-7",
     "time: 9.0 & treatment" => 9,
     "time: 10.0 & treatment" => 10,
     "time: 11.0 & treatment" => 11,
-    "time: 12.0 & treatment" => "\\\$\\geq\\\$12"]
+    "time: 12.0 & treatment" => 12]
 
 res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
 pool = Coefplots.parse(res_pool,rename_rule...)
@@ -78,5 +78,5 @@ Coefplots.width!(m, 300)
 using PGFPlotsX
 zero_level = @pgf Coefplots.HLine({dashed, black , line_width=0.75}, 0)
 treatment_divide = @pgf Coefplots.rVLine({dashed, black , line_width=0.75}, 0.4)
-anno = Coefplots.Annotation(-45, "treatment happens", (0.4,0.2))
+anno = Coefplots.Annotation(-45, "event happens", (0.4,0.2))
 pgfsave("../assets/esplot.svg", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
