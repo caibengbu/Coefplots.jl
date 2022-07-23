@@ -19,13 +19,13 @@ treatment = repeat(rand(N), inner=T) .* is_treated # generate treatment, 0 if ob
 idfe = rand(N)
 timefe = rand(T)
 outcome = treatment .* (time .> 0) + idfe[id] + timefe[Int.(time .+ event_time)] .+ rand(N*T) # generate outcome, treatment only have an effect after event time
-# use face value of id, time as FE, also add a noise.
+#add id FE and time FE, also add a noise.
 
 
 df = DataFrame(id = id, time = time, outcome = outcome, treatment = treatment)
 first(df,10)
 
-rename_rule = ["time: -7.0 & treatment" => -7, 
+rename_rule = ["time: -7.0 & treatment" => "\$\\leq\$-7", 
     "time: -6.0 & treatment" => -6,
     "time: -5.0 & treatment" => -5,
     "time: -4.0 & treatment" => -4,
@@ -44,7 +44,7 @@ rename_rule = ["time: -7.0 & treatment" => -7,
     "time: 9.0 & treatment" => 9,
     "time: 10.0 & treatment" => 10,
     "time: 11.0 & treatment" => 11,
-    "time: 12.0 & treatment" => 12]
+    "time: 12.0 & treatment" => "\$\\geq\$12"]
 
 res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
 pool = Coefplots.parse(res_pool,rename_rule...)

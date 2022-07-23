@@ -13,14 +13,12 @@ yname(r::TableRegressionModel) = lhs(r.mf.f.lhs) # returns a Symbol
 yname(r::FixedEffectModel) = r.yname
 
 stderror(r::RegressionModel) = StatsBase.stderror(r)
-stderror(r::RegressionModel) = StatsModels.coefnames(r)
+stderror(r::RegressionModel) = StatsModels.stderror(r)
 stderror(r::FixedEffectModel) = FixedEffectModels.stderror(r)
 
 df_residual(r::RegressionModel) = StatsBase.dof_residual(r)
 df_residual(r::TableRegressionModel) = StatsModels.dof_residual(r)
 df_residual(r::FixedEffectModel) = FixedEffectModels.dof_residual(r)
-
-latex_escape(s) = escape_string(s,"&\$%")
 
 function parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
     """
@@ -63,3 +61,5 @@ end
 
 ## julia> print_tex(latex_escape("\\g"))
 ## \\g                                     -- (instead of \g)
+
+# Also, we need to escape commas. because commas are regarded as the separator. "," needs to be "{,}". Similarly, parenthesis needs to be escaped in the same way

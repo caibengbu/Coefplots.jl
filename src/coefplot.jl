@@ -18,7 +18,7 @@ mutable struct Coefplot
     offset::Real # use only in Multicoefplot
     
     # data
-    data::DataFrame # contains variables: varname, b, se
+    data::DataFrame # contains variables: varname, b, se, dof
     sorter::Vector{String} # is a sorter of varnames
     level::Real # confidence level
 
@@ -78,9 +78,13 @@ function get_axis_options(c::Coefplot)
     if c.vertical
         axis_options["symbolic x coords"] = c.sorter
         axis_options["xtick"] = c.sorter # force show all xticklabel
+        axis_options["xmin"] = "{[normalized]-0.5}"
+        axis_options["xmax"] = "{[normalized]$(length(c.sorter)-0.5)}"
     else
         axis_options["symbolic y coords"] = c.sorter
         axis_options["ytick"] = c.sorter
+        axis_options["ymin"] = "{[normalized]-0.5}"
+        axis_options["ymax"] = "{[normalized]$(length(c.sorter)-0.5)}"
     end
     return axis_options
 end
@@ -172,10 +176,16 @@ function width!(c::Coefplot, w::MaybeData{Real})
     c.note.textwidth = w
 end
 
-function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true)
+function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, key_escaped::Bool=true)
     data = c.data
-    ps = map(ps) do x # convert pair.second to string
-        return x.first => string(x.second)
+    if key_escaped
+        ps = map(ps) do x # convert pair.second to string
+            return x.first => string(x.second)
+        end
+    else
+        ps = map(ps) do x # convert pair.second to string
+            return latex_escape(x.first) => string(x.second)
+        end
     end
     if drop_unmentioned
         data.varname = get.(Ref(Dict(ps)), data.varname, missing)

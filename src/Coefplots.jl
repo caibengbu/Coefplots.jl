@@ -12,8 +12,10 @@ module Coefplots
     const MaybeData{T} = Union{T, Missing}
 
     include("color.jl")
+    include("escape.jl")
     include("components.jl")
-    include("Coefplot.jl")
+    include("coefplot.jl")
     include("MultiCoefplot.jl")
     include("parse.jl")
+    include("other_utils.jl")
 end
