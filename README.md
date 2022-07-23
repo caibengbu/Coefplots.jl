@@ -12,6 +12,9 @@
   <img width="700" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg">
 </p>
 
+<p align="center">
+  <img width="700" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/elasticity.svg">
+</p>
 ## Quick Start
 
 Please refer to [these scripts](test/) as an example.
