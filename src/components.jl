@@ -155,14 +155,13 @@ end
 
 mutable struct Note <: PGFPlotsX.TikzElement
     content::MaybeData{String}
-    textwidth::MaybeData{Real}
     anchor::MaybeData{Symbol}
     at::Any
     align::MaybeData{Symbol}
     captionstyle::MaybeData{CaptionStyle}
 
-    function Note(;content=missing, textwidth=missing, anchor=missing ,at=missing, align=missing, captionstyle=missing)
-        return new(content, textwidth, anchor, at, align, captionstyle)
+    function Note(;content=missing, anchor=missing ,at=missing, align=missing, captionstyle=missing)
+        return new(content, anchor, at, align, captionstyle)
     end
 end
 
@@ -171,9 +170,7 @@ function to_options(n::Note)
     generates PGF options related to note: [font={}, rotate={}].
     """
     options = PGFPlotsX.Options()
-    if !ismissing(n.textwidth)
-        options["text width"] = "$(n.textwidth)pt"
-    end
+    options["text width"] = "\\the\\notewidth"
     if !ismissing(n.anchor)
         options[:anchor] = "$(n.anchor)"
     end
@@ -193,6 +190,9 @@ function PGFPlotsX.print_tex(io::IO, n::Note)
     if ismissing(n.content)
         return nothing
     else
+        print(io, "\\newdimen\\notewidth
+                    \\pgfextractx{\\notewidth}{\\pgfpointdiff{\\pgfpointanchor{current bounding box}{west}}
+                    {\\pgfpointanchor{current bounding box}{east}}}")
         print(io, "\\draw node")
         options = to_options(n)
         PGFPlotsX.print_options(io, options; newline = false)

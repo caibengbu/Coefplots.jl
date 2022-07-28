@@ -73,7 +73,13 @@ m.note.captionstyle.size=6
 m.xlabel.content = "time relative to event"
 m.ylabel.content = "coefficient"
 m.title.content = "My example event study plot"
-Coefplots.width!(m, 300)
+
+for c in m.data
+    c.mark.mark="*"
+    c.errorbar.linetype=:solid
+    c.errorbar.linewidth=0.5
+    c.errormark.mark="none"
+end
 
 using PGFPlotsX
 zero_level = @pgf Coefplots.HLine({dashed, black , line_width=0.75}, 0)

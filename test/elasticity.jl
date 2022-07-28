@@ -23,18 +23,15 @@ sector_names = ["01-05  Animal & Animal Products",
                 "86-89  Transportation",
                 "90-97  Miscellaneous"]
 
-df = DataFrame(varname=Coefplots.latex_escape.(sector_names), b=rand(15), se = rand(15)./10, dof=10)
+df = DataFrame(groupname = ["Agriculture", "Agriculture", "Light", "Heavy", "Heavy",
+    "Heavy", "Light", "Light", "Light", "Light", "Heavy",
+    "Heavy", "Heavy", "Heavy", "Other"], 
+    varname=Coefplots.latex_escape.(sector_names), 
+    b=sort(rand(15)).+3, se = rand(15)./10, dof=10)
 c = Coefplots.Coefplot(df; sorter=df.varname)
 c.vertical=false
 c.keepconnect=false
-c.yticklabel.size=8
-c.mark.mark="*"
-c.errorbar.linetype=:solid
-c.errorbar.linewidth=0.5
-c.errormark.mark="none"
-c.title.content="title"
 c.xlabel.content = "elasticity"
-c.ylabel.content = "HS Sectors"
-c.title.content = "My fake plot of elasticity"
-Coefplots.sortcoef!(c)
+c.title.content = "My fake plot"
+c.note.content = "Note: Heavy = Heavy manufacture, Light = Light manufacture. The classification is only for demonstration purposes, not rigorous."
 pgfsave("../assets/elasticity.svg", Coefplots.to_picture(c))

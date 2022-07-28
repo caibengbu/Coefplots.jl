@@ -36,7 +36,7 @@ mutable struct MultiCoefplot
                            interval::MaybeData{Real} = missing,
                            sorter::Vector{String} = String[], # default sorter is empty
                            csorter::Vector{String} = String[], # default csorter is empty
-                           note::Note = Note(textwidth=width, anchor=Symbol("north west"), at="(current axis.outer south west)", align=:left, captionstyle=CaptionStyle()), # default note is missing, but keep the box aligned
+                           note::Note = Note(anchor=Symbol("north west"), at="(current axis.outer south west)", align=:left, captionstyle=CaptionStyle()), # default note is missing, but keep the box aligned
                            vertical::Bool = true)
         """
         to construct a MultiCoefplot, the minimal invocation is `MultiCoefplot(data)`
