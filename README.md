@@ -13,7 +13,15 @@
 </p>
 
 <p align="center">
+  Figure 1. In a Event Study Scenario
+</p>
+
+<p align="center">
   <img width="700" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/elasticity.svg">
+</p>
+
+<p align="center">
+  Figure 1. Presenting Multi-dimensional Results
 </p>
 
 ## Quick Start
