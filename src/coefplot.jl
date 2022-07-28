@@ -204,3 +204,6 @@ function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unment
     c.sorter = sorter
     c.data = data
 end
+
+Base.minimum(c::Coefplot) = minimum(c.data.b - Coefplots.errbar_length(c.data, c.level))
+Base.maximum(c::Coefplot) = maximum(c.data.b + Coefplots.errbar_length(c.data, c.level))

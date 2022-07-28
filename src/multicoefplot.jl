@@ -37,7 +37,8 @@ mutable struct MultiCoefplot
                            sorter::Vector{String} = String[], # default sorter is empty
                            csorter::Vector{String} = String[], # default csorter is empty
                            note::Note = Note(anchor=Symbol("north west"), at="(current axis.outer south west)", align=:left, captionstyle=CaptionStyle()), # default note is missing, but keep the box aligned
-                           vertical::Bool = true)
+                           vertical::Bool = true,
+                           kwargs...)
         """
         to construct a MultiCoefplot, the minimal invocation is `MultiCoefplot(data)`
         """
@@ -80,6 +81,10 @@ mutable struct MultiCoefplot
     end
 end
 
+Base.minimum(m::MultiCoefplot) = minimum(map(minimum, m.data))
+
+Base.maximum(m::MultiCoefplot) = maximum(map(maximum, m.data))
+
 function Base.sort!(m::MultiCoefplot)
     """
     sort the vector of coefplots according to csorter
@@ -118,6 +123,7 @@ function get_axis_options(m::MultiCoefplot)
         axis_options["ymin"] = "{[normalized]-0.5}"
         axis_options["ymax"] = "{[normalized]$(length(m.sorter)-0.5)}"
     end
+    axis_options["scale only axis"] = nothing
     return axis_options
 end
 
@@ -147,8 +153,3 @@ end
 convert the MultiCoefplot object to an PGFPlotsX.TikzPicture, note is added
 """
 to_picture(m::MultiCoefplot, other::SupportedAddition ...) = PGFPlotsX.TikzPicture(to_axis(m, other...), m.note)
-
-function width!(m::MultiCoefplot, w::MaybeData{Real})
-    m.width = w
-    m.note.textwidth = w
-end

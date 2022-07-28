@@ -76,11 +76,11 @@ function get_groupplot_options(g::GroupedCoefplot)
     ngroups = length(data)
     actualmin = minimum(map(data) do x
         c = x.second
-        minimum(c.data.b - Coefplots.errbar_length(c.data, c.level))
+        minimum(c)
     end)
     actualmax = maximum(map(data) do x
         c = x.second
-        maximum(c.data.b + Coefplots.errbar_length(c.data, c.level))
+        maximum(c)
     end)
     actualrange = actualmax - actualmin
     coefmin = actualmin - actualrange * 0.15
@@ -165,16 +165,8 @@ function to_axis(g::GroupedCoefplot, other::SupportedAddition ...)
     gp = PGFPlotsX.GroupPlot(groupplot_options);
     for (groupname, c) in g.data
         nextgroupplot_options = get_nextgroupplot_options(c)
-        plot_options = get_plot_options(c)
-        if g.vertical
-            push!(gp, nextgroupplot_options, PGFPlotsX.Plot(plot_options,
-                PGFPlotsX.Coordinates(c.data.varname, c.data.b; yerror = errbar_length(c.data, c.level))),
-                other...)
-        else
-            push!(gp, nextgroupplot_options, PGFPlotsX.Plot(plot_options,
-                PGFPlotsX.Coordinates(c.data.b, c.data.varname; xerror = errbar_length(c.data, c.level))),
-                other...)
-        end
+        push!(gp, nextgroupplot_options, to_plot(c))
     end
+    push!(gp, other...)
     return gp
 end

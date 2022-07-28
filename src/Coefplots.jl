@@ -17,6 +17,7 @@ module Coefplots
     include("coefplot.jl")
     include("multicoefplot.jl")
     include("groupedcoefplot.jl")
+    include("groupedmulticoefplot.jl")
     include("parse.jl")
     include("other_utils.jl")
 end
