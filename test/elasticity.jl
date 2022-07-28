@@ -28,10 +28,9 @@ df = DataFrame(groupname = ["Agriculture", "Agriculture", "Light", "Heavy", "Hea
     "Heavy", "Heavy", "Heavy", "Other"], 
     varname=Coefplots.latex_escape.(sector_names), 
     b=sort(rand(15)).+3, se = rand(15)./10, dof=10)
-c = Coefplots.Coefplot(df; sorter=df.varname)
-c.vertical=false
-c.keepconnect=false
-c.xlabel.content = "elasticity"
-c.title.content = "My fake plot"
-c.note.content = "Note: Heavy = Heavy manufacture, Light = Light manufacture. The classification is only for demonstration purposes, not rigorous."
-pgfsave("../assets/elasticity.svg", Coefplots.to_picture(c))
+gdf = groupby(df, :groupname)
+g = Coefplots.GroupedCoefplot(gdf; keepconnect=false, vertical=false)
+g.xlabel.content = "elasticity"
+g.title.content = "My fake plot"
+g.note.content = "Note: Heavy = Heavy manufacture, Light = Light manufacture. The classification is only for demonstration purposes, not rigorous."
+pgfsave("../assets/elasticity.svg", Coefplots.to_picture(g))
