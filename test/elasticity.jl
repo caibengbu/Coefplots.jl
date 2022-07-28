@@ -49,3 +49,4 @@ g.xlabel.content = "elasticity"
 g.title.content = "My fake plot"
 g.note.content = "Note: Heavy = Heavy manufacture, Light = Light manufacture. The classification is only for demonstration purposes, not rigorous."
 pgfsave("../assets/elasticity.svg", Coefplots.to_picture(g))
+pgfsave("../assets/elasticity.tex", Coefplots.to_picture(g))

@@ -1,0 +1,122 @@
+\RequirePackage{luatex85}
+\documentclass[tikz]{standalone}
+% Default preamble
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\usepgfplotslibrary{polar}
+\usepgfplotslibrary{smithchart}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{dateplot}
+\usepgfplotslibrary{ternary}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[title={My example event study plot}, title style={}, xlabel={time relative to event}, xlabel style={}, ylabel={coefficient}, ylabel style={}, xticklabel style={font={\fontsize{6}{6}\selectfont}, rotate={45}}, yticklabel style={}, width={300pt}, height={240pt}, legend style={font={\fontsize{6}{6}\selectfont}, at={(0.02, 0.98)}, anchor={north west}}, symbolic x coords={$\leq$-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,$\geq$12}, xtick={$\leq$-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,$\geq$12}, xmin={{[normalized]-0.5}}, xmax={{[normalized]19.5}}, scale only axis]
+    \addplot[mark={*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={none}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, solid, line width={0.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{-0.30000000000000004}}}]
+        coordinates {
+            ($\leq$-7,0.36968848040224583) +- (0,0.34266703123023107)
+            (-6,1.0161642543359544) +- (0,0.3426670312302311)
+            (-5,0.8004351374649951) +- (0,0.342667031230231)
+            (-4,0.8778993522840777) +- (0,0.34266703123023107)
+            (-3,0.5827695112478849) +- (0,0.3426670312302311)
+            (-2,0.14944225350724566) +- (0,0.34266703123023107)
+            (-1,0.4916073111000283) +- (0,0.34266703123023096)
+            (0,-0.3984695278101158) +- (0,0.24536538956165185)
+            (1,2.072646366698694) +- (0,0.34266703123023107)
+            (2,1.069919698272851) +- (0,0.34266703123023107)
+            (3,1.2250710642968223) +- (0,0.342667031230231)
+            (4,0.7976719857021045) +- (0,0.34266703123023107)
+            (5,0.836470875169129) +- (0,0.34266703123023107)
+            (6,2.043744880797379) +- (0,0.34266703123023107)
+            (7,1.3859074708972907) +- (0,0.342667031230231)
+            (8,2.0529242306769406) +- (0,0.342667031230231)
+            (9,1.328331125236562) +- (0,0.342667031230231)
+            (10,1.8713616815794534) +- (0,0.34266703123023107)
+            (11,1.9179877639249487) +- (0,0.34266703123023107)
+            ($\geq$12,0.8338398361407295) +- (0,0.34266703123023107)
+        }
+        ;
+    \addlegendentry {no FE}
+    \addplot[mark={*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 56; green, 152; blue, 38}, fill opacity={1}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}}, error bars/error mark={none}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 56; green, 152; blue, 38}, fill opacity={1}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}, solid, line width={0.5pt}}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{-0.10000000000000003}}}]
+        coordinates {
+            ($\leq$-7,0.36968848040220753) +- (0,0.26858970916630087)
+            (-6,1.016164254335918) +- (0,0.2685897091663009)
+            (-5,0.8004351374649588) +- (0,0.2685897091663009)
+            (-4,0.8778993522840418) +- (0,0.26858970916630087)
+            (-3,0.5827695112478485) +- (0,0.268589709166301)
+            (-2,0.1494422535072081) +- (0,0.26858970916630087)
+            (-1,0.4916073110999911) +- (0,0.2685897091663009)
+            (0,0.0) +- (0,0.0)
+            (1,2.072646366698659) +- (0,0.2685897091663009)
+            (2,1.0699196982728134) +- (0,0.2685897091663009)
+            (3,1.2250710642967875) +- (0,0.268589709166301)
+            (4,0.7976719857020691) +- (0,0.2685897091663009)
+            (5,0.8364708751690918) +- (0,0.2685897091663009)
+            (6,2.043744880797342) +- (0,0.26858970916630087)
+            (7,1.3859074708972556) +- (0,0.2685897091663009)
+            (8,2.052924230676905) +- (0,0.2685897091663009)
+            (9,1.3283311252365253) +- (0,0.26858970916630087)
+            (10,1.8713616815794178) +- (0,0.2685897091663009)
+            (11,1.9179877639249114) +- (0,0.2685897091663009)
+            ($\geq$12,0.8338398361406942) +- (0,0.268589709166301)
+        }
+        ;
+    \addlegendentry {with id FE}
+    \addplot[mark={*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 203; green, 60; blue, 51}, fill opacity={1}, draw={rgb,255: red, 203; green, 60; blue, 51}, draw opacity={1}}, error bars/error mark={none}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 203; green, 60; blue, 51}, fill opacity={1}, draw={rgb,255: red, 203; green, 60; blue, 51}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 203; green, 60; blue, 51}, draw opacity={1}, solid, line width={0.5pt}}, draw={rgb,255: red, 203; green, 60; blue, 51}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{0.09999999999999998}}}]
+        coordinates {
+            ($\leq$-7,0.07645489065628298) +- (0,0.36715405297185305)
+            (-6,0.07996822101711923) +- (0,0.367154052971853)
+            (-5,-0.011650219338169922) +- (0,0.36715405297185305)
+            (-4,0.048274055401765305) +- (0,0.367154052971853)
+            (-3,-0.025795428786323044) +- (0,0.36715405297185316)
+            (-2,-0.19579864129185398) +- (0,0.36715405297185316)
+            (-1,-0.06466735007183771) +- (0,0.367154052971853)
+            (0,0.1268890275225408) +- (0,0.2596171205965258)
+            (1,0.8447808240898901) +- (0,0.36715405297185316)
+            (2,0.9532945471851093) +- (0,0.36715405297185305)
+            (3,1.0256382459735525) +- (0,0.36715405297185316)
+            (4,0.9454918497954883) +- (0,0.36715405297185316)
+            (5,0.9192463471134893) +- (0,0.36715405297185305)
+            (6,1.0183105850288372) +- (0,0.36715405297185305)
+            (7,1.0200496824371583) +- (0,0.36715405297185316)
+            (8,0.8870106225498678) +- (0,0.36715405297185305)
+            (9,0.864324512110313) +- (0,0.36715405297185305)
+            (10,0.9657067575074153) +- (0,0.36715405297185316)
+            (11,0.9105573459927404) +- (0,0.36715405297185305)
+            ($\geq$12,0.9555153257114695) +- (0,0.36715405297185305)
+        }
+        ;
+    \addlegendentry {with time FE}
+    \addplot[mark={*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 149; green, 88; blue, 178}, fill opacity={1}, draw={rgb,255: red, 149; green, 88; blue, 178}, draw opacity={1}}, error bars/error mark={none}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 149; green, 88; blue, 178}, fill opacity={1}, draw={rgb,255: red, 149; green, 88; blue, 178}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 149; green, 88; blue, 178}, draw opacity={1}, solid, line width={0.5pt}}, draw={rgb,255: red, 149; green, 88; blue, 178}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{0.3}}}]
+        coordinates {
+            ($\leq$-7,0.07645489065630831) +- (0,0.25215615168351)
+            (-6,0.07996822101714456) +- (0,0.2521561516835101)
+            (-5,-0.011650219338145154) +- (0,0.2521561516835101)
+            (-4,0.0482740554017895) +- (0,0.2521561516835101)
+            (-3,-0.025795428786298095) +- (0,0.25215615168351)
+            (-2,-0.19579864129182975) +- (0,0.2521561516835101)
+            (-1,-0.06466735007181312) +- (0,0.25215615168351)
+            (0,0.0) +- (0,0.0)
+            (1,0.8447808240899143) +- (0,0.25215615168351)
+            (2,0.9532945471851335) +- (0,0.25215615168351)
+            (3,1.0256382459735756) +- (0,0.25215615168350997)
+            (4,0.9454918497955125) +- (0,0.25215615168350997)
+            (5,0.9192463471135143) +- (0,0.25215615168350997)
+            (6,1.018310585028861) +- (0,0.2521561516835099)
+            (7,1.0200496824371827) +- (0,0.25215615168350997)
+            (8,0.8870106225498916) +- (0,0.2521561516835099)
+            (9,0.8643245121103371) +- (0,0.25215615168350997)
+            (10,0.9657067575074394) +- (0,0.2521561516835099)
+            (11,0.9105573459927649) +- (0,0.2521561516835099)
+            ($\geq$12,0.9555153257114923) +- (0,0.2521561516835098)
+        }
+        ;
+    \addlegendentry {with id \& time FE}
+    \draw[dashed, black, line width={0.75}] ({rel axis cs:1,0}|-{axis cs:0,0}) -- ({rel axis cs:0,0}|-{axis cs:0,0});
+    \draw[dashed, black, line width={0.75}] ({rel axis cs:0.4,0}|-{rel axis cs:0,1}) -- ({rel axis cs:0.4,0}|-{rel axis cs:0,0});
+    \draw node[pin=-45:{event happens}, inner sep=0, outer sep=0] at ({rel axis cs:0.4, 0.2}) {};\end{axis}
+\newdimen\notewidth
+                    \pgfextractx{\notewidth}{\pgfpointdiff{\pgfpointanchor{current bounding box}{west}}
+                    {\pgfpointanchor{current bounding box}{east}}}\draw node[text width={\the\notewidth}, anchor={north west}, at={(current axis.outer south west)}, align={left}, font={\fontsize{6}{6}\selectfont}] {Note: The total number of observation is 2000, with 100 individuals and 20 periods. Half of the observations is treated. The true coefficient before treatment is 0. The true coefficient after treatment is 1. The CI is at 95\% level.};
+\end{tikzpicture}
+\end{document}

@@ -73,6 +73,8 @@ m.note.captionstyle.size=6
 m.xlabel.content = "time relative to event"
 m.ylabel.content = "coefficient"
 m.title.content = "My example event study plot"
+m.width=300
+m.height=240
 
 for c in m.data
     c.mark.mark="*"

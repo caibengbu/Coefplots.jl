@@ -187,7 +187,7 @@ function to_axis(g::GroupedMultiCoefplot, other::SupportedAddition ...)
         for c in m.data
             push!(cplots, to_plot(c))
             if !ismissing(c.title.content)
-                push!(cplots, PGFPlotsX.LegendEntry(c.title.content));
+                # push!(cplots, PGFPlotsX.LegendEntry(c.title.content));
             end
         end
         push!(gp, nextgroupplot_options, cplots);
