@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  Figure 1. Presenting Multi-dimensional Results
+  Figure 2. Presenting Multi-dimensional Results
 </p>
 
 ## Quick Start
