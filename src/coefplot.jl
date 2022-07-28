@@ -172,6 +172,7 @@ function get_groupplot_options(gc::Vector{Pair{T, Coefplot}}) where T <: Abstrac
         )
         groupplot_options["ymin"] = coefmin
         groupplot_options["ymax"] = coefmax
+        merge!(groupplot_options, to_options(getfield(c,:ylabel), :ylabel, Symbol("ylabel style")))
     else
         groupplot_options["group style"] = PGFPlotsX.Options(
             "group size" => "1 by $(ngroups)",
@@ -181,6 +182,7 @@ function get_groupplot_options(gc::Vector{Pair{T, Coefplot}}) where T <: Abstrac
         )
         groupplot_options["xmin"] = coefmin
         groupplot_options["xmax"] = coefmax
+        merge!(groupplot_options, to_options(getfield(c,:xlabel), :xlabel, Symbol("xlabel style")))
     end
     return groupplot_options
 end
