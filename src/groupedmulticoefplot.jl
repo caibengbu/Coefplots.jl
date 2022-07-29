@@ -5,7 +5,7 @@ mutable struct GroupedMultiCoefplot
     ylabel::Label
     xticklabel::CaptionStyle
     yticklabel::CaptionStyle
-    legend::Legend
+    show_legend::Vector{Bool}
     width::Real
     height::Real
 
@@ -29,7 +29,7 @@ mutable struct GroupedMultiCoefplot
                                 ylabel::Label = Label(), 
                                 xticklabel::CaptionStyle = CaptionStyle(),
                                 yticklabel::CaptionStyle = CaptionStyle(),
-                                legend::Legend = Legend(),
+                                show_legend::MaybeData{Vector{Bool}} = missing,
                                 width::Real = 240, # in line with the tikz default
                                 height::Real = 204,
                                 interval::MaybeData{Real} = missing,
@@ -39,8 +39,13 @@ mutable struct GroupedMultiCoefplot
         """
         to construct a GroupedMultiCoefplot.
         """
+        ngroups = length(data)
+        if ismissing(show_legend)
+            show_legend = falses(ngroups)
+            show_legend[1] = true # default: show only the first legend
+        end
 
-        new(title, xlabel, ylabel, xticklabel, yticklabel, legend, width, height, interval, data, note, vertical)
+        new(title, xlabel, ylabel, xticklabel, yticklabel, show_legend, width, height, interval, data, note, vertical)
     end
 end
 
@@ -129,11 +134,6 @@ function get_nextgroupplot_options(m::MultiCoefplot)
         delete!(nextgroupplot_options, x)
         delete!(nextgroupplot_options, Symbol("$x style"))
     end
-    # for groupedmulticoefplot, avoid duplicated legends
-    for x in [:title, :xlabel, :ylabel]
-        delete!(nextgroupplot_options, x)
-        delete!(nextgroupplot_options, Symbol("$x style"))
-    end
     return nextgroupplot_options
 end
 
@@ -178,7 +178,7 @@ end
 function to_axis(g::GroupedMultiCoefplot, other::SupportedAddition ...) 
     groupplot_options = get_groupplot_options(g)
     gp = PGFPlotsX.GroupPlot(groupplot_options);
-    for (groupname, m) in g.data
+    for ((groupname, m), is_show_legend) in zip(g.data, g.show_legend)
         if !isempty(m.csorter)
             sort!(m)
         end
@@ -187,7 +187,9 @@ function to_axis(g::GroupedMultiCoefplot, other::SupportedAddition ...)
         for c in m.data
             push!(cplots, to_plot(c))
             if !ismissing(c.title.content)
-                # push!(cplots, PGFPlotsX.LegendEntry(c.title.content));
+                if is_show_legend
+                    push!(cplots, PGFPlotsX.LegendEntry(c.title.content));
+                end
             end
         end
         push!(gp, nextgroupplot_options, cplots);
