@@ -34,5 +34,4 @@ pkg> add https://github.com/caibengbu/Coefplots.jl.git
 ```
 
 ## To-do
-- plot multicoefplot in **TWO** ways: stacked on each coefficient or stacked on the axis.
 - enable setting attributes of coefplot directly from a function exerting on the multicoefplot.
