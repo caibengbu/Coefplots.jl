@@ -5,6 +5,32 @@ using GLM
 using DataFrames, CSV
 using Random
 using PGFPlotsX
+using Test
+
+# this is a utility function to check that two text files are the same
+function checkfilesarethesame(file1::String, file2::String)
+    f1 = open(file1, "r")
+    f2 = open(file2, "r")
+    s1 = read(f1, String)
+    s2 = read(f2, String)
+    close(f1)
+    close(f2)
+    # Character-by-character comparison
+    for i=1:length(s1)
+        if s1[i]!=s2[i]
+            println("Character $(i) different: $(s1[i]) $(s2[i])")
+        end
+    end
+    if s1 == s2
+        return true
+    else
+        return false
+        println("File 1:")
+        @show s1
+        println("File 2:")
+        @show s2
+    end
+end
 
 Random.seed!(1234)
 sector_names = ["01-05  Animal & Animal Products",
@@ -51,5 +77,11 @@ g = Coefplots.GroupedMultiCoefplot(["China" => g_CHN, "France" => g_FRA]; keepco
 g.xlabel.content = "elasticity"
 g.title.content = "My fake plot"
 g.note.content = "Note: The classification is only for demonstration purposes, not rigorous."
-pgfsave("../assets/elasticity.svg", Coefplots.to_picture(g))
-pgfsave("../assets/elasticity.tex", Coefplots.to_picture(g))
+# Note that SVG creation depends on external libraries that are not distributed with Julia by default
+try
+    pgfsave("../assets/elasticity.svg", Coefplots.to_picture(g))
+catch ex
+    @warn "SVG creation failed."
+end
+pgfsave("elasticity.tex", Coefplots.to_picture(g))
+@test checkfilesarethesame("../assets/elasticity.tex", "elasticity.tex")
