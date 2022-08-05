@@ -103,10 +103,12 @@ mutable struct Bar
     end
 end
 
+"""
+    to_options(l::Bar)
+
+generates tikz options related to bars: [draw={}, draw opacity={}, line width=0.6pt}, densely dotted].
+"""
 function to_options(l::Bar)
-    """
-    generates PGF options related to bars: [draw={}, draw opacity={}, line width=0.6pt}, densely dotted].
-    """
     options = PGFPlotsX.Options()
     if !ismissing(l.draw)
         options["draw"] = color_as_xcolor(l.draw)
@@ -132,10 +134,12 @@ mutable struct Legend
     end
 end
 
+"""
+    to_options(l::Legend)
+
+generates tikz options related to the legend style: [font={}, rotate={}].
+"""
 function to_options(l::Legend)
-    """
-    generates PGF options related to legend style: [font={}, rotate={}].
-    """
     options = PGFPlotsX.Options()
     if !ismissing(l.font) & !ismissing(l.size)
         options[:font] = "\\fontsize{$(l.size)}{$(l.size)}\\fontfamily{$(l.font)}\\selectfont"
@@ -165,10 +169,12 @@ mutable struct Note <: PGFPlotsX.TikzElement
     end
 end
 
+"""
+    to_options(l::Legend)
+
+generates tikz options related to note: [font={}, rotate={}].
+"""
 function to_options(n::Note)
-    """
-    generates PGF options related to note: [font={}, rotate={}].
-    """
     options = PGFPlotsX.Options()
     options["text width"] = "\\the\\notewidth"
     if !ismissing(n.anchor)
@@ -211,7 +217,8 @@ end
 
 """
     rVLine([options], x)
-A vertical line at `x`.
+
+A vertical line at `x`, where `x` takes a real value between 0 and 1 and denotes the relative position of the vertical line.
 """
 rVLine(x::Real) = rVLine(PGFPlotsX.Options(), x)
 
@@ -229,7 +236,8 @@ end
 
 """
     rHLine([options], y)
-A horizontal line at `y`.
+
+A horizontal line at `y`, where `y` takes a real value between 0 and 1 and denotes the relative position of the horizontal line.
 """
 rHLine(y::Real) = rHLine(PGFPlotsX.Options(), y)
 
@@ -252,7 +260,8 @@ end
 
 """
     rVBand([options], xmin, xmax)
-A vertical band from `xmin` to `xmax`.
+
+A vertical band from `xmin` to `xmax`, which are relative and range between 0 and 1.
 """
 rVBand(xmin::Real, xmax::Real) = rVBand(PGFPlotsX.Options(), xmin, xmax)
 
@@ -271,7 +280,7 @@ end
 
 """
     rHBand([options], ymin, ymax)
-A horizontal band from `ymin` to `ymax`.
+A horizontal band from `ymin` to `ymax`, which are relative and range between 0 and 1.
 """
 rHBand(ymin::Real, ymax::Real) = rHBand(PGFPlotsX.Options(), ymin, ymax)
 

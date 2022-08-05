@@ -61,7 +61,11 @@ mutable struct Coefplot
 end
 
 # TODO: be able to rename the varnames
+"""
+    get_axis_options(c::Coefplot)
 
+Renders the properties of a Coefplot object as options of the \\begin{axis}
+"""
 function get_axis_options(c::Coefplot)
     """
     extract all fields in a coefplot that are related to the options of the axis, and generate such PGFPlotsX.Options
@@ -94,6 +98,11 @@ function get_axis_options(c::Coefplot)
     return axis_options
 end
 
+"""
+    get_plot_options(c::Coefplot)
+
+Renders the properties of a Coefplot object as options of the \\addplot
+"""
 function get_plot_options(c::Coefplot)
     """
     extract all fields in a coefplot that are related to the options of the plot, and generate such PGFPlotsX.Options
@@ -135,19 +144,27 @@ const SupportedAddition = Union{PGFPlotsX.HLine, PGFPlotsX.VLine,
                                 PGFPlotsX.HBand, PGFPlotsX.VBand,
                                 rHLine, rVLine, rHBand, rVBand, Annotation}
 """
-convert the Coefplot object to an PGFPlotsX.TikzPicture, note is added
+    to_picture(c::Coefplot, other::SupportedAddition ...)
+
+Convert the Coefplot object to an PGFPlotsX.TikzPicture. Other supported components are allowed and appended after the Coefplot. 
+The note field is drawn as a node beyond the axis.
 """
 to_picture(c::Coefplot, other::SupportedAddition ...) = PGFPlotsX.TikzPicture(to_axis(c, other...), c.note)
 
 """
-convert the Coefplot object to an PGFPlotsX.Axis
+    to_axis(c::Coefplot, other::SupportedAddition ...)
+
+Converts the Coefplot object to a PGFPlotsX.Axis object. Other supported components are allowed and appended after the Coefplot within the axis. 
 """
 to_axis(c::Coefplot, other::SupportedAddition ...) = PGFPlotsX.Axis(get_axis_options(c), to_plot(c), other...)
 
+"""
+    to_plot(c::Coefplot)
+
+Convert the Coefplot object to an PGFPlotsX.AxisElement. It is realized using the PGFPlotsX.Plot/PGFPlotsX.Coordinates combination.
+"""
 function to_plot(c::Coefplot)
-    """
-    convert the Coefplot object to an PGFPlotsX.AxisElement
-    """
+
     if !isempty(c.sorter) # sort
         data = c.data[indexin(c.sorter, c.data.varname),:]
     else
@@ -164,6 +181,11 @@ function to_plot(c::Coefplot)
     end
 end
 
+"""
+    color!(c::Coefplot, clr::Color)
+
+Reset the color of a Coefplot.
+"""
 function color!(c::Coefplot, clr::Color)
     """
     short cut to recolor all the elements in a coefplot, instead of re-assign colors one by one.
@@ -176,6 +198,11 @@ function color!(c::Coefplot, clr::Color)
     c.connect.draw = clr
 end
 
+"""
+    errbar_length(data::AbstractDataFrame, level::Real=0.95)
+
+Compute the length of the error bar for each coefficient.
+"""
 errbar_length(data::AbstractDataFrame, level::Real=0.95) = data.se .* abs(quantile(Distributions.TDist(first(data.dof)), (1. - level)/2.))
 
 function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, key_escaped::Bool=true)
@@ -205,5 +232,16 @@ function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unment
     c.data = data
 end
 
+"""
+    minimum(c::Coefplot)
+
+Compute the minimal value that the Coefplot can reach with its error bar.
+"""
 Base.minimum(c::Coefplot) = minimum(c.data.b - Coefplots.errbar_length(c.data, c.level))
+
+"""
+    maximum(c::Coefplot)
+
+Compute the maximal value that the Coefplot can reach with its error bar.
+"""
 Base.maximum(c::Coefplot) = maximum(c.data.b + Coefplots.errbar_length(c.data, c.level))

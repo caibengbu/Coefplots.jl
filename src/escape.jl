@@ -1,15 +1,3 @@
-## TO-DO: something is wrong with the current escaping. for example "$\geq$", this won't event be able to inputted as a string.
-## Users will have to input it as "\$\\geq\$". which is already escapped.
-## in that case, latex_escape will need to skip "\\g"-like items, and "\$". If not, this will happen:
-
-## julia> print_tex(latex_escape("\$"))
-## \$                                      -- (instead of $)
-
-## julia> print_tex(latex_escape("\\g"))
-## \\g                                     -- (instead of \g)
-
-# Also, we need to escape commas. because commas are regarded as the separator. "," needs to be "{,}". Similarly, parenthesis needs to be escaped in the same way
-
 DISABLE_ESCAPE = false
 
 function enable_escape!()
@@ -23,7 +11,7 @@ end
 """
     escape_string(str::AbstractString[, esc]; keep = ())::AbstractString
     escape_string(io, str::AbstractString[, esc]; keep = ())::Nothing
-    Almost the same as the Base.escape_string except that _escape_string escapes comma as {,}.
+    Almost the same as the Base.escape_string except that _escape_string escapes ",", "(", ")", and "." by putting it in a pair of brackets.
 ```
 """
 function _escape_string(io::IO, s::AbstractString, esc=""; keep = ())
@@ -62,4 +50,10 @@ end
 _escape_string(s::AbstractString, esc=('\"',); keep = ()) =
     sprint((io)->_escape_string(io, s, esc; keep = keep), sizehint=lastindex(s))
 
-latex_escape(s) = DISABLE_ESCAPE ? s : _escape_string(s,"&%"; keep='\\')
+
+"""
+    latex_escape(s::AbstractString)
+
+    Escapes `,`, `(`, `)`, and `.` by putting it in a pair of brackets, also esxapes `&` and `%` by adding `\\`
+"""
+latex_escape(s::AbstractString) = DISABLE_ESCAPE ? s : _escape_string(s,"&%"; keep='\\')

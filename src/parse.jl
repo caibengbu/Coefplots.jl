@@ -20,12 +20,14 @@ df_residual(r::RegressionModel) = StatsBase.dof_residual(r)
 df_residual(r::TableRegressionModel) = StatsModels.dof_residual(r)
 df_residual(r::FixedEffectModel) = FixedEffectModels.dof_residual(r)
 
+"""
+    parseparse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
+
+This function takes the regression result and convert it into a Coefplot.
+`ps` is how you want to rename the coefficients. 
+If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
+"""
 function parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
-    """
-    This function takes the regression result and convert it into a Coefplot.
-    `ps` is how you want to rename the coefficients. 
-    If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
-    """
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -51,15 +53,3 @@ function parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; dr
     data.varname = latex_escape.(data.varname)
     Coefplot(data; sorter = sorter, kwargs...)
 end
-
-## TO-DO: something is wrong with the current escaping. for example "$\geq$", this won't event be able to inputted as a string.
-## Users will have to input it as "\$\\geq\$". which is already escapped.
-## in that case, latex_escape will need to skip "\\g"-like items, and "\$". If not, this will happen:
-
-## julia> print_tex(latex_escape("\$"))
-## \$                                      -- (instead of $)
-
-## julia> print_tex(latex_escape("\\g"))
-## \\g                                     -- (instead of \g)
-
-# Also, we need to escape commas. because commas are regarded as the separator. "," needs to be "{,}". Similarly, parenthesis needs to be escaped in the same way

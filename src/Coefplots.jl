@@ -20,4 +20,7 @@ module Coefplots
     include("groupedmulticoefplot.jl")
     include("parse.jl")
     include("other_utils.jl")
+
+    export to_plot, to_axis, to_picture, color!, rename!
+    export Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot
 end
