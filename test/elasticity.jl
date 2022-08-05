@@ -1,6 +1,6 @@
-include("../src/Coefplots.jl")
-using .Coefplots
-# using Coefplots
+# include("../src/Coefplots.jl")
+# using .Coefplots
+using Coefplots
 using GLM
 using DataFrames, CSV
 using Random
@@ -83,5 +83,7 @@ try
 catch ex
     @warn "SVG creation failed."
 end
+pgfsave("../assets/elasticity.png", Coefplots.to_picture(g))
+# pgfsave("../assets/elasticity.tex", Coefplots.to_picture(g))
 pgfsave("elasticity.tex", Coefplots.to_picture(g))
 @test checkfilesarethesame("../assets/elasticity.tex", "elasticity.tex")

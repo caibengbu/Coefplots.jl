@@ -1,6 +1,6 @@
-include("../src/Coefplots.jl")
-using .Coefplots
-# using Coefplots
+# include("../src/Coefplots.jl")
+# using .Coefplots
+using Coefplots
 using FixedEffectModels
 using DataFrames
 using Random
@@ -47,18 +47,31 @@ rename_rule = ["time: -7.0 & treatment" => "\$\\leq\$-7",
     "time: 11.0 & treatment" => 11,
     "time: 12.0 & treatment" => "\$\\geq\$12"]
 
+
+# round result to 4 digit, there are always small errors each time you test.
+function round!(c::Coefplot,digits::Int64=4)
+    data = c.data
+    data.b = round.(data.b; digits=digits)
+    data.se = round.(data.se; digits=digits)
+    c.data = data;
+end
+
 res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
 pool = Coefplots.parse(res_pool,rename_rule...)
 pool.title.content = "no FE"
+round!(pool)
 res_idfe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
 with_idfe = Coefplots.parse(res_idfe,rename_rule...)
 with_idfe.title.content = "with id FE"
+round!(with_idfe)
 res_timefe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time)); contrasts = Dict(:time => DummyCoding(base=0))); 
 with_timefe = Coefplots.parse(res_timefe,rename_rule...)
 with_timefe.title.content = "with time FE"
+round!(with_timefe)
 res_both = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time) + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
 with_bothfe = Coefplots.parse(res_both,rename_rule...)
 with_bothfe.title.content = "with id \\& time FE"
+round!(with_bothfe)
 
 m = Coefplots.MultiCoefplot(pool, with_idfe, with_timefe, with_bothfe)
 m.xticklabel.rotate=45
@@ -93,5 +106,7 @@ try
 catch ex 
     @warn "SVG creation failed."
 end
+pgfsave("../assets/esplot.png", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
+# pgfsave("../assets/esplot.tex", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
 pgfsave("esplot.tex", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
 @test checkfilesarethesame("../assets/esplot.tex", "esplot.tex")
