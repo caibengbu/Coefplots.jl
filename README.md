@@ -9,7 +9,7 @@
 
 ## Gallery
 <p align="center">
-  <img width="500" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg">
+  <img width="500" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.png">
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img width="600" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/elasticity.svg">
+  <img width="600" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/elasticity.png">
 </p>
 
 <p align="center">
