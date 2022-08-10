@@ -70,9 +70,9 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: doctest, DocMeta
-            using PGFPlotsX
-            DocMeta.setdocmeta!(PGFPlotsX, :DocTestSetup, :(using PGFPlotsX); recursive=true)
-            doctest(PGFPlotsX)'
+            using Coefplots
+            DocMeta.setdocmeta!(Coefplots, :DocTestSetup, :(using Coefplots); recursive=true)
+            doctest(Coefplots)'
       - run: julia --project=docs docs/make.jl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
