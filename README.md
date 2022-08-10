@@ -6,7 +6,7 @@
 
 | **Documentation**                                                               | **Build Status**                                                                                |
 |:-------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| Work in progress | [![build](https://github.com/caibengbu/Coefplots.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/caibengbu/Coefplots.jl/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/caibengbu/Coefplots.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/caibengbu/Coefplots.jl)|
+|[![devdoc](https://img.shields.io/badge/docs-dev-blue.svg)](https://caibengbu.github.io/Coefplots.jl/dev/)| [![build](https://github.com/caibengbu/Coefplots.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/caibengbu/Coefplots.jl/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/caibengbu/Coefplots.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/caibengbu/Coefplots.jl)|
 
 
 
