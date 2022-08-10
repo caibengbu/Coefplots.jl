@@ -39,7 +39,7 @@ mutable struct Coefplot
                       width::Real = 240, # in line with the tikz default
                       height::Real = 204,
                       keepmark::Bool = true,
-                      keepconnect::Bool = true,
+                      keepconnect::Bool = false,
                       mark::Mark = Mark(mark=:"square*", marksize=1.75, linewidth=0, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
                       errormark::Mark = Mark(mark=:|, marksize=2.0, linewidth=0.6, linetype=:solid, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
                       errorbar::Bar = Bar(linewidth=1.5, linetype=Symbol("densely dotted"), draw=first(COLOR_LOOP)),
