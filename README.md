@@ -1,6 +1,6 @@
 <h1>
   <p align="center">
-    <img width="550" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg">
+    <img width="400" src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg">
   </p>
 </h1>
 
