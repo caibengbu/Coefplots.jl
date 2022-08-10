@@ -25,4 +25,4 @@ Pkg.add("Coefplots")
 ![event_study](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg)
 
 ### Presenting multi-dimensional results
-![gmc_result](https://github.com/caibengbu/Coefplots.jl/blob/main/assets/elasticity.svg)
+![gmc_result](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/elasticity.svg)

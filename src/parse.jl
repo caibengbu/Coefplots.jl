@@ -21,7 +21,7 @@ df_residual(r::TableRegressionModel) = StatsModels.dof_residual(r)
 df_residual(r::FixedEffectModel) = FixedEffectModels.dof_residual(r)
 
 """
-    parseparse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
+    parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
 
 This function takes the regression result and convert it into a Coefplot.
 `ps` is how you want to rename the coefficients. 

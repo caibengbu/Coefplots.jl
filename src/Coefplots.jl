@@ -8,7 +8,6 @@ module Coefplots
     using Parameters: @unpack
     import FixedEffectModels: FixedEffectModel
     import StatsModels: TableRegressionModel
-    import Base: parse
 
     const MaybeData{T} = Union{T, Missing}
 
