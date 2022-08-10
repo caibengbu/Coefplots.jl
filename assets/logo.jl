@@ -1,4 +1,5 @@
 using Luxor, Colors
+scale = 0.85
 @svg begin
     background(colorant"transparent")
     setopacity(0.85)
@@ -9,10 +10,10 @@ using Luxor, Colors
             Luxor.julia_red,
             Luxor.julia_purple,
             Luxor.julia_blue][mod1(n, 4)])
-        sector(Point(-75, 0), 25, 50, θ, θ + 2π/steps - deg2rad(gap), :fill)
+        sector(Point(-75*scale, 0), 25*scale, 50*scale, θ, θ + 2π/steps - deg2rad(gap), :fill)
     end
-     fontsize(45)
+     fontsize(45*scale)
      fontface("MyanmarMN-Bold")
      sethue("black")
-     text("oefplots.jl", Point(-89, -5) ,halign=:left,valign = :middle)
-end 350 100 "logo.svg"
+     text("oefplots.jl", Point(-89*scale, -5*scale) ,halign=:left,valign = :middle)
+end 350*scale 100*scale "logo.svg"

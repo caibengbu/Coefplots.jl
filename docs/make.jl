@@ -8,7 +8,8 @@ makedocs(
     checkdocs = :none,
     pages = Any[
         "Home" => "index.md",
-        "Manual" => [],
+        "Manual" => ["quick_start.md",
+                     ""],
         "Examples" => []
     ]
 )
