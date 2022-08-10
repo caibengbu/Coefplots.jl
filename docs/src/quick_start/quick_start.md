@@ -12,6 +12,8 @@ end
 
 We use the Iris dataset from RDatasets.jl to demonstrate the basic usage of Coefplots.jl
 
+The quickest way to plot a coefplot is to invoke `plot()`.
+
 ```@example pgf
 using Coefplots
 using RDatasets
@@ -25,3 +27,21 @@ savefigs("quick_start1", p) # hide
 [\[.pdf\]](quick_start1.pdf), [\[generated .tex\]](quick_start1.tex)
 
 ![](quick_start1.svg)
+
+You can also customize your coefplot by passing named arguments. For example,
+
+```@example pgf
+p = plot(reg; keepcoef = ["SepalWidth", "PetalLength", "PetalWidth"],
+              title = Label(content="My OLS regression"),
+              xlabel = Label(content="Regressor Names"),
+              ylabel = Label(content="Coefficients"),
+              width = 250, 
+              height = 180,
+              keepconnect = true,
+              mark = Mark(mark=:"triangle*", marksize=4, linewidth=0))
+
+savefigs("quick_start2", p) # hide
+```
+[\[.pdf\]](quick_start2.pdf), [\[generated .tex\]](quick_start2.tex)
+
+![](quick_start2.svg)

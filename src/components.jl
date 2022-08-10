@@ -291,13 +291,6 @@ function PGFPlotsX.print_tex(io::IO, hband::rHBand)
     println(io, "({rel axis cs:1,0}|-{rel axis cs:0,$(ymin)}) rectangle ({rel axis cs:0,0}|-{rel axis cs:0,$(ymax)});")
 end
 
-function PGFPlotsX.print_tex(io::IO, hband::rHBand)
-    @unpack options, ymin, ymax = hband
-    print(io, "\\draw")
-    PGFPlotsX.print_options(io, options; newline = false)
-    println(io, "({rel axis cs:1,0}|-{rel axis cs:0,$(ymin)}) rectangle ({rel axis cs:0,0}|-{rel axis cs:0,$(ymax)});")
-end
-
 struct Annotation
     angle::Real
     content::String

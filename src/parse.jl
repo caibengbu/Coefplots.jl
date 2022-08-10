@@ -13,7 +13,7 @@ yname(r::TableRegressionModel) = lhs(r.mf.f.lhs) # returns a Symbol
 yname(r::FixedEffectModel) = r.yname
 
 stderror(r::RegressionModel) = StatsBase.stderror(r)
-stderror(r::RegressionModel) = StatsModels.stderror(r)
+stderror(r::TableRegressionModel) = StatsModels.stderror(r)
 stderror(r::FixedEffectModel) = FixedEffectModels.stderror(r)
 
 df_residual(r::RegressionModel) = StatsBase.dof_residual(r)
@@ -27,7 +27,8 @@ This function takes the regression result and convert it into a Coefplot.
 `ps` is how you want to rename the coefficients. 
 If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
 """
-function parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractString where R; drop_unmentioned::Bool=true, kwargs...)
+function Coefplots.parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractString where R; drop_unmentioned::Bool=true, kwargs...)
+    println(3)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -51,7 +52,8 @@ function parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractSt
     Coefplot(data; sorter = sorter, kwargs...)
 end
 
-function parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
+function Coefplots.parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
+    println(2)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -71,7 +73,8 @@ function parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kw
     Coefplot(data; sorter = sorter, kwargs...)
 end
 
-function parse(r::SupportedEstimation; kwargs...)
+function Coefplots.parse(r::SupportedEstimation; kwargs...)
+    println(1)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)

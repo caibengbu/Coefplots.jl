@@ -26,4 +26,5 @@ module Coefplots
 
     export plot
     export Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot
+    export Label, CaptionStyle, Mark, Bar, Legend, Note, rVLine, rHLine, rVBand, rHBand, Annotation
 end
