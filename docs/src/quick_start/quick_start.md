@@ -10,7 +10,7 @@ savefigs = (figname, obj) -> begin
 end
 ```
 
-test
+We use the Iris dataset from RDatasets.jl to demonstrate the basic usage of Coefplots.jl
 
 ```@example pgf
 using Coefplots
@@ -22,3 +22,6 @@ p = plot(reg)
 
 savefigs("quick_start1", p) # hide
 ```
+[\[.pdf\]](quick_start1.pdf), [\[generated .tex\]](quick_start1.tex)
+
+![](quick_start1.svg)

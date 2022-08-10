@@ -57,19 +57,19 @@ function round!(c::Coefplot,digits::Int64=4)
 end
 
 res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
-pool = Coefplots.parse(res_pool,rename_rule...;keepconnect=true)
+pool = parse(res_pool; rename = rename_rule, keepconnect=true)
 pool.title.content = "no FE"
 round!(pool)
 res_idfe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_idfe = Coefplots.parse(res_idfe,rename_rule...;keepconnect=true)
+with_idfe = parse(res_idfe; rename = rename_rule, keepconnect=true)
 with_idfe.title.content = "with id FE"
 round!(with_idfe)
 res_timefe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_timefe = Coefplots.parse(res_timefe,rename_rule...;keepconnect=true)
+with_timefe = parse(res_timefe; rename = rename_rule, keepconnect=true)
 with_timefe.title.content = "with time FE"
 round!(with_timefe)
 res_both = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time) + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_bothfe = Coefplots.parse(res_both,rename_rule...;keepconnect=true)
+with_bothfe = parse(res_both; rename = rename_rule, keepconnect=true)
 with_bothfe.title.content = "with id \\& time FE"
 round!(with_bothfe)
 
@@ -101,6 +101,7 @@ using PGFPlotsX
 zero_level = @pgf Coefplots.HLine({dashed, black , line_width=0.75}, 0)
 treatment_divide = @pgf Coefplots.rVLine({dashed, black , line_width=0.75}, 0.4)
 anno = Coefplots.Annotation(-45, "event happens", (0.4,0.2))
+Coefplots.print_tex(Coefplots.to_picture(m, zero_level, treatment_divide, anno))
 try
     pgfsave("../assets/esplot.svg", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
 catch ex 

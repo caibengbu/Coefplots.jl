@@ -1,4 +1,4 @@
-![header](../../assets/logo.svg)
+![header](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg)
 
 ## Introduction
 
@@ -22,7 +22,7 @@ Pkg.add("Coefplots")
 
 ## Gallery
 ### In a event study scenario
-![event_study](../../assets/esplot.svg)
+![event_study](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/esplot.svg)
 
 ### Presenting multi-dimensional results
-![gmc_result](../../assets/elasticity.svg)
+![gmc_result](https://github.com/caibengbu/Coefplots.jl/blob/main/assets/elasticity.svg)
