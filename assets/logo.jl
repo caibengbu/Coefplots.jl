@@ -1,5 +1,6 @@
-using Luxor
+using Luxor, Colors
 @svg begin
+    background(colorant"transparent")
     setopacity(0.85)
     steps = 10
     gap   = 12
