@@ -27,7 +27,7 @@ This function takes the regression result and convert it into a Coefplot.
 `ps` is how you want to rename the coefficients. 
 If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
 """
-function parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
+function Base.parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)

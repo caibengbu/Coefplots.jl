@@ -21,8 +21,8 @@ Pkg.add("Coefplots")
     For more information of prerequisite installations, please refer to [the installation section of PGFPlotsX.jl's documentation](https://kristofferc.github.io/PGFPlotsX.jl/stable/#Installation).
 
 ## Gallery
-In a event study scenario:
+### In a event study scenario
 ![event_study](../../assets/esplot.svg)
 
-Presenting multi-dimensional results:
+### Presenting multi-dimensional results
 ![gmc_result](../../assets/elasticity.svg)

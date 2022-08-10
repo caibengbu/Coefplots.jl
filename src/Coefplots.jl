@@ -8,6 +8,7 @@ module Coefplots
     using Parameters: @unpack
     import FixedEffectModels: FixedEffectModel
     import StatsModels: TableRegressionModel
+    import Base: parse
 
     const MaybeData{T} = Union{T, Missing}
 
@@ -21,6 +22,9 @@ module Coefplots
     include("parse.jl")
     include("other_utils.jl")
 
-    export to_plot, to_axis, to_picture, color!, rename!
+    plot(x::T, other::SupportedAddition ...) where T<:Union{Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot} = to_picture(x, other...)
+    plot(x::SupportedEstimation, other::SupportedAddition ...; kwargs...) = plot(parse(x; kwargs...), other...)
+
+    export plot
     export Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot
 end
