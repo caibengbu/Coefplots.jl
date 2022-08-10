@@ -1,2 +1,5 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+PGFPlotsX = "8314cec4-20b6-5062-9cdb-752b83310925"
+RDatasets = "ce6b1742-4840-55fa-b093-852dadbb1d8b"

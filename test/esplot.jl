@@ -57,19 +57,19 @@ function round!(c::Coefplot,digits::Int64=4)
 end
 
 res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
-pool = Coefplots.parse(res_pool,rename_rule...)
+pool = Coefplots.parse(res_pool,rename_rule...;keepconnect=true)
 pool.title.content = "no FE"
 round!(pool)
 res_idfe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_idfe = Coefplots.parse(res_idfe,rename_rule...)
+with_idfe = Coefplots.parse(res_idfe,rename_rule...;keepconnect=true)
 with_idfe.title.content = "with id FE"
 round!(with_idfe)
 res_timefe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_timefe = Coefplots.parse(res_timefe,rename_rule...)
+with_timefe = Coefplots.parse(res_timefe,rename_rule...;keepconnect=true)
 with_timefe.title.content = "with time FE"
 round!(with_timefe)
 res_both = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time) + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
-with_bothfe = Coefplots.parse(res_both,rename_rule...)
+with_bothfe = Coefplots.parse(res_both,rename_rule...;keepconnect=true)
 with_bothfe.title.content = "with id \\& time FE"
 round!(with_bothfe)
 
