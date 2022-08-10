@@ -27,8 +27,7 @@ This function takes the regression result and convert it into a Coefplot.
 `ps` is how you want to rename the coefficients. 
 If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot.
 """
-function Coefplots.parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractString where R; drop_unmentioned::Bool=true, kwargs...)
-    println(3)
+function _parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractString where R; drop_unmentioned::Bool=true, kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -52,8 +51,7 @@ function Coefplots.parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:
     Coefplot(data; sorter = sorter, kwargs...)
 end
 
-function Coefplots.parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
-    println(2)
+function _parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -73,8 +71,7 @@ function Coefplots.parse(r::SupportedEstimation, ps::Vector{T} where T<:Abstract
     Coefplot(data; sorter = sorter, kwargs...)
 end
 
-function Coefplots.parse(r::SupportedEstimation; kwargs...)
-    println(1)
+function _parse(r::SupportedEstimation; kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
     data.se = isfinite.(data.se) .* data.se # set value to 0 if is not finite (NaN, Inf, etc)
     data.b = isfinite.(data.b) .* data.b # set value to 0 if is not finite (NaN, Inf, etc)
@@ -87,11 +84,11 @@ end
 
 function Base.parse(r::SupportedEstimation; rename=missing, keepcoef=missing, kwargs...)
     if ismissing(rename) & ismissing(keepcoef)
-        parse(r; kwargs...)
+        _parse(r; kwargs...)
     elseif ismissing(rename) & ~ismissing(keepcoef)
-        parse(r, keepcoef; kwargs...)
+        _parse(r, keepcoef; kwargs...)
     elseif ~ismissing(rename) & ismissing(keepcoef)
-        parse(r, rename; kwargs...)
+        _parse(r, rename; kwargs...)
     else
         throw(ArgumentError("rename and keepcoef can't have values in the same time"))
     end
