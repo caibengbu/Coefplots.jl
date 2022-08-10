@@ -1,4 +1,4 @@
-![header](https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg)
+<img src="https://raw.githubusercontent.com/caibengbu/Coefplots.jl/main/assets/logo.svg" width="300"/>
 
 ## Introduction
 

@@ -15,4 +15,4 @@ using Luxor, Colors
      fontface("MyanmarMN-Bold")
      sethue("black")
      text("oefplots.jl", Point(-178, -10) ,halign=:left,valign = :middle)
-end 700 200 "logo.svg"
+end 350 100 "logo.svg"
