@@ -179,12 +179,18 @@ function to_options(n::Note)
     options["text width"] = "\\the\\notewidth"
     if !ismissing(n.anchor)
         options[:anchor] = "$(n.anchor)"
+    else
+        options[:anchor] = "north west"
     end
     if !ismissing(n.at)
         options[:at] = "$(n.at)"
+    else
+        options[:at] = "(current axis.outer south west)"
     end
     if !ismissing(n.align)
         options[:align] = "$(n.align)"
+    else
+        options[:align] = "left"
     end
     merge!(options, to_options(n.captionstyle))
     return options
