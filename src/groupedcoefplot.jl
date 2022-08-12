@@ -30,7 +30,7 @@ mutable struct GroupedCoefplot
 
     # TO-DO: allow other components in the struct, instead of plugging in to_picture
 
-    function GroupedCoefplot(data::Vector{Pair{Any, Coefplot}} = Pair{Any, Coefplot}[]
+    function GroupedCoefplot(data::Pair{<:Any, Coefplot}...
                             ;title::Label = Label(), 
                             xlabel::Label = Label(), 
                             ylabel::Label = Label(), 
@@ -44,6 +44,28 @@ mutable struct GroupedCoefplot
         """
         to construct a GroupedCoefplot.
         """
+        data = collect(data)
+        if ~isempty(data)
+            ncoef = sum(map(data) do x
+                size(x.second.data,1) # length of each coefplot
+            end)
+            data = map(data) do (groupname, c)
+                subdata = c.data
+                _c = Coefplot(subdata; vertical=vertical, width=width, height=height, kwargs...) # build the Coefplot first 
+                nsubcoef = size(subdata,1)
+                if _c.vertical
+                    _c.width *= nsubcoef/ncoef # compute the width for each sub plot
+                else
+                    _c.height *= nsubcoef/ncoef
+                end
+                filter!(x->x in subdata.varname, _c.sorter) # filter sorter
+                return groupname => _c
+            end
+            if ~vertical
+                # because groupplot draw from top to down and left to right
+                reverse!(data)
+            end
+        end
         new(title, xlabel, ylabel, xticklabel, yticklabel, width, height, data, note, vertical)
     end
 end
@@ -155,8 +177,9 @@ function to_picture(g::GroupedCoefplot, other::SupportedAddition ...)
         end
         push!(p, grouptag)
     end
-
-    push!(p, "\\node[yshift=1em] at (title) {$(g.title.content)};")
+    if ~ismissing(g.title.content)
+        push!(p, "\\node[yshift=1em] at (title) {$(g.title.content)};")
+    end
     push!(p, g.note)
 end
 

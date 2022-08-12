@@ -23,7 +23,7 @@ mutable struct GroupedMultiCoefplot
 
     # TO-DO: allow other components in the struct, instead of plugging in to_picture
 
-    function GroupedMultiCoefplot(data::Vector{Pair{T, MultiCoefplot}} where T = Pair{Any, MultiCoefplot}[]
+    function GroupedMultiCoefplot(data::Pair{<:Any, MultiCoefplot} ...
                                 ;title::Label = Label(), 
                                 xlabel::Label = Label(), 
                                 ylabel::Label = Label(), 
@@ -39,6 +39,7 @@ mutable struct GroupedMultiCoefplot
         """
         to construct a GroupedMultiCoefplot.
         """
+        data = collect(data)
         ngroups = length(data)
         if ismissing(show_legend)
             show_legend = falses(ngroups)
@@ -49,7 +50,8 @@ mutable struct GroupedMultiCoefplot
     end
 end
 
-function GroupedMultiCoefplot(data::Vector{Pair{T, GroupedCoefplot}} where T; kwargs...) 
+function GroupedMultiCoefplot(data::Pair{<:Any, GroupedCoefplot} ...; kwargs...) 
+    data = collect(data)
     df = vcat(map(data) do (multi_tag, gc)
         vcat(map(gc.data) do (group_tag, c)
             df = c.data
@@ -82,7 +84,7 @@ function GroupedMultiCoefplot(data::Vector{Pair{T, GroupedCoefplot}} where T; kw
             m.height *= length(m.sorter)/ttl_ncoef
         end
     end
-    GroupedMultiCoefplot(ms; kwargs...)
+    GroupedMultiCoefplot(ms...; kwargs...)
 end
 
 
@@ -170,8 +172,9 @@ function to_picture(g::GroupedMultiCoefplot, other::SupportedAddition ...)
         end
         push!(p, grouptag)
     end
-
-    push!(p, "\\node[yshift=1em] at (title) {$(g.title.content)};")
+    if ~ismissing(g.title.content)
+        push!(p, "\\node[yshift=1em] at (title) {$(g.title.content)};")
+    end
     push!(p, g.note)
 end
 

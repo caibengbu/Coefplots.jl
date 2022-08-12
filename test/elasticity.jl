@@ -68,12 +68,12 @@ gdf_FRA = groupby(df_FRA, [:sector_type])
 g_CHN = Coefplots.GroupedCoefplot(gdf_CHN; keepconnect=false, vertical=false)
 g_FRA = Coefplots.GroupedCoefplot(gdf_FRA; keepconnect=false, vertical=false)
 
-g = Coefplots.GroupedMultiCoefplot(["China" => g_CHN, "France" => g_FRA]; keepconnect=false, 
-                                                                          vertical=false, 
-                                                                          height=400,
-                                                                          show_legend=[false, false, false, true],
-                                                                          legend = Coefplots.Legend(at=(0.98,0.02), 
-                                                                                                    anchor = Symbol("south east")))
+g = Coefplots.GroupedMultiCoefplot("China" => g_CHN, "France" => g_FRA; keepconnect=false, 
+                                                                        vertical=false, 
+                                                                        height=400,
+                                                                        show_legend=[false, false, false, true],
+                                                                        legend = Coefplots.Legend(at=(0.98,0.02), 
+                                                                                                  anchor = Symbol("south east")))
 g.xlabel.content = "elasticity"
 g.title.content = "My fake plot"
 g.note.content = "Note: The classification is only for demonstration purposes, not rigorous."
