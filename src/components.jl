@@ -83,11 +83,11 @@ function to_options(l::Mark, mark::Symbol, mark_options::Symbol)
     end
     if !ismissing(l.fill)
         what_mark_options["fill"] = color_as_xcolor(l.fill)
-        what_mark_options["fill opacity"] = l.fill.opacity
+        what_mark_options["fill opacity"] = Int64(alpha(l.fill))
     end
     if !ismissing(l.draw)
         what_mark_options["draw"] = color_as_xcolor(l.draw)
-        what_mark_options["draw opacity"] = l.draw.opacity
+        what_mark_options["draw opacity"] = Int64(alpha(l.draw))
     end
     options[mark_options] = what_mark_options
     return options
@@ -112,7 +112,7 @@ function to_options(l::Bar)
     options = PGFPlotsX.Options()
     if !ismissing(l.draw)
         options["draw"] = color_as_xcolor(l.draw)
-        options["draw opacity"] = l.draw.opacity
+        options["draw opacity"] = Int64(alpha(l.draw))
     end
     if !ismissing(l.linetype)
         options[l.linetype] = nothing

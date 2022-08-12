@@ -11,7 +11,6 @@ savefigs = (figname, obj) -> begin
 end
 
 using Coefplots
-import Coefplots: Legend
 using RDatasets
 using GLM
 df = dataset("datasets", "iris");
@@ -92,8 +91,8 @@ grouped_df = groupby(df, [:coefgroup])
 g3 = GroupedCoefplot(grouped_df)
 
 gmc = GroupedMultiCoefplot("OLS" => g2, "FE" => g3; show_legend=[false, true], # which subplot should show their legend
-                                                    legend = Legend(at=(0.98,0.02), 
-                                                                    anchor = Symbol("south east")))
+                                                    legend = Coefplots.Legend(at=(0.98,0.02), 
+                                                                              anchor = Symbol("south east")))
 
 gmc_plot = plot(gmc)
 savefigs("gmc", gmc_plot) # hide

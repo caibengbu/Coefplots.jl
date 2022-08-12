@@ -6,6 +6,7 @@ module Coefplots
     using PGFPlotsX
     using DataFrames
     using Parameters: @unpack
+    using Colors
     import FixedEffectModels: FixedEffectModel
     import StatsModels: TableRegressionModel
 
