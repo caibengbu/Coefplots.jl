@@ -11,18 +11,18 @@
 \usepgfplotslibrary{ternary}
 \begin{document}
 \begin{tikzpicture}
-\begin{groupplot}[group style={group size={2 by 1}, y descriptions at={edge left}, ylabels at={edge left}, horizontal sep={10pt}}, ymin={-1.053030052084214}, ymax={1.0656974335865952}, ylabel={Coefficients}, ylabel style={}]
+\begin{groupplot}[group style={group size={2 by 1}, y descriptions at={edge left}, ylabels at={edge left}, horizontal sep={10pt}}, ymin={-1.0530300520843554}, ymax={1.0656974335866654}, ylabel={Coefficients}, ylabel style={}]
     \nextgroupplot[xticklabel style={}, yticklabel style={}, width={133.33333333333331pt}, height={204pt}, symbolic x coords={SepalWidth,PetalWidth}, xtick={SepalWidth,PetalWidth}, xmin={{[normalized]-0.5}}, xmax={{[normalized]1.5}}, scale only axis]
     \addplot[only marks, mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit]
         coordinates {
-            (SepalWidth,0.6508371593133089) +- (0,0.1317182882857669)
-            (PetalWidth,-0.5564826601669999) +- (0,0.25207883587827457)
+            (SepalWidth,0.6508371593132527) +- (0,0.13171828828576346)
+            (PetalWidth,-0.5564826601671072) +- (0,0.2520788358782843)
         }
         ;
     \nextgroupplot[xticklabel style={}, yticklabel style={}, width={66.66666666666666pt}, height={204pt}, symbolic x coords={PetalLength}, xtick={PetalLength}, xmin={{[normalized]-0.5}}, xmax={{[normalized]0.5}}, scale only axis]
     \addplot[only marks, mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit]
         coordinates {
-            (PetalLength,0.7091319591367299) +- (0,0.11209691841092581)
+            (PetalLength,0.7091319591367713) +- (0,0.11209691841093013)
         }
         ;
 \end{groupplot}
