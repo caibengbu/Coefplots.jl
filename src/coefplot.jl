@@ -205,33 +205,6 @@ Compute the length of the error bar for each coefficient.
 """
 errbar_length(data::AbstractDataFrame, level::Real=0.95) = data.se .* abs(quantile(Distributions.TDist(first(data.dof)), (1. - level)/2.))
 
-function rename!(c::Coefplot, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, key_escaped::Bool=true)
-    data = c.data
-    if key_escaped
-        ps = map(ps) do x # convert pair.second to string
-            return x.first => string(x.second)
-        end
-    else
-        ps = map(ps) do x # convert pair.second to string
-            return latex_escape(x.first) => string(x.second)
-        end
-    end
-    if drop_unmentioned
-        data.varname = get.(Ref(Dict(ps)), data.varname, missing)
-        data = data[completecases(data),:] # filter out varnames that are not mentioned in pairs
-        sorter = intersect(string.(last.(ps)), data.varname) # sorter order is kept the same with the ps, remove redundant naming
-    else
-        v = get.(Ref(Dict(ps)), data.varname, missing)
-        v[ismissing.(v)] = data.varname[ismissing.(v)]
-        data.varname = v
-        sorter = data.varname
-    end
-    sorter = latex_escape.(sorter)
-    data.varname = latex_escape.(data.varname)
-    c.sorter = sorter
-    c.data = data
-end
-
 """
     minimum(c::Coefplot)
 
