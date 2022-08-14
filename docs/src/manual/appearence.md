@@ -8,7 +8,7 @@ savefigs = (figname, obj) -> begin
 end
 
 saveicon = (figname, icon) -> begin
-    obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4] (0,0) -- plot[mark=$(icon),mark size=4] (1,0.5) -- plot[mark=$(icon),mark size=4] (2,0) -- plot[mark=$(icon),mark size=4] (3,0.5);")
+    obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4, mark options={fill=red}] (0,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (1,0.5) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (2,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (3,0.5);")
     pgfsave(figname * ".pdf", obj)
     run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
     return nothing
