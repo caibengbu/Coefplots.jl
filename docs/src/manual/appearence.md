@@ -112,9 +112,14 @@ coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv",
                                                                   size=10,
                                                                   rotate=45))
 
-p = plot(coefplots_pool)
+p = plot(coefplots_pool);
+Coefplots.print_tex(p)
 
-savefigs("a2", p) # hide
+try
+    savefigs("a2", p)
+catch e
+    @error e
+end
 ```
 [\[.pdf\]](a2.pdf), [\[generated .tex\]](a2.tex)
 
