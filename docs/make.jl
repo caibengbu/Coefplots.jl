@@ -8,12 +8,12 @@ makedocs(
     checkdocs = :none,
     pages = Any[
         "Home" => "index.md",
-        "Manual" => ["manual/quick_start.md"]
-                     # "manual/multi_dimension.md",
-                     # "manual/appearence.md",
-                     # "manual/utilities.md"],
-        # "API" => ["api/types.md",
-        #           "api/functions.md"]
+        "Manual" => ["manual/quick_start.md",
+                     "manual/multi_dimension.md",
+                     "manual/appearence.md",
+                     "manual/utilities.md"],
+        "API" => ["api/types.md",
+                  "api/functions.md"]
     ]
 )
 

@@ -1,16 +1,24 @@
 ```@setup pgf
 using PGFPlotsX
 savefigs = (figname, obj) -> begin
-    pgfsave(figname * ".pdf", obj)
-    run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
-    pgfsave(figname * ".tex", obj);
+    try
+        pgfsave(figname * ".pdf", obj)
+        run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
+        pgfsave(figname * ".tex", obj);
+    catch e
+        @error e
+    end
     return nothing
 end
 
 saveicon = (figname, icon) -> begin
-    obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (0,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (1,0.5) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (2,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (3,0.5);")
-    pgfsave(figname * ".pdf", obj)
-    run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
+    try
+        obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (0,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (1,0.5) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (2,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (3,0.5);")
+        pgfsave(figname * ".pdf", obj)
+        run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
+    catch e
+        @error e
+    end
     return nothing
 end
 
