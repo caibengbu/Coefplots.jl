@@ -15,17 +15,17 @@
 \begin{axis}[title={My combined Coefplots}, title style={}, xlabel={Regressor Names}, xlabel style={}, ylabel={Coefficients}, ylabel style={}, xticklabel style={}, yticklabel style={}, width={240pt}, height={204pt}, legend style={}, symbolic x coords={SepalWidth,PetalLength,PetalWidth}, xtick={SepalWidth,PetalLength,PetalWidth}, xmin={{[normalized]-0.5}}, xmax={{[normalized]2.5}}, scale only axis]
     \addplot[only marks, mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{-0.16666666666666666}}}]
         coordinates {
-            (SepalWidth,0.49588893838855097) +- (0,0.17012366235356863)
-            (PetalLength,0.8292439122348054) +- (0,0.13545003524785232)
-            (PetalWidth,-0.3151551733264726) +- (0,0.2988497512639165)
+            (SepalWidth,0.49588893838855247) +- (0,0.17012366235356885)
+            (PetalLength,0.829243912234806) +- (0,0.13545003524785237)
+            (PetalWidth,-0.31515517332647497) +- (0,0.2988497512639166)
         }
         ;
     \addlegendentry {OLS}
     \addplot[only marks, mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 56; green, 152; blue, 38}, fill opacity={1}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 56; green, 152; blue, 38}, fill opacity={1}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 56; green, 152; blue, 38}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit, x filter/.code={{\pgfmathadd{\pgfmathresult}{0.16666666666666666}}}]
         coordinates {
-            (SepalWidth,0.6508371593132527) +- (0,0.13171828828576346)
-            (PetalLength,0.7091319591367713) +- (0,0.11209691841093013)
-            (PetalWidth,-0.5564826601671072) +- (0,0.2520788358782843)
+            (SepalWidth,0.6508371593133089) +- (0,0.1317182882857669)
+            (PetalLength,0.7091319591367299) +- (0,0.11209691841092581)
+            (PetalWidth,-0.5564826601669999) +- (0,0.25207883587827457)
         }
         ;
     \addlegendentry {with species FE}
