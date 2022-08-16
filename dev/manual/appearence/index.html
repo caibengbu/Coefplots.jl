@@ -6,64 +6,10 @@ coefplots_pool = parse(regression_result, mark=Mark(mark=&quot;heart&quot;, mark
                                           connect=Bar(draw=colorant&quot;lightsalmon&quot;),
                                                     keepconnect=true)
 
-p = plot(coefplots_pool)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_tOk3N3.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/a1.pdf">[.pdf]</a>, <a href="manual/a1.tex">[generated .tex]</a></p><p><img src="a1.svg" alt/></p><h2 id="Caption-Styles"><a class="docs-heading-anchor" href="#Caption-Styles">Caption Styles</a><a id="Caption-Styles-1"></a><a class="docs-heading-anchor-permalink" href="#Caption-Styles" title="Permalink"></a></h2><p>There are three elements about a caption that can be customized: <code>font</code>, <code>size</code>, and <code>rotate</code>. <code>font</code> dictates the font in which the caption is written in, <code>size</code> determines the font size, and <code>rotate</code> specifies the angle to which the caption is tilted. This can be useful when the caption is long but the intervals between captions are short.</p><pre><code class="language-julia hljs">coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font=&quot;phv&quot;,  # fontcode for Helvetica
+p = plot(coefplots_pool)</code></pre><p><a href="../a1.pdf">[.pdf]</a>, <a href="../a1.tex">[generated .tex]</a></p><p><img src="../a1.svg" alt/></p><h2 id="Caption-Styles"><a class="docs-heading-anchor" href="#Caption-Styles">Caption Styles</a><a id="Caption-Styles-1"></a><a class="docs-heading-anchor-permalink" href="#Caption-Styles" title="Permalink"></a></h2><p>There are three elements about a caption that can be customized: <code>font</code>, <code>size</code>, and <code>rotate</code>. <code>font</code> dictates the font in which the caption is written in, <code>size</code> determines the font size, and <code>rotate</code> specifies the angle to which the caption is tilted. This can be useful when the caption is long but the intervals between captions are short.</p><pre><code class="language-julia hljs">coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font=&quot;phv&quot;,  # fontcode for Helvetica
                                                                   size=10,
                                                                   rotate=45),
                                           title=Label(content=&quot;My Title in Helvetica&quot;,
                                                       captionstyle=CaptionStyle(font=&quot;phv&quot;)))
 
-p = plot(coefplots_pool)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_tWFVo7.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/a2.pdf">[.pdf]</a>, <a href="manual/a2.tex">[generated .tex]</a></p><p><img src="a2.svg" alt/></p><p>Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing <code>texdoc fontname</code> in terminal. Its appendix provides a big list of available fonts.</p><p>The caption style of title, xlabel, ylabel, xtickstyle, ytickstyle and note can be modified.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../multi_dimension/">« Plot Combination</a><a class="docs-footer-nextpage" href="../utilities/">Utilities »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:20">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+p = plot(coefplots_pool)</code></pre><p><a href="../a2.pdf">[.pdf]</a>, <a href="../a2.tex">[generated .tex]</a></p><p><img src="../a2.svg" alt/></p><p>Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing <code>texdoc fontname</code> in terminal. Its appendix provides a big list of available fonts.</p><p>The caption style of title, xlabel, ylabel, xtickstyle, ytickstyle and note can be modified.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../multi_dimension/">« Plot Combination</a><a class="docs-footer-nextpage" href="../utilities/">Utilities »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:28">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

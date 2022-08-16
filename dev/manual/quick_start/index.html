@@ -4,34 +4,7 @@ using RDatasets
 using GLM
 df = dataset(&quot;datasets&quot;, &quot;iris&quot;);
 regression_result = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth), df)
-p = plot(regression_result)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_J5n095.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/quick_start1.pdf">[.pdf]</a>, <a href="manual/quick_start1.tex">[generated .tex]</a></p><p><img src="quick_start1.svg" alt/></p><p>You can also customize your coefplot by passing named arguments. For example, </p><pre><code class="language-julia hljs">p = plot(regression_result; keepcoef = [&quot;SepalWidth&quot;, &quot;PetalLength&quot;, &quot;PetalWidth&quot;], # drop intercept
+p = plot(regression_result)</code></pre><p><a href="../quick_start1.pdf">[.pdf]</a>, <a href="../quick_start1.tex">[generated .tex]</a></p><p><img src="../quick_start1.svg" alt/></p><p>You can also customize your coefplot by passing named arguments. For example, </p><pre><code class="language-julia hljs">p = plot(regression_result; keepcoef = [&quot;SepalWidth&quot;, &quot;PetalLength&quot;, &quot;PetalWidth&quot;], # drop intercept
                             title = Label(content=&quot;My OLS regression&quot;), # add title
                             xlabel = Label(content=&quot;Coefficients&quot;), # add xlabel
                             ylabel = Label(content=&quot;Regressor Names&quot;), # add ylabel
@@ -40,34 +13,7 @@ te_list, 1 write, 1 pdf_colorstack nodes
                             keepconnect = true, # connect consecutive coefficients
                             level = 0.9, # confidence level, the default is 0.95.
                             vertical = false, # default is true
-                            mark = Mark(mark=:&quot;triangle*&quot;, marksize=4, linewidth=0)) # aesthetics</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_1C8ip6.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/quick_start2.pdf">[.pdf]</a>, <a href="manual/quick_start2.tex">[generated .tex]</a></p><p><img src="quick_start2.svg" alt/></p><p>Apart from directly calling <code>plot()</code>, one can also invoke <code>parse()</code> to convert regression object to a Coefplot object. This allows users to deal with the plot with more flexibility, especially on combining plots.</p><pre><code class="language-julia hljs">using FixedEffectModels
+                            mark = Mark(mark=:&quot;triangle*&quot;, marksize=4, linewidth=0)) # aesthetics</code></pre><p><a href="../quick_start2.pdf">[.pdf]</a>, <a href="../quick_start2.tex">[generated .tex]</a></p><p><img src="../quick_start2.svg" alt/></p><p>Apart from directly calling <code>plot()</code>, one can also invoke <code>parse()</code> to convert regression object to a Coefplot object. This allows users to deal with the plot with more flexibility, especially on combining plots.</p><pre><code class="language-julia hljs">using FixedEffectModels
 regression_withFE = reg(df, @formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth + fe(Species)));
 coefplots_withfe = parse(regression_withFE; title=Label(content=&quot;OLS&quot;))
 coefplots_pool = parse(regression_result; keepcoef = [&quot;SepalWidth&quot;, &quot;PetalLength&quot;, &quot;PetalWidth&quot;], title=Label(content=&quot;with species FE&quot;))
@@ -75,64 +21,10 @@ m = MultiCoefplot(coefplots_withfe, coefplots_pool; title = Label(content=&quot;
                                                     xlabel = Label(content=&quot;Regressor Names&quot;),
                                                     ylabel = Label(content=&quot;Coefficients&quot;),
                                                     note = Note(content=&quot;This is my note.&quot;))
-p = plot(m)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_1YcgX5.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/quick_start3.pdf">[.pdf]</a>, <a href="manual/quick_start3.tex">[generated .tex]</a></p><p><img src="quick_start3.svg" alt/></p><h2 id="Plotting-from-DataFrame"><a class="docs-heading-anchor" href="#Plotting-from-DataFrame">Plotting from DataFrame</a><a id="Plotting-from-DataFrame-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-from-DataFrame" title="Permalink"></a></h2><p>In order for Coefplots.jl to learn what to plot from a DataFrame, the DataFrame needs to contain the following columns: <code>[:varname, :b, :se, :dof]</code> (<code>:dof</code> is constant across rows while others should vary). </p><pre><code class="language-julia hljs">using DataFrames
+p = plot(m)</code></pre><p><a href="../quick_start3.pdf">[.pdf]</a>, <a href="../quick_start3.tex">[generated .tex]</a></p><p><img src="../quick_start3.svg" alt/></p><h2 id="Plotting-from-DataFrame"><a class="docs-heading-anchor" href="#Plotting-from-DataFrame">Plotting from DataFrame</a><a id="Plotting-from-DataFrame-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-from-DataFrame" title="Permalink"></a></h2><p>In order for Coefplots.jl to learn what to plot from a DataFrame, the DataFrame needs to contain the following columns: <code>[:varname, :b, :se, :dof]</code> (<code>:dof</code> is constant across rows while others should vary). </p><pre><code class="language-julia hljs">using DataFrames
 df = DataFrame(varname = [&quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;],
                b = [1, 2, 3],
                se = [0.1, 0.2, 0.3],
                dof = 10)
 c = Coefplot(df)
-p = plot(c)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_jJpCG4.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/quick_start4.pdf">[.pdf]</a>, <a href="manual/quick_start4.tex">[generated .tex]</a></p><p><img src="quick_start4.svg" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><a class="docs-footer-nextpage" href="../multi_dimension/">Plot Combination »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:20">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+p = plot(c)</code></pre><p><a href="../quick_start4.pdf">[.pdf]</a>, <a href="../quick_start4.tex">[generated .tex]</a></p><p><img src="../quick_start4.svg" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« Home</a><a class="docs-footer-nextpage" href="../multi_dimension/">Plot Combination »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:28">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

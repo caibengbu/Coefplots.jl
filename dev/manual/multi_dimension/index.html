@@ -4,100 +4,19 @@
                                                     ylabel = Label(content=&quot;Coefficients&quot;),
                                                     note = Note(content=&quot;This is my note.&quot;))
 
-m_plot = plot(m)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_ExeCw6.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/md1.pdf">[.pdf]</a>, <a href="manual/md1.tex">[generated .tex]</a></p><p><img src="md1.svg" alt/></p><h2 id="GroupedCoefplot"><a class="docs-heading-anchor" href="#GroupedCoefplot">GroupedCoefplot</a><a id="GroupedCoefplot-1"></a><a class="docs-heading-anchor-permalink" href="#GroupedCoefplot" title="Permalink"></a></h2><p>We also provide method <code>GroupedCoefplot()</code> to plot Coefplot objects side by side</p><pre><code class="language-julia hljs">g = GroupedCoefplot(&quot;OLS&quot; =&gt; coefplots_pool, &quot;FE&quot; =&gt; coefplots_withfe;
+m_plot = plot(m)</code></pre><p><a href="../md1.pdf">[.pdf]</a>, <a href="../md1.tex">[generated .tex]</a></p><p><img src="../md1.svg" alt/></p><h2 id="GroupedCoefplot"><a class="docs-heading-anchor" href="#GroupedCoefplot">GroupedCoefplot</a><a id="GroupedCoefplot-1"></a><a class="docs-heading-anchor-permalink" href="#GroupedCoefplot" title="Permalink"></a></h2><p>We also provide method <code>GroupedCoefplot()</code> to plot Coefplot objects side by side</p><pre><code class="language-julia hljs">g = GroupedCoefplot(&quot;OLS&quot; =&gt; coefplots_pool, &quot;FE&quot; =&gt; coefplots_withfe;
     title = Label(content=&quot;My combined Coefplots&quot;),
     ylabel = Label(content=&quot;Coefficients&quot;),
     width = 350)
 
-g_plot = plot(g)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_CF7QH6.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/md2.pdf">[.pdf]</a>, <a href="manual/md2.tex">[generated .tex]</a></p><p><img src="md2.svg" alt/></p><p>Not limited to plot multiple regressions, <code>GroupedCoefplot()</code> can also divide the coefficients in a single regression into multiple groups however the user wants. To make this happen, we first extract the regression results in DataFrame form,</p><pre><code class="language-julia hljs">df = deepcopy(coefplots_pool.data) # extract the regression results from Coefplot object
+g_plot = plot(g)</code></pre><p><a href="../md2.pdf">[.pdf]</a>, <a href="../md2.tex">[generated .tex]</a></p><p><img src="../md2.svg" alt/></p><p>Not limited to plot multiple regressions, <code>GroupedCoefplot()</code> can also divide the coefficients in a single regression into multiple groups however the user wants. To make this happen, we first extract the regression results in DataFrame form,</p><pre><code class="language-julia hljs">df = deepcopy(coefplots_pool.data) # extract the regression results from Coefplot object
 df</code></pre><div class="data-frame"><p>3 rows × 4 columns</p><table class="data-frame"><thead><tr><th></th><th>varname</th><th>b</th><th>se</th><th>dof</th></tr><tr><th></th><th title="String">String</th><th title="Float64">Float64</th><th title="Float64">Float64</th><th title="Float64">Float64</th></tr></thead><tbody><tr><th>1</th><td>SepalWidth</td><td>0.650837</td><td>0.0666474</td><td>146.0</td></tr><tr><th>2</th><td>PetalLength</td><td>0.709132</td><td>0.0567193</td><td>146.0</td></tr><tr><th>3</th><td>PetalWidth</td><td>-0.556483</td><td>0.127548</td><td>146.0</td></tr></tbody></table></div><p>we add our categorization (it doesn&#39;t have to be called <code>coefgroup</code>), use DataFrames.jl&#39;s <code>groupby()</code> to produce a <code>GroupedDataFrame</code>, and then plug it in our <code>GroupedCoefplot()</code> method.</p><pre><code class="language-julia hljs">df.coefgroup = [&quot;Width Related&quot;, &quot;Length Related&quot;, &quot;Width Related&quot;]
 grouped_df = groupby(df, [:coefgroup])
 g2 = GroupedCoefplot(grouped_df; title = Label(content=&quot;My combined Coefplots&quot;),
                                  ylabel = Label(content=&quot;Coefficients&quot;),
                                  width = 200)
 
-g2_plot = plot(g2)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_BdlBb6.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/md3.pdf">[.pdf]</a>, <a href="manual/md3.tex">[generated .tex]</a></p><p><img src="md3.svg" alt/></p><h2 id="GroupedMultiCoefplot"><a class="docs-heading-anchor" href="#GroupedMultiCoefplot">GroupedMultiCoefplot</a><a id="GroupedMultiCoefplot-1"></a><a class="docs-heading-anchor-permalink" href="#GroupedMultiCoefplot" title="Permalink"></a></h2><p>This type is reserved for scenarios when the user wants to have side-by-side plots and also overlapping plots. One can achieve this by plug in <code>Pair{Any, MultiCoefplot} ...</code> or <code>Pair{Any, GroupedCoefplots} ...</code> when invoking <code>GroupedMultiCoefplot()</code>. For example,</p><pre><code class="language-julia hljs">df = deepcopy(coefplots_withfe.data)
+g2_plot = plot(g2)</code></pre><p><a href="../md3.pdf">[.pdf]</a>, <a href="../md3.tex">[generated .tex]</a></p><p><img src="../md3.svg" alt/></p><h2 id="GroupedMultiCoefplot"><a class="docs-heading-anchor" href="#GroupedMultiCoefplot">GroupedMultiCoefplot</a><a id="GroupedMultiCoefplot-1"></a><a class="docs-heading-anchor-permalink" href="#GroupedMultiCoefplot" title="Permalink"></a></h2><p>This type is reserved for scenarios when the user wants to have side-by-side plots and also overlapping plots. One can achieve this by plug in <code>Pair{Any, MultiCoefplot} ...</code> or <code>Pair{Any, GroupedCoefplots} ...</code> when invoking <code>GroupedMultiCoefplot()</code>. For example,</p><pre><code class="language-julia hljs">df = deepcopy(coefplots_withfe.data)
 df.coefgroup = [&quot;Width Related&quot;, &quot;Length Related&quot;, &quot;Width Related&quot;]
 grouped_df = groupby(df, [:coefgroup])
 g3 = GroupedCoefplot(grouped_df)
@@ -106,31 +25,4 @@ gmc = GroupedMultiCoefplot(&quot;OLS&quot; =&gt; g2, &quot;FE&quot; =&gt; g3; sh
                                                     legend = Coefplots.Legend(at=(0.98,0.02),
                                                                               anchor = Symbol(&quot;south east&quot;)))
 
-gmc_plot = plot(gmc)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">! LaTeX Error: File `lmodern.sty&#39; not found.
-
-Type X to quit or &lt;RETURN&gt; to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name:
-! Emergency stop.
-&lt;read *&gt;
-
-l.14 \begin
-         {document}
-End of file on the terminal!
-
-
-
-Here is how much of LuaTeX&#39;s memory you used:
- 23301 strings out of 481390
- 100000,1144653 words of node,token memory allocated 383 words of node memory still in use:
-   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
-te_list, 1 write, 1 pdf_colorstack nodes
-   avail lists: 2:49,3:2,5:5,7:2,9:3
- 39645 multiletter control sequences out of 65536+600000
- 26 fonts using 3341731 bytes
- 78i,0n,136p,731b,245s stack positions out of 5000i,500n,10000p,200000b,100000s
-!  ==&gt; Fatal error occurred, no output PDF file produced!
-
-┌ Error: ErrorException(&quot;The latex command `lualatex jl_pClIa6.tex` failed&quot;)
-└ @ Main string:8</code></pre><p><a href="manual/gmc.pdf">[.pdf]</a>, <a href="manual/gmc.tex">[generated .tex]</a></p><p><img src="gmc.svg" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quick_start/">« Quick Start</a><a class="docs-footer-nextpage" href="../appearence/">Appearence »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:20">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+gmc_plot = plot(gmc)</code></pre><p><a href="../gmc.pdf">[.pdf]</a>, <a href="../gmc.tex">[generated .tex]</a></p><p><img src="../gmc.svg" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quick_start/">« Quick Start</a><a class="docs-footer-nextpage" href="../appearence/">Appearence »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 21:28">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
