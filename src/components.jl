@@ -383,13 +383,14 @@ function PGFPlotsX.print_tex(io::IO, hband::HBand)
 end
 
 
-
-
-
 struct Annotation
     angle::Real
     content::String
-    point_at::Tuple{Real, Real}
+    point_at::Tuple{String, String}
+    function Annotation(;angle, content, point_at)
+        x, y = point_at
+        new(angle, content, (string(x), string(y)))
+    end
 end
 
 function PGFPlotsX.print_tex(io::IO, a::Annotation)
