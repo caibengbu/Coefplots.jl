@@ -66,10 +66,11 @@ savefigs("addons", p) # hide
 
 ## Annotation
 
-An `Annotation` is defined by its `content`, `angle`, `point_at`. 
+An `Annotation` is defined by its `content`, `angle`, `point_at`. `point_at` is a `Tuple{Real, Real}` that specifies the relative position of the annotation to the axis.
 
 ```@example pgf
-anno = Annotation(content="This is my anotation", point_at="([normalized]1, 0)", angle=45)
+anno = Annotation(content="This is my anotation", point_at=(0.5, 0.5), angle=45)
+# this will add an annotation at the center of 
 
 p = plot(c, hline, rvband, anno)
 savefigs("addons2", p) # hide

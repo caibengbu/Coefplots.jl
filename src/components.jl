@@ -386,10 +386,9 @@ end
 struct Annotation
     angle::Real
     content::String
-    point_at::Tuple{String, String}
+    point_at::Tuple{Real, Real}
     function Annotation(;angle, content, point_at)
-        x, y = point_at
-        new(angle, content, (string(x), string(y)))
+        new(angle, content, point_at)
     end
 end
 
