@@ -5,9 +5,13 @@
 ```@setup pgf
 using PGFPlotsX
 savefigs = (figname, obj) -> begin
-    pgfsave(figname * ".pdf", obj)
-    run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
-    pgfsave(figname * ".tex", obj);
+    try
+        pgfsave(figname * ".pdf", obj)
+        run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
+        pgfsave(figname * ".tex", obj);
+    catch e
+        @error e
+    end
     return nothing
 end
 ```
