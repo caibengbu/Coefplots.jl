@@ -8,7 +8,7 @@ savefigs = (figname, obj) -> begin
 end
 
 saveicon = (figname, icon) -> begin
-    obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4, mark options={fill=red}] (0,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (1,0.5) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (2,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red}] (3,0.5);")
+    obj = PGFPlotsX.TikzPicture("\\draw plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (0,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (1,0.5) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (2,0) -- plot[mark=$(icon),mark size=4, mark options={fill=red, fill opacity=0.7}] (3,0.5);")
     pgfsave(figname * ".pdf", obj)
     run(`pdftocairo -svg -l  1 $(figname * ".pdf") $(figname * ".svg")`)
     return nothing
@@ -108,7 +108,7 @@ savefigs("a1", p) # hide
 There are three elements about a caption that can be customized: `font`, `size`, and `rotate`. `font` dictates the font in which the caption is written in, `size` determines the font size, and `rotate` specifies the angle to which the caption is tilted. This can be useful when the caption is long but the intervals between captions are short.
 
 ```@example pgf
-coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv", 
+coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv",  # fontcode for Helvetica
                                                                   size=10,
                                                                   rotate=45))
 
