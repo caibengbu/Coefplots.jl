@@ -100,7 +100,7 @@ end
 using PGFPlotsX
 zero_level = @pgf Coefplots.HLine({dashed, black , line_width=0.75}, 0)
 treatment_divide = @pgf Coefplots.rVLine({dashed, black , line_width=0.75}, 0.4)
-anno = Coefplots.Annotation(-45, "event happens", (0.4,0.2))
+anno = Coefplots.Annotation(angle=-45, content="event happens", point_at=(0.4,0.2))
 
 try
     pgfsave("../assets/esplot.svg", Coefplots.to_picture(m, zero_level, treatment_divide, anno))
