@@ -10,4 +10,43 @@ p = plot(coefplots_pool)</code></pre><p><a href="../a1.pdf">[.pdf]</a>, <a href=
                                                                   size=10,
                                                                   rotate=45))
 
-p = plot(coefplots_pool)</code></pre><p>Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing <code>texdoc fontname</code> in terminal. Its appendix provides a big list of available fonts.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../multi_dimension/">« Plot Combination</a><a class="docs-footer-nextpage" href="../utilities/">Utilities »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 11:58">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+p = plot(coefplots_pool);
+Coefplots.print_tex(p)
+
+try
+    savefigs(&quot;a2&quot;, p)
+catch e
+    @error e
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">\RequirePackage{luatex85}
+\documentclass[tikz]{standalone}
+% Default preamble
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\usepgfplotslibrary{polar}
+\usepgfplotslibrary{smithchart}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{dateplot}
+\usepgfplotslibrary{ternary}
+\usepackage[T1]{fontenc}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[title style={}, xlabel style={}, ylabel style={}, xticklabel style={font={\fontsize{10}{10}\fontfamily{phv}\selectfont}, rotate={45}}, yticklabel style={}, width={240pt}, height={204pt}, symbolic x coords={{(}Intercept{)},SepalWidth,PetalLength,PetalWidth}, xtick={{(}Intercept{)},SepalWidth,PetalLength,PetalWidth}, xmin={{[normalized]-0.5}}, xmax={{[normalized]3.5}}, scale only axis]
+    \addplot[only marks, mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit]
+        coordinates {
+            ({(}Intercept{)},1.8559974929172318) +- (0,0.49562225706654334)
+            (SepalWidth,0.6508371593133089) +- (0,0.1317182882857669)
+            (PetalLength,0.7091319591367299) +- (0,0.11209691841092581)
+            (PetalWidth,-0.5564826601669999) +- (0,0.25207883587827457)
+        }
+        ;
+\end{axis}
+\end{tikzpicture}
+\end{document}
+! Font \T1/phv/m/n/10=phvr8t at 10pt not loadable: metric data not found or bad.
+&lt;to be read again&gt;
+relax
+l.24 \end{axis}
+
+┌ Error: ErrorException(&quot;The latex command `lualatex jl_r8KAAu.tex` failed&quot;)
+└ @ Main appearence.md:121</code></pre><p><a href="manual/a2.pdf">[.pdf]</a>, <a href="manual/a2.tex">[generated .tex]</a></p><p><img src="a2.svg" alt/></p><p>Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing <code>texdoc fontname</code> in terminal. Its appendix provides a big list of available fonts.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../multi_dimension/">« Plot Combination</a><a class="docs-footer-nextpage" href="../utilities/">Utilities »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.22 on <span class="colophon-date" title="Tuesday 16 August 2022 15:15">Tuesday 16 August 2022</span>. Using Julia version 1.7.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
