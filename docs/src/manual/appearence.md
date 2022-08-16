@@ -110,19 +110,18 @@ There are three elements about a caption that can be customized: `font`, `size`,
 ```@example pgf
 coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv",  # fontcode for Helvetica
                                                                   size=10,
-                                                                  rotate=45))
+                                                                  rotate=45),
+                                          title=Label(content="My Title in Helvetica", 
+                                                      captionstyle=CaptionStyle(font="phv")))
 
-p = plot(coefplots_pool);
-Coefplots.print_tex(p)
+p = plot(coefplots_pool)
 
-try
-    savefigs("a2", p)
-catch e
-    @error e
-end
+savefigs("a2", p) # hide
 ```
 [\[.pdf\]](a2.pdf), [\[generated .tex\]](a2.tex)
 
 ![](a2.svg)
 
 Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing `texdoc fontname` in terminal. Its appendix provides a big list of available fonts.
+
+The caption style of title, xlabel, ylabel, xtickstyle, ytickstyle and note can be modified.

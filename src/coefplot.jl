@@ -140,9 +140,11 @@ end
 
 
 # TO-DO: allow adding HBand HLine VBand VLine
-const SupportedAddition = Union{PGFPlotsX.HLine, PGFPlotsX.VLine,
-                                PGFPlotsX.HBand, PGFPlotsX.VBand,
-                                rHLine, rVLine, rHBand, rVBand, Annotation}
+const SupportedAddition = Union{HLine, VLine,
+                                HBand, VBand,
+                                rHLine, rVLine, 
+                                rHBand, rVBand, 
+                                Annotation}
 """
     to_picture(c::Coefplot, other::SupportedAddition ...)
 

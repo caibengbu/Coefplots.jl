@@ -28,5 +28,6 @@ module Coefplots
 
     export plot
     export Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot
-    export Label, CaptionStyle, Mark, Bar, Legend, Note, rVLine, rHLine, rVBand, rHBand, Annotation
+    export Label, CaptionStyle, Mark, Bar, Legend, Note, rVLine, rHLine, rVBand, rHBand, Annotation, VLine, HLine, VBand, HBand
+    export sortcoef!, latex_escape
 end

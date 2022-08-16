@@ -297,6 +297,95 @@ function PGFPlotsX.print_tex(io::IO, hband::rHBand)
     println(io, "({rel axis cs:1,0}|-{rel axis cs:0,$(ymin)}) rectangle ({rel axis cs:0,0}|-{rel axis cs:0,$(ymax)});")
 end
 
+###################
+# VLine and HLine #
+###################
+
+struct VLine
+    options::PGFPlotsX.Options
+    x::Real
+end
+
+"""
+    VLine([options], x)
+
+A vertical line at `x`
+"""
+VLine(x::Real) = VLine(PGFPlotsX.Options(), x)
+
+function PGFPlotsX.print_tex(io::IO, vline::VLine)
+    @unpack options, x = vline
+    print(io, "\\draw")
+    PGFPlotsX.print_options(io, options; newline = false)
+    println(io, "({axis cs:$(x),{[normalized]0}}|-{rel axis cs:0,1}) -- ({axis cs:$(x),{[normalized]0}}|-{rel axis cs:0,0});")
+end
+
+struct HLine
+    options::PGFPlotsX.Options
+    y::Real
+end
+
+"""
+    HLine([options], y)
+
+A horizontal line at `y`
+"""
+HLine(y::Real) = HLine(PGFPlotsX.Options(), y)
+
+function PGFPlotsX.print_tex(io::IO, hline::HLine)
+    @unpack options, y = hline
+    print(io, "\\draw")
+    PGFPlotsX.print_options(io, options; newline = false)
+    println(io, "({rel axis cs:1,0}|-{axis cs:{[normalized]0},$(y)}) -- ({rel axis cs:0,0}|-{axis cs:{[normalized]0},$(y)});")
+end
+
+###################
+# rVBand and rHBand #
+###################
+
+struct VBand
+    options::PGFPlotsX.Options
+    xmin::Real
+    xmax::Real
+end
+
+"""
+    VBand([options], xmin, xmax)
+
+A vertical band from `xmin` to `xmax`
+"""
+VBand(xmin::Real, xmax::Real) = VBand(PGFPlotsX.Options(), xmin, xmax)
+
+function PGFPlotsX.print_tex(io::IO, vband::VBand)
+    @unpack options, xmin, xmax = vband
+    print(io, "\\draw")
+    PGFPlotsX.print_options(io, options; newline = false)
+    println(io, "({axis cs:$(xmin),{[normalized]0}}|-{rel axis cs:0,1}) rectangle ({axis cs:$(xmax),{[normalized]0}}|-{rel axis cs:0,0});")
+end
+
+struct HBand
+    options::PGFPlotsX.Options
+    ymin::Real
+    ymax::Real
+end
+
+"""
+    HBand([options], ymin, ymax)
+A horizontal band from `ymin` to `ymax`
+"""
+HBand(ymin::Real, ymax::Real) = HBand(PGFPlotsX.Options(), ymin, ymax)
+
+function PGFPlotsX.print_tex(io::IO, hband::HBand)
+    @unpack options, ymin, ymax = hband
+    print(io, "\\draw")
+    PGFPlotsX.print_options(io, options; newline = false)
+    println(io, "({rel axis cs:1,0}|-{axis cs:{[normalized]0},$(ymin)}) rectangle ({rel axis cs:0,0}|-{axis cs:{[normalized]0},$(ymax)});")
+end
+
+
+
+
+
 struct Annotation
     angle::Real
     content::String
