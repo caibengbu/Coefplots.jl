@@ -114,7 +114,10 @@ coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv",
 
 p = plot(coefplots_pool)
 
-savefigs("a1", p) # hide
+savefigs("a2", p) # hide
 ```
+[\[.pdf\]](a2.pdf), [\[generated .tex\]](a2.tex)
+
+![](a2.svg)
 
 Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing `texdoc fontname` in terminal. Its appendix provides a big list of available fonts.
