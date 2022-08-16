@@ -65,7 +65,7 @@ jobs:
       - run: |
           sudo apt-get update && \
             sudo apt-get install --no-install-recommends -qq texlive-fonts-recommended git \
-            texlive-luatex texlive-pictures texlive-latex-extra pdf2svg \
+            texlive-luatex texlive-pictures texlive-latex-extra pdf2svg lmodern \
             poppler-utils gnuplot-nox wget ca-certificates openssh-client rsync file
       - run: |
           julia --project=docs -e '
