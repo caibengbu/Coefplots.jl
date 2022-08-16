@@ -22,7 +22,7 @@ module Coefplots
     include("parse.jl")
     include("other_utils.jl")
 
-    PREAMBLE = ["\\usepackage[T1]{fontenc}"] # use T1 coding for fonts
+    PREAMBLE = ["\\usepackage[T1]{fontenc}", "\\usepackage{lmodern}"] # use T1 coding for fonts
     plot(x::T, other::SupportedAddition ...) where T<:Union{Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot} = PGFPlotsX.TikzDocument(to_picture(x, other...); preamble = PREAMBLE)
     plot(x::SupportedEstimation, other::SupportedAddition ...; kwargs...) = plot(parse(x; kwargs...), other...)
 
