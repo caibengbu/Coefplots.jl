@@ -15,12 +15,18 @@ df = dataset("datasets", "iris");
 regression_result = lm(@formula(SepalLength ~ SepalWidth + PetalLength + PetalWidth), df)
 ```
 ## LaTeX escaping
-Charaters like `%` and `$` are reserved for special functionalities in LaTeX. In addition, Coefplots.jl uses `symbolic coords` for regressor names, which further complicates the string escaping situation: parenthesis, commas and periods all need to be escaped. PGFPlotsX.jl uses `raw` string literal which left these situations unattended. The function `latex_escape()` will escape these characters so that in the tex output file `%` is written as `\%` (escaped, will not render as the symbol of the begining of comment in TeX), as an example. Coefplots.jl escapes parenthesis, commas and periods by adding a pair of brackets.
+Charaters like `%` and `&` are reserved for special functionalities in LaTeX. In addition, Coefplots.jl uses `symbolic coords` for regressor names, which further complicates the string escaping situation: parenthesis, commas and periods all need to be escaped. PGFPlotsX.jl uses `raw` string literal which left these situations unattended. The function `latex_escape()` will escape these characters so that in the tex output file `%` is written as `\%` (escaped, will not render as the symbol of the begining of comment in TeX), as an example. Coefplots.jl escapes parenthesis, commas and periods by adding a pair of brackets.
 
 ```@example pgf
 Coefplots.print_tex(Coefplots.latex_escape("%"))
-Coefplots.print_tex(Coefplots.latex_escape("\$"))
+```
+```@example pgf
+Coefplots.print_tex(Coefplots.latex_escape("&"))
+```
+```@example pgf
 Coefplots.print_tex(Coefplots.latex_escape("("))
+```
+```@example pgf
 Coefplots.print_tex(Coefplots.latex_escape(","))
 ```
 
@@ -43,7 +49,7 @@ savefigs("sort", p) # hide
 
 ## HLine and rHLine and their friends
 
-`HLine`, `VLine`, `HBand`, `VBand` from PGFPlotsX.jl can be directly added to the plot by passing them to `plot()`. Coefplots.jl also allows relative specification of the location in `rHLine`, `rVLine`, `rHBand`, `rVBand`. 
+Coefplots.jl provides its version of `HLine`, `VLine`, `HBand` and `VBand` which is analogous to PGFPlotsX.jl but is compatible with symbolic coords. They can be directly added to the plot by passing them to `plot()`. Coefplots.jl also allows relative specification of the location in `rHLine`, `rVLine`, `rHBand`, `rVBand`. 
 
 ```@example pgf
 using PGFPlotsX
@@ -59,3 +65,15 @@ savefigs("addons", p) # hide
 ![](addons.svg)
 
 ## Annotation
+
+An `Annotation` is defined by its `content`, `angle`, `point_at`. 
+
+```@example pgf
+anno = Annotation(content="This is my anotation", point_at="([normalized]1, 0)", angle=45)
+
+p = plot(c, hline, rvband, anno)
+savefigs("addons2", p) # hide
+```
+[\[.pdf\]](addons2.pdf), [\[generated .tex\]](addons2.tex)
+
+![](addons2.svg)
