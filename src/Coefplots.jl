@@ -25,6 +25,9 @@ module Coefplots
     plot(x::T, other::SupportedAddition ...) where T<:Union{Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot} = to_picture(x, other...)
     plot(x::SupportedEstimation, other::SupportedAddition ...; kwargs...) = plot(parse(x; kwargs...), other...)
 
+    # stick with T1 font coding for now
+    PGFPlotsX.CUSTOM_PREAMBLE = ["\\usepackage[T1]{fontenc}"]
+
     export plot
     export Coefplot, MultiCoefplot, GroupedCoefplot, GroupedMultiCoefplot
     export Label, CaptionStyle, Mark, Bar, Legend, Note, rVLine, rHLine, rVBand, rHBand, Annotation

@@ -90,9 +90,9 @@ For example,
 ```@example pgf
 using Colors
 coefplots_pool = parse(regression_result, mark=Mark(mark="heart", marksize=3, fill=colorant"salmon", draw=colorant"#FF0000"),
-                                                    errorbar=Bar(linewidth=2, linetype=Symbol("densely dotted"), draw=colorant"lightsalmon"),
-                                                    errormark=Mark(mark=:|, marksize=3.0, linewidth=0.8, linetype=:solid, draw=colorant"firebrick2"),
-                                                    connect=Bar(draw=colorant"lightsalmon"),
+                                          errorbar=Bar(linewidth=2, linetype=Symbol("densely dotted"), draw=colorant"lightsalmon"),
+                                          errormark=Mark(mark=:|, marksize=3.0, linewidth=0.8, linetype=:solid, draw=colorant"firebrick2"),
+                                          connect=Bar(draw=colorant"lightsalmon"),
                                                     keepconnect=true)
 
 p = plot(coefplots_pool)
@@ -105,3 +105,16 @@ savefigs("a1", p) # hide
 
 ## Caption Styles
 
+There are three elements about a caption that can be customized: `font`, `size`, and `rotate`. `font` dictates the font in which the caption is written in, `size` determines the font size, and `rotate` specifies the angle to which the caption is tilted. This can be useful when the caption is long but the intervals between captions are short.
+
+```@example pgf
+coefplots_pool = parse(regression_result, xticklabel=CaptionStyle(font="phv", 
+                                                                  size=10,
+                                                                  rotate=45))
+
+p = plot(coefplots_pool)
+
+savefigs("a1", p) # hide
+```
+
+Fonts can be accessed with T1 encoding. To list all code installed, check out the documents that pops out after typing `texdoc fontname` in terminal. Its appendix provides a big list of available fonts.

@@ -1,5 +1,5 @@
 mutable struct CaptionStyle
-    font::MaybeData{Symbol} # fontcode
+    font::Union{Symbol, String, Missing} # fontcode
     size::MaybeData{Real}
     rotate::MaybeData{Real}
 
@@ -52,7 +52,7 @@ end
 mutable struct Mark
     mark::Union{Symbol, String, Missing}
     marksize::MaybeData{Real}
-    linetype::MaybeData{Symbol}
+    linetype::Union{Symbol, String, Missing}
     linewidth::MaybeData{Real} # line width of the draw
     fill::MaybeData{Color}
     draw::MaybeData{Color}
@@ -62,7 +62,7 @@ mutable struct Mark
     end
 end
 
-function to_options(l::Mark, mark::Symbol, mark_options::Symbol)
+function to_options(l::Mark, mark::Union{Symbol, String}, mark_options::Union{Symbol, String})
     """
     generates PGF options related to mark: [*mark*={}, *mark_options*={fill={}, fill opacity={},
                                                                        mark size={}, draw={}, draw opacity={}, solid, line width=0.6pt}].
@@ -96,7 +96,7 @@ end
 mutable struct Bar
     draw::MaybeData{Color}
     linewidth::MaybeData{Real}
-    linetype::MaybeData{Symbol} # eg solid, dotted, dashed, densely dotted
+    linetype::Union{Symbol, String, Missing} # eg solid, dotted, dashed, densely dotted
     
     function Bar(;draw=missing, linewidth=missing, linetype=missing)
         return new(draw, linewidth, linetype)
@@ -126,7 +126,7 @@ end
 mutable struct Legend
     anchor::MaybeData{Symbol}
     at::Any
-    font::MaybeData{Symbol}
+    font::Union{Symbol, String, Missing} 
     size::MaybeData{Real}
     
     function Legend(;anchor=missing, at=missing, font=missing, size=missing)
