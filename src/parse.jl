@@ -23,9 +23,9 @@ df_residual(r::FixedEffectModel) = FixedEffectModels.dof_residual(r)
 """
     _parse(r::SupportedEstimation, ps::Pair{<:AbstractString, <:Any} ...; drop_unmentioned::Bool=true, kwargs...)
 
-This function takes the regression result and convert it into a Coefplot.
+This function takes the regression result and convert it into a `Coefplot`.
 `ps` is how you want to rename the coefficients. 
-If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the Coefplot. Named arguements of Coefplot() can also be passed in this function.
+If drop_unmentioned, parse will drop all the unmentioned coefficient in `ps` in the `Coefplot`. Named arguements of `Coefplot()` can also be passed in this function.
 """
 function _parse(r::SupportedEstimation, ps::Vector{Pair{T,R}} where T<:AbstractString where R; drop_unmentioned::Bool=true, kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
@@ -54,9 +54,9 @@ end
 """
     _parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
 
-This function takes the regression result and convert it into a Coefplot.
+This function takes the regression result and convert it into a `Coefplot`.
 `ps` contains what coefficients and in what order the user wants to keep. 
-Named arguements of Coefplot() can also be passed in this function.
+Named arguements of `Coefplot()` can also be passed in this function.
 """
 function _parse(r::SupportedEstimation, ps::Vector{T} where T<:AbstractString; kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
@@ -81,8 +81,8 @@ end
 """
     _parse(r::SupportedEstimation; kwargs...)
 
-This function takes the regression result and convert it into a Coefplot.
-Named arguements of Coefplot() can also be passed in this function.
+This function takes the regression result and convert it into a `Coefplot`.
+Named arguements of `Coefplot()` can also be passed in this function.
 """
 function _parse(r::SupportedEstimation; kwargs...)
     data = DataFrame(varname = coefnames(r), b = coef(r), se = stderror(r), dof = df_residual(r))
@@ -101,10 +101,10 @@ end
         keepcoef::Vector{T} where T<:AbstractString=missing, 
         kwargs...)
 
-This function takes the regression result and convert it into a Coefplot. 
-If `rename::` is specified, it will rename the coefficients, and keep them in the order the renameing pairs are specified.
+This function takes the regression result and convert it into a `Coefplot`. 
+If `rename` is specified, it will rename the coefficients, and keep them in the order the renameing pairs are specified.
 If `keepcoef` is specified, it will filter the coefficients, and keep them in the order they are specified.
-Named arguements of Coefplot() can also be passed in this function.
+Named arguements of `Coefplot()` can also be passed in this function.
 """
 function Base.parse(r::SupportedEstimation; rename=missing, keepcoef=missing, kwargs...)
     if ismissing(rename) & ismissing(keepcoef)

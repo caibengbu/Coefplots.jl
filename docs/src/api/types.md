@@ -1,2 +1,5 @@
 # Types
-To be continued
+```@autodocs
+Modules = [Coefplots]
+Order = [:type]
+```

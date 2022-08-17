@@ -1,3 +1,33 @@
+"""
+    Coefplot
+
+A `Coefplot` object. It contains the all information for which a coefplot should be plotted. The keyword arguements of the constructor are all optional.
+
+# Constructors
+```julia
+Coefplot(data::AbstractDataFrame; <keyword arguments>)
+```
+
+# Arguments
+- `title::Label`: the title to the plot.
+- `xlabel::Label`: the xlabel to the plot.
+- `ylabel::Label`: the ylabel to the plot.
+- `xticklabel::CaptionStyle`: the style of the xtick.
+- `yticklabel::CaptionStyle`: the style of the ytick.
+- `width::Real = 240`: the width of the axis frame
+- `height::Real = 204`: the height of the axis frame
+- `keepmark::Bool = true`: `true` if the user wants to plot the point estimates, `false` otherwise.
+- `keepconnect::Bool = false`: `true` if the user wants to connect the neighboring point estimates, `false` otherwise.
+- `mark::Mark`: the style of mark for the point estimates.
+- `errormark:Mark`: the style of mark for the endpoints of confidence interval.
+- `errorbar::Bar`: the style of the error bar.
+- `connect::Bar`: the style of the line that connects the neighboring point estimates.
+- `offset::Real = 0`: similar to that of the Stata package, it shifts the coefplot along the axis that represents coefficient name.
+- `sorter::Vector{String} = String[]`: a vector indicating the content and the order of the coefficients. If empty, use the order of the `data.varname`.
+- `level::Real = 0.95`: the confidence level.
+- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
+- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
+"""
 mutable struct Coefplot
     # axis args
     title::Label
@@ -29,31 +59,6 @@ mutable struct Coefplot
     vertical::Bool
 end
 
-"""
-    Coefplot(data::AbstractDataFrame; <keyword arguments>)
-
-Construct a Coefplot object. Its keyword arguements are all optional. The minimal invocation is `Coefplot(data::AbstractDataFrame)`.
-
-# Arguments
-- `title::Label`: the title to the plot.
-- `xlabel::Label`: the xlabel to the plot.
-- `ylabel::Label`: the ylabel to the plot.
-- `xticklabel::CaptionStyle`: the style of the xtick.
-- `yticklabel::CaptionStyle`: the style of the ytick.
-- `width::Real = 240`: the width of the axis frame
-- `height::Real = 204`: the height of the axis frame
-- `keepmark::Bool = true`: `true` if the user wants to plot the point estimates, `false` otherwise.
-- `keepconnect::Bool = false`: `true` if the user wants to connect the neighboring point estimates, `false` otherwise.
-- `mark::Mark`: the style of mark for the point estimates.
-- `errormark:Mark`: the style of mark for the endpoints of confidence interval.
-- `errorbar::Bar`: the style of the error bar.
-- `connect::Bar`: the style of the line that connects the neighboring point estimates.
-- `offset::Real = 0`: similar to that of the Stata package, it shifts the coefplot along the axis that represents coefficient name.
-- `sorter::Vector{String} = String[]`: a vector indicating the content and the order of the coefficients. If empty, use the order of the data.varname.
-- `level::Real = 0.95`: the confidence level.
-- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
-- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
-"""
 function Coefplot(data::AbstractDataFrame
                 ;title::Label = Label(), 
                 xlabel::Label = Label(), 
@@ -85,12 +90,9 @@ end
 """
     get_axis_options(c::Coefplot)
 
-Renders the properties of a Coefplot object as options of the \\begin{axis}
+Renders the properties of a `Coefplot` object as options of the `\\begin{axis}`
 """
 function get_axis_options(c::Coefplot)
-    """
-    extract all fields in a coefplot that are related to the options of the axis, and generate such PGFPlotsX.Options
-    """
     axis_options = PGFPlotsX.Options()
     for x in [:title, :xlabel, :ylabel]
         if !ismissing(getfield(c,x))
@@ -122,7 +124,7 @@ end
 """
     get_plot_options(c::Coefplot)
 
-Renders the properties of a Coefplot object as options of the \\addplot
+Renders the properties of a `Coefplot` object as options of the `\\addplot`
 """
 function get_plot_options(c::Coefplot)
     """
@@ -162,7 +164,7 @@ end
 
 # TO-DO: allow adding HBand HLine VBand VLine
 """
-Elements that are supported to be plotted together with GroupedMulti-, Grouped-, MultiCoefplot.
+Elements that are supported to be plotted together with `GroupedMulti-`, `Grouped-`, `MultiCoefplot`.
 """
 const SupportedAddition = Union{HLine, VLine,
                                 HBand, VBand,
@@ -172,7 +174,7 @@ const SupportedAddition = Union{HLine, VLine,
 """
     to_picture(c::Coefplot, other::SupportedAddition ...)
 
-Convert the Coefplot object to an PGFPlotsX.TikzPicture. Other supported components are allowed and appended after the Coefplot. 
+Convert the `Coefplot` object to an `PGFPlotsX.TikzPicture`. Other supported components are allowed and appended after the `Coefplot`. 
 The note field is drawn as a node beyond the axis.
 """
 to_picture(c::Coefplot, other::SupportedAddition ...) = PGFPlotsX.TikzPicture(to_axis(c, other...), c.note)
@@ -180,14 +182,14 @@ to_picture(c::Coefplot, other::SupportedAddition ...) = PGFPlotsX.TikzPicture(to
 """
     to_axis(c::Coefplot, other::SupportedAddition ...)
 
-Converts the Coefplot object to a PGFPlotsX.Axis object. Other supported components are allowed and appended after the Coefplot within the axis. 
+Converts the `Coefplot` object to a `PGFPlotsX.Axis` object. Other supported components are allowed and appended after the `Coefplot` within the axis. 
 """
 to_axis(c::Coefplot, other::SupportedAddition ...) = PGFPlotsX.Axis(get_axis_options(c), to_plot(c), other...)
 
 """
     to_plot(c::Coefplot)
 
-Convert the Coefplot object to an PGFPlotsX.AxisElement. It is realized using the PGFPlotsX.Plot/PGFPlotsX.Coordinates combination.
+Convert the `Coefplot` object to an `PGFPlotsX.AxisElement`. It is realized using the `PGFPlotsX.Plot`/`PGFPlotsX.Coordinates` combination.
 """
 function to_plot(c::Coefplot)
 
@@ -210,7 +212,7 @@ end
 """
     color!(c::Coefplot, clr::Color)
 
-Reset the color of a Coefplot.
+Reset the color of a `Coefplot`.
 """
 function color!(c::Coefplot, clr::Color)
     """
@@ -234,13 +236,13 @@ errbar_length(data::AbstractDataFrame, level::Real=0.95) = data.se .* abs(quanti
 """
     minimum(c::Coefplot)
 
-Compute the minimal value that the Coefplot can reach with its error bar.
+Compute the minimal value that the `Coefplot` can reach with its error bar.
 """
 Base.minimum(c::Coefplot) = minimum(c.data.b - Coefplots.errbar_length(c.data, c.level))
 
 """
     maximum(c::Coefplot)
 
-Compute the maximal value that the Coefplot can reach with its error bar.
+Compute the maximal value that the `Coefplot` can reach with its error bar.
 """
 Base.maximum(c::Coefplot) = maximum(c.data.b + Coefplots.errbar_length(c.data, c.level))

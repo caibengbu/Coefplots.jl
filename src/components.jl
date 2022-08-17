@@ -1,3 +1,18 @@
+"""
+    CaptionStyle
+
+This enters `Coefplot.xticklabel`, `Coefplot.yticklabel`, 
+`Coefplot.xlabel.captionstyle`, `Coefplot.ylabel.captionstyle`, 
+`Coefplot.title.captionstyle`, `Coefplot.note.captionstyle`.
+# Constructors
+```julia
+CaptionStyle(;font=missing, size=missing, rotate=missing)
+```
+# Keyword arguments
+- `font::Union{Symbol, String, Missing}` contains the font's T1 code
+- `size::Union{Real, Missing}` is the font's size in pt.
+- `rotate::Union{Real, Missing}` is the rotation angle counterclockwise for the caption.
+"""
 mutable struct CaptionStyle
     font::Union{Symbol, String, Missing} # fontcode
     size::MaybeData{Real}
@@ -28,6 +43,18 @@ function to_options(l::CaptionStyle)
     return style_options
 end
 
+"""
+    Label
+
+This enters `Coefplot.xlabel`, `Coefplot.ylabel`, and that of `Multi-,` `Grouoped-`, `GroupedMultiCoefplot`.
+# Constructors
+```julia
+Label(;content=missing, captionstyle=CaptionStyle())
+```
+# Keyword arguments
+- `content::Union{String, Missing}` is the content of the label.
+- `captionstyle::Union{CaptionStyle, Missing}` is the font's style in which the label is printed.
+"""
 mutable struct Label
     content::MaybeData{String}
     captionstyle::MaybeData{CaptionStyle}
@@ -53,6 +80,22 @@ function to_options(l::Label, label::Symbol, label_style::Symbol)
     return options
 end
 
+"""
+    Mark
+
+This enters `Coefplot.mark`, `Coefplot.errormark`, and that of `Multi-,` `Grouoped-`, `GroupedMultiCoefplot`.
+# Constructors
+```julia
+Mark(;mark=missing, marksize=missing, linetype=missing, linewidth=missing, fill=missing, draw=missing)
+```
+# Keyword arguments
+- `mark::Union{Symbol, String, Missing}` is the shape of the mark.
+- `marksize::Union{Real, Missing}` is the size of the mark in pt.
+- `linetype::Union{Real, Missing}` is the type of line of the outline of the mark. Available choices are: `"solid"`, `"dotted"`, `"densely dotted"`, `"loosely dotted"`, `"dashed"`, `"densely dashed"`, `"loosely dashed"`, `"dash dot"`, `"densely dash dot"`, `"loosely dash dot"`, `"dash dot dot"`, `"densely dash dot dot"`, `"loosely dash dot dot"`.
+- `linewidth::Union{Real, Missing}` is the width of line of the outline of the mark.
+- `fill::Union{Color, Missing}` is the color used to fill the mark
+- `draw::Union{Color, Missing}` is the color used to draw the outline of the mark.
+"""
 mutable struct Mark
     mark::Union{Symbol, String, Missing}
     marksize::MaybeData{Real}
@@ -98,6 +141,19 @@ function to_options(l::Mark, mark::Union{Symbol, String}, mark_options::Union{Sy
     return options
 end
 
+"""
+    Bar
+
+This enters `Coefplot.errbar`, `Coefplot.connect`, and that of `Multi-,` `Grouoped-`, `GroupedMultiCoefplot`.
+# Constructors
+```julia
+Bar(;draw=missing, linewidth=missing, linetype=missing)
+```
+# Keyword arguments
+- `draw::Union{Color, Missing}` is the color of the bar.
+- `linetype::Union{Real, Missing}` is the type of line used to draw the bar. Available choices are: `"solid"`, `"dotted"`, `"densely dotted"`, `"loosely dotted"`, `"dashed"`, `"densely dashed"`, `"loosely dashed"`, `"dash dot"`, `"densely dash dot"`, `"loosely dash dot"`, `"dash dot dot"`, `"densely dash dot dot"`, `"loosely dash dot dot"`.
+- `linewidth::Union{Real, Missing}` is the width of line used to draw the bar.
+"""
 mutable struct Bar
     draw::MaybeData{Color}
     linewidth::MaybeData{Real}
@@ -128,8 +184,22 @@ function to_options(l::Bar)
     return options
 end
 
+"""
+    Legend
+
+This enters `MultiCoefplot.legend`. It determines the style of the legend. The content of the legend is defined by the title of the `Coefplot`.
+# Constructors
+```julia
+Legend(;anchor=missing, at=missing, font=missing, size=missing)
+```
+# Keyword arguments
+- `anchor::Union{Symbol, String, Missing}` specifies the anchor of the legend box that is used for alignment. A typical one would be `"north west"`.
+- `at::Any` specifies the location in the axis frame that the anchor should adhere to. A typical one would be `(1, 0)`, which means that the anchor is fixed to the south-east corner of the axis frame.
+- `font::Union{Symbol, String, Missing}` is the font in which the legend should be printed in.
+- `size::Union{Real, Missing}` is the font size.
+"""
 mutable struct Legend
-    anchor::MaybeData{Symbol}
+    anchor::Union{Symbol, String, Missing} 
     at::Any
     font::Union{Symbol, String, Missing} 
     size::MaybeData{Real}
@@ -162,11 +232,25 @@ function to_options(l::Legend)
     return options
 end
 
+"""
+    Note <: PGFPlotsX.TikzElement
+
+# Constructors
+```julia
+Note(;content=missing, anchor=missing ,at=missing, align=missing, captionstyle=missing)
+```
+# Keyword arguments
+- `content::Union{String, Missing}` is the content of the note.
+- `anchor::Union{Symbol, String, Missing}` specifies the anchor of the note box that is used for alignment. A typical one would be `"north west"`.
+- `at::Any` specifies the location in the axis frame that the anchor should adhere to. A typical one would be `(1, 0)`, which means that the anchor is fixed to the south-east corner of the axis frame.
+- `align::Union{Symbol, String, Missing}` specifies how the note should be aligned. It could be `"left"`, `"right"` or `"center"`.
+- `captionstyle::Union{captionstyle, Missing}` is the caption style of the note.
+"""
 mutable struct Note <: PGFPlotsX.TikzElement
     content::MaybeData{String}
-    anchor::MaybeData{Symbol}
+    anchor::Union{Symbol, String, Missing}
     at::Any
-    align::MaybeData{Symbol}
+    align::Union{Symbol, String, Missing}
     captionstyle::MaybeData{CaptionStyle}
 
     function Note(;content=missing, anchor=missing ,at=missing, align=missing, captionstyle=missing)
@@ -387,7 +471,18 @@ function PGFPlotsX.print_tex(io::IO, hband::HBand)
     println(io, "({rel axis cs:1,0}|-{axis cs:{[normalized]0},$(ymin)}) rectangle ({rel axis cs:0,0}|-{axis cs:{[normalized]0},$(ymax)});")
 end
 
+"""
+    Annotation
 
+# Constructors
+```julia
+Annotation(;angle, content, point_at)
+```
+# Keyword arguments
+- `angle::Real` is the angle of the pointer of the annotation.
+- `content::String` is the textual content of the annotation.
+- `point_at::Tuple{Real, Real}` specifies the location in the axis frame that the annotation should point at. A typical one would be `(1, 0)`, which means that the annotation points at the south-east corner of the axis frame.
+"""
 struct Annotation
     angle::Real
     content::String

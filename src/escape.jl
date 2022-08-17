@@ -17,7 +17,7 @@ end
     _escape_string(str::AbstractString[, esc]; keep = ())::AbstractString
     _escape_string(io, str::AbstractString[, esc]; keep = ())::Nothing
     
-Almost the same as the Base.escape_string except that _escape_string escapes `,` , `(`, `)`, and `.` by putting it in a pair of brackets.
+Almost the same as the `Base.escape_string` except that `_escape_string()` escapes `,` , `(`, `)`, and `.` by putting it in a pair of brackets.
 """
 function _escape_string(io::IO, s::AbstractString, esc=""; keep = ())
     a = Iterators.Stateful(s)

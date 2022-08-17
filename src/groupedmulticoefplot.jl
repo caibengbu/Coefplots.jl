@@ -1,3 +1,27 @@
+"""
+    GroupedMultiCoefplot
+
+A `GroupedMultiCoefplot` object. It contains the all information for which a set of multiple `GroupedCoefplot`s should be plotted together. The keyword arguements of the constructor are all optional.
+
+# Constructors
+```julia
+GroupedMultiCoefplot(data::Pair{<:Any, GroupedCoefplot} ...;  <keyword arguments>)
+GroupedMultiCoefplot(data::Pair{<:Any, MultiCoefplot} ...;  <keyword arguments>)
+```
+
+# Arguments
+- `title::Label`: the title to the plot.
+- `xlabel::Label`: the xlabel to the plot.
+- `ylabel::Label`: the ylabel to the plot.
+- `xticklabel::CaptionStyle`: the style of the xtick.
+- `yticklabel::CaptionStyle`: the style of the ytick.
+- `show_legend::Union{Vector{Bool}, Missing} = missing`: a boolean vector specifying which legend of the subplot should be shown. The default is to show only the first legend.
+- `width::Real = 240`: the width of the axis frame
+- `height::Real = 204`: the height of the axis frame
+- `interval::Union{Real,Missing} = missing`: determines the distance between each `Coefplot`. Each `Coefplot`'s `offset` is computed according to this.
+- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
+- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
+"""
 mutable struct GroupedMultiCoefplot
     # axis args
     title::Label
@@ -24,25 +48,6 @@ mutable struct GroupedMultiCoefplot
     # TO-DO: allow other components in the struct, instead of plugging in to_picture
 end
 
-"""
-    GroupedMultiCoefplot(data::Pair{<:Any, GroupedCoefplot} ...;  <keyword arguments>)
-    GroupedMultiCoefplot(data::Pair{<:Any, MultiCoefplot} ...;  <keyword arguments>)
-
-Construct a GroupedMultiCoefplot object. Its keyword arguements are all optional.
-
-# Arguments
-- `title::Label`: the title to the plot.
-- `xlabel::Label`: the xlabel to the plot.
-- `ylabel::Label`: the ylabel to the plot.
-- `xticklabel::CaptionStyle`: the style of the xtick.
-- `yticklabel::CaptionStyle`: the style of the ytick.
-- `show_legend::Union{Vector{Bool}, Missing} = missing`: a boolean vector specifying which legend of the subplot should be shown. The default is to show only the first legend.
-- `width::Real = 240`: the width of the axis frame
-- `height::Real = 204`: the height of the axis frame
-- `interval::Union{Real,Missing} = missing`: determines the distance between each Coefplot. Each Coefplot's `offset` is computed according to this.
-- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
-- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
-"""
 function GroupedMultiCoefplot(data::Pair{<:Any, MultiCoefplot} ...
     ;title::Label = Label(), 
     xlabel::Label = Label(), 
@@ -107,7 +112,7 @@ end
 """
     get_nextgroupplot_options(g::GroupedMultiCoefplot)
 
-Renders the properties of a GroupedMultiCoefplot object as options of the \\begin{groupplot}
+Renders the properties of a `GroupedMultiCoefplot` object as options of the `\\begin{groupplot}`
 """
 function get_groupplot_options(g::GroupedMultiCoefplot)
     data = g.data
@@ -152,7 +157,7 @@ end
 """
     get_nextgroupplot_options(m::MultiCoefplot)
 
-Renders the properties of a MultiCoefplot object as options of the \\begin{nextgroupplot}
+Renders the properties of a `MultiCoefplot` object as options of the `\\begin{nextgroupplot}`
 """
 function get_nextgroupplot_options(m::MultiCoefplot)
     nextgroupplot_options = get_axis_options(m)
@@ -167,7 +172,9 @@ end
 """
     to_picture(m::GroupedMultiCoefplot, other::SupportedAddition ...)
 
-convert the GroupedMultiCoefplot object to an PGFPlotsX.TikzPicture, note is added.
+convert the `GroupedMultiCoefplot` object to an `PGFPlotsX.TikzPicture`. 
+Other supported components are allowed and appended after the `GroupedMultiCoefplot` within the axis. 
+Note is added.
 """
 function to_picture(g::GroupedMultiCoefplot, other::SupportedAddition ...)
     p = PGFPlotsX.TikzPicture(to_axis(g, other...))
@@ -211,7 +218,8 @@ end
 """
     to_axis(g::GroupedMultiCoefplot, other::SupportedAddition ...)
 
-Converts the GroupedMultiCoefplot object to a PGFPlotsX.Axis object. Other supported components are allowed and appended after the Coefplot within the axis. 
+Converts the GroupedMultiCoefplot object to a PGFPlotsX.Axis object. 
+Other supported components are allowed and appended after the `GroupedMultiCoefplot` within the axis. 
 """
 function to_axis(g::GroupedMultiCoefplot, other::SupportedAddition ...) 
     groupplot_options = get_groupplot_options(g)
