@@ -1,3 +1,8 @@
+"""
+    DISABLE_ESCAPE = false
+
+Automatic escaping of the variables names. Disable escaping by calling `disable_escape!()`. Enable escaping by calling `enable_escape!()`.
+"""
 DISABLE_ESCAPE = false
 
 function enable_escape!()
@@ -9,10 +14,10 @@ function disable_escape!()
 end
 
 """
-    escape_string(str::AbstractString[, esc]; keep = ())::AbstractString
-    escape_string(io, str::AbstractString[, esc]; keep = ())::Nothing
-    Almost the same as the Base.escape_string except that _escape_string escapes ",", "(", ")", and "." by putting it in a pair of brackets.
-```
+    _escape_string(str::AbstractString[, esc]; keep = ())::AbstractString
+    _escape_string(io, str::AbstractString[, esc]; keep = ())::Nothing
+    
+Almost the same as the Base.escape_string except that _escape_string escapes `,` , `(`, `)`, and `.` by putting it in a pair of brackets.
 """
 function _escape_string(io::IO, s::AbstractString, esc=""; keep = ())
     a = Iterators.Stateful(s)
@@ -54,6 +59,6 @@ _escape_string(s::AbstractString, esc=('\"',); keep = ()) =
 """
     latex_escape(s::AbstractString)
 
-    Escapes `,`, `(`, `)`, and `.` by putting it in a pair of brackets, also esxapes `&` and `%` by adding `\\`
+Escapes `,`, `(`, `)`, and `.` by putting it in a pair of brackets, also esxapes `&` and `%` by adding `\\`
 """
 latex_escape(s::AbstractString) = DISABLE_ESCAPE ? s : _escape_string(s,"&%"; keep='\\')

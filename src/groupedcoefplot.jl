@@ -29,45 +29,60 @@ mutable struct GroupedCoefplot
     vertical::Bool
 
     # TO-DO: allow other components in the struct, instead of plugging in to_picture
+end
 
-    function GroupedCoefplot(data::Pair{<:Any, Coefplot}...
-                            ;title::Label = Label(), 
-                            xlabel::Label = Label(), 
-                            ylabel::Label = Label(), 
-                            xticklabel::CaptionStyle = CaptionStyle(),
-                            yticklabel::CaptionStyle = CaptionStyle(),
-                            width::Real = 240, # in line with the tikz default
-                            height::Real = 204,
-                            note::MaybeData{Note} = Note(anchor=Symbol("north west"), at="(current bounding box.south west)", align=:left, captionstyle=CaptionStyle()),
-                            vertical::Bool = true,
-                            kwargs ...)
-        """
-        to construct a GroupedCoefplot.
-        """
-        data = collect(data)
-        if ~isempty(data)
-            ncoef = sum(map(data) do x
-                size(x.second.data,1) # length of each coefplot
-            end)
-            data = map(data) do (groupname, c)
-                subdata = c.data
-                _c = Coefplot(subdata; vertical=vertical, width=width, height=height, kwargs...) # build the Coefplot first 
-                nsubcoef = size(subdata,1)
-                if _c.vertical
-                    _c.width *= nsubcoef/ncoef # compute the width for each sub plot
-                else
-                    _c.height *= nsubcoef/ncoef
-                end
-                filter!(x->x in subdata.varname, _c.sorter) # filter sorter
-                return groupname => _c
+"""
+    GroupedCoefplot(data::Pair{<:Any, Coefplot}...;  <keyword arguments>)
+    GroupedCoefplot(gdata::GroupedDataFrame;  <keyword arguments>)
+
+Construct a GroupedCoefplot object. Its keyword arguements are all optional.
+
+# Arguments
+- `title::Label`: the title to the plot.
+- `xlabel::Label`: the xlabel to the plot.
+- `ylabel::Label`: the ylabel to the plot.
+- `xticklabel::CaptionStyle`: the style of the xtick.
+- `yticklabel::CaptionStyle`: the style of the ytick.
+- `width::Real = 240`: the width of the axis frame
+- `height::Real = 204`: the height of the axis frame
+- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
+- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
+"""
+function GroupedCoefplot(data::Pair{<:Any, Coefplot}...
+    ;title::Label = Label(), 
+    xlabel::Label = Label(), 
+    ylabel::Label = Label(), 
+    xticklabel::CaptionStyle = CaptionStyle(),
+    yticklabel::CaptionStyle = CaptionStyle(),
+    width::Real = 240, # in line with the tikz default
+    height::Real = 204,
+    note::MaybeData{Note} = Note(anchor=Symbol("north west"), at="(current bounding box.south west)", align=:left, captionstyle=CaptionStyle()),
+    vertical::Bool = true,
+    kwargs ...)
+
+    data = collect(data)
+    if ~isempty(data)
+        ncoef = sum(map(data) do x
+            size(x.second.data,1) # length of each coefplot
+        end)
+        data = map(data) do (groupname, c)
+            subdata = c.data
+            _c = Coefplot(subdata; vertical=vertical, width=width, height=height, kwargs...) # build the Coefplot first 
+            nsubcoef = size(subdata,1)
+            if _c.vertical
+                _c.width *= nsubcoef/ncoef # compute the width for each sub plot
+            else
+                _c.height *= nsubcoef/ncoef
             end
-            if ~vertical
-                # because groupplot draw from top to down and left to right
-                reverse!(data)
-            end
+            filter!(x->x in subdata.varname, _c.sorter) # filter sorter
+            return groupname => _c
         end
-        new(title, xlabel, ylabel, xticklabel, yticklabel, width, height, data, note, vertical)
+        if ~vertical
+            # because groupplot draw from top to down and left to right
+            reverse!(data)
+        end
     end
+    GroupedCoefplot(title, xlabel, ylabel, xticklabel, yticklabel, width, height, data, note, vertical)
 end
 
 function GroupedCoefplot(gdata::GroupedDataFrame; kwargs...)
@@ -93,6 +108,11 @@ function GroupedCoefplot(gdata::GroupedDataFrame; kwargs...)
     return g
 end
 
+"""
+    get_groupplot_options(g::GroupedCoefplot)
+
+Renders the properties of a GroupedCoefplot object as options of the \\begin{groupplot}
+"""
 function get_groupplot_options(g::GroupedCoefplot)
     data = g.data
     ngroups = length(data)
@@ -133,7 +153,11 @@ function get_groupplot_options(g::GroupedCoefplot)
     return groupplot_options
 end
 
+"""
+    get_nextgroupplot_options(c::Coefplot)
 
+Renders the properties of a Coefplot object as options of the \\begin{nextgroupplot}
+"""
 function get_nextgroupplot_options(c::Coefplot)
     nextgroupplot_options = get_axis_options(c)
     # for groupedcoefplot, title and labels are nodes, instead of options
@@ -144,6 +168,11 @@ function get_nextgroupplot_options(c::Coefplot)
     return nextgroupplot_options
 end
 
+"""
+    to_picture(g::GroupedCoefplot, other::SupportedAddition ...)
+
+convert the GroupedCoefplot object to an PGFPlotsX.TikzPicture, note is added.
+"""
 function to_picture(g::GroupedCoefplot, other::SupportedAddition ...)
     p = PGFPlotsX.TikzPicture(to_axis(g, other...))
 
@@ -183,6 +212,11 @@ function to_picture(g::GroupedCoefplot, other::SupportedAddition ...)
     push!(p, g.note)
 end
 
+"""
+    to_axis(g::GroupedCoefplot, other::SupportedAddition ...)
+
+Converts the GroupedCoefplot object to a PGFPlotsX.Axis object. Other supported components are allowed and appended after the Coefplot within the axis. 
+"""
 function to_axis(g::GroupedCoefplot, other::SupportedAddition ...) 
     groupplot_options = get_groupplot_options(g)
     gp = PGFPlotsX.GroupPlot(groupplot_options);

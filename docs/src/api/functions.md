@@ -1,1 +1,4 @@
 # Functions
+```@autodocs
+Modules = [Coefplots]
+```

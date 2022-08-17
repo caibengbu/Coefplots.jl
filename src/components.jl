@@ -8,10 +8,12 @@ mutable struct CaptionStyle
     end
 end
 
+"""
+    to_options(l::CaptionStyle)
+
+generates PGF options related to caption style: [font={}, rotate={}].
+"""
 function to_options(l::CaptionStyle)
-    """
-    generates PGF options related to caption style: [font={}, rotate={}].
-    """
     style_options = PGFPlotsX.Options()
     if !ismissing(l.font) & !ismissing(l.size)
         style_options[:font] = "\\fontsize{$(l.size)}{$(l.size)}\\fontfamily{$(l.font)}\\selectfont"
@@ -35,10 +37,12 @@ mutable struct Label
     end
 end
 
+"""
+    to_options(l::Label, label::Symbol, label_style::Symbol)
+
+generates PGF options related to label: [label={}, label_style={font={}, rotate={}}].
+"""
 function to_options(l::Label, label::Symbol, label_style::Symbol)
-    """
-    generates PGF options related to label: [label={}, label_style={font={}, rotate={}}].
-    """
     options = PGFPlotsX.Options()
     if !ismissing(l.content)
         options[label] = l.content
@@ -62,11 +66,12 @@ mutable struct Mark
     end
 end
 
+"""
+    to_options(l::Mark, mark::Union{Symbol, String}, mark_options::Union{Symbol, String})
+
+generates PGF options related to mark: [mark={}, mark_options={fill={}, fill opacity={}, mark size={}, draw={}, draw opacity={}, solid, line width=...}].
+"""
 function to_options(l::Mark, mark::Union{Symbol, String}, mark_options::Union{Symbol, String})
-    """
-    generates PGF options related to mark: [*mark*={}, *mark_options*={fill={}, fill opacity={},
-                                                                       mark size={}, draw={}, draw opacity={}, solid, line width=0.6pt}].
-    """
     options = PGFPlotsX.Options()
     what_mark_options = PGFPlotsX.Options()
     if !ismissing(l.mark)

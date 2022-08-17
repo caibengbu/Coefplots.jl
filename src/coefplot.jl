@@ -27,37 +27,58 @@ mutable struct Coefplot
 
     # vertical
     vertical::Bool
+end
 
-    # TO-DO: allow other components in the struct, instead of plugging in to_picture
+"""
+    Coefplot(data::AbstractDataFrame; <keyword arguments>)
 
-    function Coefplot(data::AbstractDataFrame
-                      ;title::Label = Label(), 
-                      xlabel::Label = Label(), 
-                      ylabel::Label = Label(), 
-                      xticklabel::CaptionStyle = CaptionStyle(),
-                      yticklabel::CaptionStyle = CaptionStyle(),
-                      width::Real = 240, # in line with the tikz default
-                      height::Real = 204,
-                      keepmark::Bool = true,
-                      keepconnect::Bool = false,
-                      mark::Mark = Mark(mark=:"square*", marksize=1.75, linewidth=0, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
-                      errormark::Mark = Mark(mark=:|, marksize=2.0, linewidth=0.6, linetype=:solid, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
-                      errorbar::Bar = Bar(linewidth=1.5, linetype=Symbol("densely dotted"), draw=first(COLOR_LOOP)),
-                      connect::Bar = Bar(linewidth=0.5, draw=first(COLOR_LOOP)),
-                      offset::Real = 0,
-                      sorter::Vector{String} = String[], # default sorter is data.varname, with the original order
-                      level::Real = 0.95, # default confidence level is 95%
-                      note::MaybeData{Note} = Note(anchor=Symbol("north west"), at="(current bounding box.south west)", align=:left, captionstyle=CaptionStyle()), # default note is missing, but keep the box aligned
-                      vertical::Bool = true,
-                      kwargs ...)
-        """
-        to construct a Coefplot, the minimal invocation is `Coefplot(data; sorter = sorter)`
-        """
-        if isempty(sorter)
-            sorter = data.varname
-        end
-        new(title, xlabel, ylabel, xticklabel, yticklabel, width, height, keepmark, keepconnect, mark, errormark, errorbar, connect, offset, data, sorter, level, note, vertical)
+Construct a Coefplot object. Its keyword arguements are all optional. The minimal invocation is `Coefplot(data::AbstractDataFrame)`.
+
+# Arguments
+- `title::Label`: the title to the plot.
+- `xlabel::Label`: the xlabel to the plot.
+- `ylabel::Label`: the ylabel to the plot.
+- `xticklabel::CaptionStyle`: the style of the xtick.
+- `yticklabel::CaptionStyle`: the style of the ytick.
+- `width::Real = 240`: the width of the axis frame
+- `height::Real = 204`: the height of the axis frame
+- `keepmark::Bool = true`: `true` if the user wants to plot the point estimates, `false` otherwise.
+- `keepconnect::Bool = false`: `true` if the user wants to connect the neighboring point estimates, `false` otherwise.
+- `mark::Mark`: the style of mark for the point estimates.
+- `errormark:Mark`: the style of mark for the endpoints of confidence interval.
+- `errorbar::Bar`: the style of the error bar.
+- `connect::Bar`: the style of the line that connects the neighboring point estimates.
+- `offset::Real = 0`: similar to that of the Stata package, it shifts the coefplot along the axis that represents coefficient name.
+- `sorter::Vector{String} = String[]`: a vector indicating the content and the order of the coefficients. If empty, use the order of the data.varname.
+- `level::Real = 0.95`: the confidence level.
+- `note::Union{Note, Missing}`: a note that is attached to the south of the plot.
+- `vertical::Bool = true`: if `true`, the errorbars are parallel to y axis; if `false`, the errorbars are parallel to x axis.
+"""
+function Coefplot(data::AbstractDataFrame
+                ;title::Label = Label(), 
+                xlabel::Label = Label(), 
+                ylabel::Label = Label(), 
+                xticklabel::CaptionStyle = CaptionStyle(),
+                yticklabel::CaptionStyle = CaptionStyle(),
+                width::Real = 240, # in line with the tikz default
+                height::Real = 204,
+                keepmark::Bool = true,
+                keepconnect::Bool = false,
+                mark::Mark = Mark(mark=:"square*", marksize=1.75, linewidth=0, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
+                errormark::Mark = Mark(mark=:|, marksize=2.0, linewidth=0.6, linetype=:solid, fill=first(COLOR_LOOP), draw=first(COLOR_LOOP)),
+                errorbar::Bar = Bar(linewidth=1.5, linetype=Symbol("densely dotted"), draw=first(COLOR_LOOP)),
+                connect::Bar = Bar(linewidth=0.5, draw=first(COLOR_LOOP)),
+                offset::Real = 0,
+                sorter::Vector{String} = String[], # default sorter is data.varname, with the original order
+                level::Real = 0.95, # default confidence level is 95%
+                note::MaybeData{Note} = Note(anchor=Symbol("north west"), at="(current bounding box.south west)", align=:left, captionstyle=CaptionStyle()), # default note is missing, but keep the box aligned
+                vertical::Bool = true,
+                kwargs ...)
+
+    if isempty(sorter)
+        sorter = data.varname
     end
+    Coefplot(title, xlabel, ylabel, xticklabel, yticklabel, width, height, keepmark, keepconnect, mark, errormark, errorbar, connect, offset, data, sorter, level, note, vertical)
 end
 
 # TODO: be able to rename the varnames
@@ -140,6 +161,9 @@ end
 
 
 # TO-DO: allow adding HBand HLine VBand VLine
+"""
+Elements that are supported to be plotted together with GroupedMulti-, Grouped-, MultiCoefplot.
+"""
 const SupportedAddition = Union{HLine, VLine,
                                 HBand, VBand,
                                 rHLine, rVLine, 

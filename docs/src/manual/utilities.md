@@ -53,7 +53,7 @@ savefigs("sort", p) # hide
 
 ## HLine and rHLine and their friends
 
-Coefplots.jl provides its version of `HLine`, `VLine`, `HBand` and `VBand` which is analogous to PGFPlotsX.jl but is compatible with symbolic coords. They can be directly added to the plot by passing them to `plot()`. Coefplots.jl also allows relative specification of the location in `rHLine`, `rVLine`, `rHBand`, `rVBand`. 
+Coefplots.jl provides its version of `HLine`, `VLine`, `HBand` and `VBand` which is analogous to those in PGFPlotsX.jl but is compatible with symbolic coords. They can be directly added to the plot by passing them to `plot()`. Coefplots.jl also allows relative specification of the location in `rHLine`, `rVLine`, `rHBand`, `rVBand`. 
 
 ```@example pgf
 using PGFPlotsX
