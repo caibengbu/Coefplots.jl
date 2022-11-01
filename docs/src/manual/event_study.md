@@ -114,9 +114,9 @@ with_bothfe = parse(res_both; rename = rename_rule,
 
 m = Coefplots.MultiCoefplot(pool, with_idfe, with_timefe, with_bothfe;
                             xticklabel = CaptionStyle(rotate=45, size=6),
-                            legend     = Legend(at=(0.02,0.98), 
-                                                anchor=Symbol("north west"),
-                                                size=6),
+                            legend     = Coefplots.Legend(at=(0.02,0.98), 
+                                                          anchor=Symbol("north west"),
+                                                          size=6),
                             note       = Note(content="This is my note.",
                                               captionstyle=CaptionStyle(size=6)),
                             xlabel     = Label(content="time relative to event"),
