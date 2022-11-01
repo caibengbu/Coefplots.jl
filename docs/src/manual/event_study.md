@@ -83,9 +83,9 @@ On a sidenote, the dollarsign is escaped with a backslash. The backslash is also
 Now, we are ready to call `parse()` or `plot()` to get the results from the regression object. 
 
 ```@example pgf
-pool = plot(res_pool; rename = rename_rule, 
-                      keepconnect = true, 
-                      title = Label(content="no FE"))
+p = plot(res_pool; rename = rename_rule, 
+                   keepconnect = true, 
+                   title = Label(content="no FE"))
 
 savefigs("esplot1", p) # hide
 ```
