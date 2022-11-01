@@ -44,13 +44,13 @@ df = DataFrame(id = id, time = time, outcome = outcome, treatment = treatment)
 We run our four specifications where we (i) do not have any fixed effects, (ii) include individual fixed effect, (iii) include time fixed effects, and (iv) include both individual and time fixed effect, with the help of FixedEffectModels.jl
 
 ```@example pgf
-res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0))); 
+res_pool = reg(df, @formula(outcome ~ time&treatment + treatment); contrasts = Dict(:time => DummyCoding(base=0)), progress_bar = false); 
 
-res_idfe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(id)); contrasts = Dict(:time => DummyCoding(base=0))); 
+res_idfe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(id)); contrasts = Dict(:time => DummyCoding(base=0)), progress_bar = false); 
 
-res_timefe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time)); contrasts = Dict(:time => DummyCoding(base=0))); 
+res_timefe = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time)); contrasts = Dict(:time => DummyCoding(base=0)), progress_bar = false); 
 
-res_both = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time) + fe(id)); contrasts = Dict(:time => DummyCoding(base=0)));
+res_both = reg(df, @formula(outcome ~ time&treatment + treatment + fe(time) + fe(id)); contrasts = Dict(:time => DummyCoding(base=0)), progress_bar = false);
 
 nothing # hide
 ```
