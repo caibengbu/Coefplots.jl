@@ -11,7 +11,8 @@ makedocs(
         "Manual" => ["manual/quick_start.md",
                      "manual/multi_dimension.md",
                      "manual/appearence.md",
-                     "manual/utilities.md"],
+                     "manual/utilities.md",
+                     "manual/event_study.md"],
         "API" => ["api/types.md",
                   "api/functions.md"]
     ]
