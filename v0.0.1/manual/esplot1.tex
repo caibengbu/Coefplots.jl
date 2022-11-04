@@ -1,0 +1,43 @@
+\RequirePackage{luatex85}
+\documentclass[tikz]{standalone}
+% Default preamble
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\usepgfplotslibrary{polar}
+\usepgfplotslibrary{smithchart}
+\usepgfplotslibrary{statistics}
+\usepgfplotslibrary{dateplot}
+\usepgfplotslibrary{ternary}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[title={no FE}, title style={}, xlabel style={}, ylabel style={}, xticklabel style={}, yticklabel style={}, width={240pt}, height={204pt}, symbolic x coords={$\leq$-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,$\geq$12}, xtick={$\leq$-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,$\geq$12}, xmin={{[normalized]-0.5}}, xmax={{[normalized]19.5}}, scale only axis]
+    \addplot[mark={square*}, mark options={mark size={1.75pt}, line width={0pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error mark={|}, error bars/error mark options={mark size={2.0pt}, solid, line width={0.6pt}, fill={rgb,255: red, 64; green, 99; blue, 216}, fill opacity={1}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}}, error bars/error bar style={draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, densely dotted, line width={1.5pt}}, draw={rgb,255: red, 64; green, 99; blue, 216}, draw opacity={1}, line width={0.5pt}, error bars/y dir={both}, error bars/y explicit]
+        coordinates {
+            ($\leq$-7,0.36968848040219676) +- (0,0.34266703123022935)
+            (-6,1.016164254335906) +- (0,0.34266703123022935)
+            (-5,0.800435137464947) +- (0,0.3426670312302293)
+            (-4,0.8778993522840294) +- (0,0.34266703123022935)
+            (-3,0.5827695112478368) +- (0,0.34266703123022946)
+            (-2,0.14944225350719761) +- (0,0.34266703123022935)
+            (-1,0.49160731109998046) +- (0,0.34266703123022935)
+            (0,-0.39846952781006556) +- (0,0.2453653895616492)
+            (1,2.0726463666986454) +- (0,0.34266703123022935)
+            (2,1.0699196982728019) +- (0,0.34266703123022935)
+            (3,1.2250710642967737) +- (0,0.34266703123022935)
+            (4,0.7976719857020569) +- (0,0.34266703123022935)
+            (5,0.8364708751690804) +- (0,0.34266703123022935)
+            (6,2.04374488079733) +- (0,0.34266703123022935)
+            (7,1.385907470897243) +- (0,0.34266703123022935)
+            (8,2.0529242306768922) +- (0,0.34266703123022935)
+            (9,1.3283311252365138) +- (0,0.34266703123022935)
+            (10,1.8713616815794052) +- (0,0.34266703123022935)
+            (11,1.9179877639249006) +- (0,0.34266703123022935)
+            ($\geq$12,0.8338398361406821) +- (0,0.34266703123022935)
+        }
+        ;
+\end{axis}
+\end{tikzpicture}
+\end{document}
