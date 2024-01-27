@@ -13,5 +13,5 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 GLM = "1.8"
-StatsBase = "0.33"
-StatsModels = "0.6"
+StatsBase = "0.33,0.34"
+StatsModels = "0.6,0.7"
