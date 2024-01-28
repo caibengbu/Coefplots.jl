@@ -4,7 +4,6 @@ makedocs(
     modules = [Coefplots],
     sitename = "Coefplots.jl",
     doctest = true,
-    strict = true,
     checkdocs = :none,
     pages = Any[
         "Home" => "index.md",

@@ -202,10 +202,10 @@ function to_plot(c::Coefplot)
     plot_options = get_plot_options(c)
     if c.vertical
         return PGFPlotsX.Plot(plot_options,
-                    PGFPlotsX.Coordinates(data.varname, data.b; yerror = errbar_length(data, c.level)))
+                    PGFPlotsX.Coordinates(data.varname, data.b; yerror = round.(errbar_length(data, c.level), digits=5)))
     else
         return PGFPlotsX.Plot(plot_options,
-                    PGFPlotsX.Coordinates(data.b, data.varname; xerror = errbar_length(data, c.level)))
+                    PGFPlotsX.Coordinates(data.b, data.varname; xerror = round.(errbar_length(data, c.level), digits=5)))
     end
 end
 
