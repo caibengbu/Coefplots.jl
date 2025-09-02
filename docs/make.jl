@@ -18,8 +18,9 @@ makedocs(
 )
 
 @info "calling deploydocs"
-
 deploydocs(
-    repo = "github.com/caibengbu/Coefplots.jl.git",
-    push_preview=true,
+    repo = "github.com/caibengbu/Coefplots.jl", 
+    devbranch = "main",
+    deploy_config = Documenter.GitHubActions(),  
+    push_preview = true,                          
 )
