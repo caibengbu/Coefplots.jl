@@ -23,15 +23,23 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: '1'
-      - uses: julia-actions/cache@v2
-      - name: Install dependencies
-        shell: julia --color=yes --project=docs {0}
-        run: |
-          using Pkg
-          Pkg.develop(PackageSpec(path=pwd()))
-          Pkg.instantiate()
-      - name: Build and deploy
-        run: julia --color=yes --project=docs docs/make.jl
+      - run: |
+          julia --project=docs -e '
+            using Pkg
+            Pkg.develop(PackageSpec(path=pwd()))
+            Pkg.instantiate()'
+      - run: |
+          sudo apt-get update && \
+            sudo apt-get install --no-install-recommends -qq texlive-fonts-recommended git \
+            texlive-luatex texlive-pictures texlive-latex-extra pdf2svg lmodern \
+            poppler-utils gnuplot-nox wget ca-certificates openssh-client rsync file
+      - run: |
+          julia --project=docs -e '
+            using Documenter: doctest, DocMeta
+            using Coefplots
+            DocMeta.setdocmeta!(Coefplots, :DocTestSetup, :(using Coefplots); recursive=true)
+            doctest(Coefplots)'
+      - run: julia --project=docs docs/make.jl
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }} # If authenticating with SSH deploy key
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
