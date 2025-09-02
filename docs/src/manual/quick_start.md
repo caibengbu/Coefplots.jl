@@ -91,3 +91,8 @@ savefigs("quick_start4", p) # hide
 [\[.pdf\]](quick_start4.pdf), [\[generated .tex\]](quick_start4.tex)
 
 ![](quick_start4.svg)
+
+## Save Plots
+Coefplots.jl uses the same mechanisms for saving plots as PGFPlotsX.jl. You can export your plots to various formats such as PDF, SVG, and TeX. You can either export by calling `Coefplots.pgfsave` (not exported) or `PGFPlotsX.pgfsave`
+
+For more details on exporting plots, refer to the [PGFPlotsX.jl documentation](https://kristofferc.github.io/PGFPlotsX.jl/stable/man/save/#Exporting-to-files).
